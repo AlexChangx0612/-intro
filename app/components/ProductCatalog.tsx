@@ -36,8 +36,8 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
   const remaining = active.images.length - shown.length;
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[200px_1fr] lg:gap-16">
-      <aside className="lg:sticky lg:top-24 lg:self-start">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-16">
+      <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
         <p className="hidden text-[11px] tracking-[0.35em] text-muted lg:block">分類</p>
         <nav className="-mx-5 flex gap-7 overflow-x-auto border-b border-line px-5 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:mx-0 lg:mt-5 lg:flex-col lg:gap-0 lg:overflow-visible lg:border-b-0 lg:border-l lg:px-0 [&::-webkit-scrollbar]:hidden">
           {categories.map((c) => (

@@ -37,7 +37,7 @@ export default function Home() {
               秩序，是空間的禮儀
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-sm leading-7 text-balance text-muted">
-              紅龍柱、排隊欄柱與公共空間設備
+              紅龍柱、排隊欄柱與公共空間設備，
               <br className="hidden sm:block" />
               為銀行、醫院、商場與各式場館，打造從容而有分寸的動線。
             </p>
