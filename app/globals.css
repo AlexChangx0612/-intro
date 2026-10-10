@@ -1,34 +1,107 @@
+/* 載入 Tailwind CSS 框架 */
 @import "tailwindcss";
 
+/* 自訂 Tailwind 設計變數（顏色、斷點、字級），可直接用在 class 上，例如 text-brand */
 @theme {
-  --color-ink: #19110b;
-  --color-muted: #6f6861;
-  --color-ivory: #f6f5f3;
-  --color-line: #e3dfd8;
-  --color-brand: #a8132c;
+  /* 大螢幕斷點（1900px），可用 3xl: 前綴 */
+  --breakpoint-3xl: 118.75rem;
+  /* 品牌 CI：紅、白。brand 為 LOGO 原色，brand-deep 用於小字與白字底色以確保可讀性 */
+  /* 品牌紅（LOGO 原色），用於大標題與裝飾 */
+  --color-brand: #ff3740;
+  /* 深品牌紅，用於小字、按鈕與紅底白字區塊 */
+  --color-brand-deep: #d61f2a;
+  /* 主要文字顏色（接近黑） */
+  --color-ink: #1f1f1f;
+  /* 次要文字顏色（灰） */
+  --color-muted: #666666;
+  /* 暖白底色：首屏與頁面背景 */
+  --color-paper: #f6f4f0;
+  /* 區塊與圖片底色（暖白，與首屏一致） */
+  --color-ivory: #f6f4f0;
+  /* 分隔線顏色（淡紅） */
+  --color-line: #f6d5d7;
+
+  /* 全站字級放大一階 */
+  /* text-xs：14px */
+  --text-xs: 0.875rem;
+  /* text-sm：16px */
+  --text-sm: 1rem;
+  /* text-base：18px */
+  --text-base: 1.125rem;
+  /* text-lg：20px */
+  --text-lg: 1.25rem;
+  /* text-xl：24px */
+  --text-xl: 1.5rem;
+  /* text-2xl：28px */
+  --text-2xl: 1.75rem;
+  /* text-3xl：34px */
+  --text-3xl: 2.125rem;
+  /* text-4xl：42px */
+  --text-4xl: 2.625rem;
+  /* text-5xl：54px */
+  --text-5xl: 3.375rem;
+  /* text-6xl：64px */
+  --text-6xl: 4rem;
 }
 
+/* 字型設定：inline 代表直接引用 layout.tsx 產生的字型變數 */
 @theme inline {
+  /* 預設字型：Noto Sans TC，載入失敗時依序改用蘋方、微軟正黑體、系統無襯線字 */
   --font-sans: var(--font-noto-sans), "PingFang TC", "Microsoft JhengHei", sans-serif;
-  --font-serif: var(--font-noto-serif), "Songti TC", "PMingLiU", serif;
+  /* 英文標題字：Archivo（中文字自動改用 Noto Sans TC） */
+  --font-display: var(--font-archivo), var(--font-noto-sans), sans-serif;
 }
 
+/* 整個網頁 */
 html {
+  /* 點選錨點連結時平滑捲動，而不是瞬間跳過去 */
   scroll-behavior: smooth;
 }
 
+/* 網頁內容區 */
 body {
-  background: #ffffff;
+  /* 暖白背景 */
+  background: var(--color-paper);
+  /* 文字使用主要文字顏色 */
   color: var(--color-ink);
 }
 
+/* 鍵盤操作時的焦點框：全站統一為深品牌紅外框（滑鼠點擊不顯示） */
+@layer base {
+  /* 連結與按鈕取得鍵盤焦點時 */
+  :where(a, button):focus-visible {
+    /* 2px 深品牌紅實線 */
+    outline: 2px solid var(--color-brand-deep);
+    /* 與元件保持 3px 間隔，避免貼住文字 */
+    outline-offset: 3px;
+  }
+
+  /* 紅色底的區塊（聯絡區、頁尾色帶）內改用白色焦點框，才看得清楚 */
+  .bg-brand-deep :where(a, button):focus-visible {
+    /* 白色外框 */
+    outline-color: #ffffff;
+  }
+}
+
+/* 動畫：浮動 header 從畫面上方滑入（只在載入時播放一次） */
+@keyframes hdr-in {
+  /* 起點：完全在畫面上方之外 */
+  from {
+    transform: translateY(calc(-100% - 48px));
+  }
+}
+
+/* 動畫：側邊選單從左側滑入 */
 @keyframes drawer-in {
+  /* 起點：整個選單位於畫面左外側 */
   from {
     transform: translateX(-100%);
   }
 }
 
+/* 動畫：淡入 */
 @keyframes fade-in {
+  /* 起點：完全透明 */
   from {
     opacity: 0;
   }

@@ -1,0 +1,501 @@
+/* =========================================================
+   首屏主視覺：左側超大標題＋右側三欄無限捲動磚牆
+   版型：手機上下排列（文字 → 磚牆），電腦與橫向手機左右並排
+   ========================================================= */
+
+/* 整個首屏：鎖定一個畫面高度，暖白底 */
+.hero {
+  /* 品牌色（取自全站設計變數，括號內為備用值） */
+  --brand: var(--color-brand, #ff3740);
+  --brand-deep: var(--color-brand-deep, #d61f2a);
+  --ink: var(--color-ink, #1f1f1f);
+  --muted: var(--color-muted, #666666);
+  --paper: var(--color-paper, #f6f4f0);
+  /* 磚牆尺寸：手機版（間距 8px、圓角 14px、寬度＝畫面寬減左右留白） */
+  --gap: 8px;
+  --r: 14px;
+  --gw: calc(100vw - 40px);
+  /* 每欄寬度＝(磚牆寬 − 兩個間距) ÷ 3；磚塊為正方形，完整呈現產品照 */
+  --col: calc((var(--gw) - 2 * var(--gap)) / 3);
+  /* 一塊磚＋一個間距的高度（捲動計算用） */
+  --pitch: calc(var(--col) + var(--gap));
+  /* 動畫曲線 */
+  --expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* 定位基準，超出部分隱藏 */
+  position: relative;
+  overflow: hidden;
+  /* 直向排列：文字在上、磚牆在下 */
+  display: flex;
+  flex-direction: column;
+  /* 一個畫面高度（最少 620px，避免太矮時擠壓） */
+  height: 100svh;
+  min-height: 620px;
+  /* 上方留出浮動 header 的高度（手機 80px） */
+  padding-top: 80px;
+  background: var(--paper);
+}
+
+/* ---------- 左側文字區 ---------- */
+.copy {
+  /* 不被壓縮 */
+  flex: none;
+  /* 層級高於磚牆 */
+  position: relative;
+  z-index: 2;
+  /* 內距：上、左右、下 */
+  padding: clamp(20px, 4svh, 40px) 20px clamp(18px, 3svh, 32px);
+}
+
+/* 英文小標：Archivo 粗體大寫、字距加寬、深品牌紅 */
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 800;
+  font-stretch: 90%;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--brand-deep);
+}
+
+/* 主標題：超大、最粗字重、黑色 */
+.title {
+  margin: 14px 0 0;
+  font-size: clamp(46px, 14vw, 96px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+/* 標題每一行：獨立一列，底部裁切讓文字「從下方升起」 */
+.ln {
+  display: block;
+  white-space: nowrap;
+  clip-path: inset(-0.2em -0.5em -0.06em -0.5em);
+}
+/* 行內文字：可做位移動畫 */
+.ln > span {
+  display: inline-block;
+}
+/* 強調行：品牌紅 */
+.accent {
+  color: var(--brand);
+}
+
+/* 說明文字：灰色、行高 1.65 */
+.lead {
+  margin: clamp(12px, 2svh, 22px) 0 0;
+  max-width: 32em;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+/* 說明中的重點字：黑色 */
+.lead strong {
+  color: var(--ink);
+}
+
+/* 行動按鈕列 */
+.acts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: clamp(14px, 2.6svh, 30px);
+}
+
+/* 主要按鈕：深品牌紅膠囊、白字 */
+.pill {
+  display: inline-grid;
+  place-items: center;
+  height: 56px;
+  padding: 0 30px;
+  border-radius: 20px;
+  background: var(--brand-deep);
+  color: #fff;
+  font-size: 17px;
+  letter-spacing: 0.12em;
+  transition: transform 0.3s var(--quart), background-color 0.2s;
+}
+/* 圓形圖示按鈕（撥打電話） */
+.circ {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--brand-deep);
+  color: #fff;
+  transition: transform 0.3s var(--quart), background-color 0.2s;
+}
+/* 滑鼠移上：微微上浮、顏色加深 */
+.pill:hover,
+.circ:hover {
+  transform: translateY(-2px);
+  background: #b81822;
+}
+/* 按下時回到原位 */
+.pill:active,
+.circ:active {
+  transform: none;
+}
+
+/* 次要連結：黑字＋黑色圓形箭頭 */
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-left: 20px;
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+/* 箭頭圓 */
+.dot {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  transition: transform 0.35s var(--quart);
+}
+/* 滑鼠移上：箭頭轉向右上 */
+.more:hover .dot {
+  transform: rotate(-45deg);
+}
+
+/* ---------- 右側（手機為下方）磚牆 ---------- */
+.band {
+  /* 填滿剩餘高度 */
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  /* 左右留白 20px，超出隱藏 */
+  margin: 0 20px;
+  overflow: hidden;
+}
+
+/* 每一欄：絕對定位，寬度一欄 */
+.col {
+  position: absolute;
+  width: var(--col);
+}
+/* 三欄的水平位置與高低錯落（手機） */
+.c1 {
+  left: 0;
+  top: calc(var(--pitch) * -0.32);
+}
+.c2 {
+  left: calc(var(--col) + var(--gap));
+  top: calc(var(--pitch) * -0.66);
+}
+.c3 {
+  left: calc(2 * (var(--col) + var(--gap)));
+  top: calc(var(--pitch) * -0.14);
+}
+
+/* 欄內容：同一組磚塊重複三次，往上（或往下）位移三分之一後無縫接回 */
+.track {
+  animation: colDown 14.6s linear infinite;
+  will-change: transform;
+}
+/* 中間欄反方向 */
+.up .track {
+  animation-name: colUp;
+}
+@keyframes colDown {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -33.3333%, 0);
+  }
+}
+@keyframes colUp {
+  from {
+    transform: translate3d(0, -33.3333%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 單一磚塊：正方形、圓角、超出裁切 */
+.cell {
+  position: relative;
+  overflow: hidden;
+  width: var(--col);
+  height: var(--col);
+  margin-bottom: var(--gap);
+  border-radius: var(--r);
+  background: #ffffff;
+  /* 避免圓角在動畫中閃爍 */
+  transform: translateZ(0);
+}
+/* 產品照：等比例填滿 */
+.img {
+  object-fit: cover;
+}
+
+/* 色塊磚 */
+.red {
+  background: var(--brand);
+  color: #fff;
+}
+.deep {
+  background: var(--brand-deep);
+  color: #fff;
+}
+.dark {
+  background: #151515;
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+.cream {
+  background: #fbf9f6;
+  box-shadow: inset 0 0 0 1px #e9e6df;
+}
+
+/* 色塊上的文字：左下角 */
+.label {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  bottom: 9%;
+  line-height: 1.15;
+}
+/* 英文：Archivo 寬體大寫 */
+.label b {
+  display: block;
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 900;
+  font-stretch: 85%;
+  font-size: clamp(10px, calc(var(--col) * 0.085), 18px);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+/* 中文 */
+.label span {
+  display: block;
+  margin-top: 0.35em;
+  font-size: clamp(12px, calc(var(--col) * 0.1), 22px);
+  letter-spacing: 0.08em;
+}
+/* 米白磚中央的品牌標誌 */
+.logo {
+  position: absolute;
+  left: 22%;
+  top: 50%;
+  /* 圖片需明確指定寬度（只設 left/right 不會縮放圖片） */
+  width: 56%;
+  height: auto;
+  transform: translateY(-50%);
+}
+
+/* =========================================================
+   平板直向：字更大、磚牆左右留白加寬
+   ========================================================= */
+@media (min-width: 640px) {
+  .hero {
+    --gap: 12px;
+    --r: 18px;
+    --gw: calc(100vw - 64px);
+    padding-top: 96px;
+  }
+  .copy {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .band {
+    margin: 0 32px;
+  }
+  .lead {
+    font-size: 17px;
+  }
+}
+
+/* =========================================================
+   電腦（≥1024px）：文字在左、磚牆在右，磚牆延伸到 header 底下
+   ========================================================= */
+@media (min-width: 1024px) {
+  .hero {
+    --gap: 13px;
+    --r: 22px;
+    /* 磚牆寬度：畫面寬 46%，最寬 900px（大螢幕不留過大空白） */
+    --gw: min(46vw, 900px);
+    --side: max(48px, 6vw);
+    display: block;
+    min-height: 700px;
+    padding-top: 0;
+  }
+  /* 文字區：header 下方到底部之間垂直置中 */
+  .copy {
+    position: absolute;
+    left: var(--side);
+    top: 185px;
+    bottom: 0;
+    width: calc(100% - var(--gw) - 48px - var(--side) - 48px);
+    padding: 0 0 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .title {
+    font-size: clamp(64px, 6.4vw, 116px);
+  }
+  .lead {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  /* 磚牆：靠右、上下貫穿（被浮動 header 蓋住上緣） */
+  .band {
+    position: absolute;
+    right: 48px;
+    top: 0;
+    bottom: 0;
+    width: var(--gw);
+    margin: 0;
+  }
+  /* 三欄高低錯落（電腦） */
+  .c1 {
+    top: calc(var(--pitch) * 0.305);
+  }
+  .c2 {
+    top: calc(var(--pitch) * -0.04);
+  }
+  .c3 {
+    top: calc(var(--pitch) * 0.306);
+  }
+}
+
+/* =========================================================
+   橫向手機（矮且寬）：同電腦版左右並排，字級依高度縮放
+   ========================================================= */
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 1023px) {
+  .hero {
+    --gw: min(44vw, calc((100svh - 20px) * 1.1));
+    display: block;
+    min-height: 0;
+    padding-top: 0;
+  }
+  .copy {
+    position: absolute;
+    left: 24px;
+    /* 橫向手機的 header 高 96px */
+    top: 96px;
+    bottom: 0;
+    width: calc(100% - var(--gw) - 64px);
+    padding: 0 0 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .title {
+    font-size: clamp(26px, 10svh, 50px);
+  }
+  .lead {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .pill,
+  .circ {
+    height: 46px;
+  }
+  .circ {
+    width: 46px;
+  }
+  .band {
+    position: absolute;
+    right: 16px;
+    top: 0;
+    bottom: 0;
+    width: var(--gw);
+    margin: 0;
+  }
+  .c1 {
+    top: 104px;
+  }
+  .c2 {
+    top: calc(96px - var(--pitch) * 0.45);
+  }
+  .c3 {
+    top: calc(96px - var(--pitch) * 0.12);
+  }
+}
+
+/* 矮螢幕的直向手機：隱藏說明文字，讓磚牆保有空間 */
+@media (max-height: 700px) and (orientation: portrait) {
+  .lead {
+    display: none;
+  }
+}
+
+/* =========================================================
+   進場動畫（只播一次）；系統要求減少動態時全部停用
+   ========================================================= */
+@media (prefers-reduced-motion: no-preference) {
+  /* 小標淡入 */
+  .eyebrow {
+    animation: fadeUp 0.8s var(--quart) 0.25s both;
+  }
+  /* 標題逐行從下方升起，每行間隔 0.085 秒 */
+  .ln > span {
+    animation: rise 1s var(--expo) both;
+    animation-delay: calc(0.3s + var(--i, 0) * 0.085s);
+  }
+  /* 說明文字上浮淡入 */
+  .lead {
+    animation: fadeUp 0.9s var(--quart) 0.76s both;
+  }
+  /* 按鈕依序上浮淡入 */
+  .acts > * {
+    animation: fadeUp 0.85s var(--quart) both;
+    animation-delay: calc(0.88s + var(--i, 0) * 0.07s);
+  }
+  /* 磚牆每欄：從遠一點的位置漂移進場，結束時無縫接上持續捲動 */
+  .col {
+    animation: drift 1.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(0.12s + var(--i, 0) * 0.07s);
+  }
+  .up {
+    animation-name: driftUp;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* 停止磚牆捲動 */
+  .track {
+    animation: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(110%);
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes drift {
+  from {
+    opacity: 0;
+    transform: translateY(var(--pitch));
+  }
+}
+@keyframes driftUp {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--pitch) * -1));
+  }
+}
