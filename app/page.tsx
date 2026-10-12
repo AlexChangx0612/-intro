@@ -1,5 +1,7 @@
 // 匯入 Next.js 圖片元件
 import Image from "next/image";
+// 匯入產品系列線條圖示
+import CategoryIcon from "./components/CategoryIcon";
 // 匯入首屏主視覺（超大標題＋無限捲動磚牆）
 import HeroMosaic from "./components/HeroMosaic";
 // 匯入視差捲動元件
@@ -32,6 +34,37 @@ const services = [
   { title: "台灣製造", desc: "多款欄柱與設備於台灣在地生產，品質穩定，溝通即時。" },
 ];
 
+// 聯絡按鈕：白框圓角卡片，圖示＋兩行文字；滑鼠移上變白底紅字
+const contactBtn =
+  "group flex h-[76px] items-center gap-3 rounded-[20px] border border-white/80 px-4 transition sm:gap-4 sm:px-5 hover:bg-white hover:text-brand-deep active:translate-y-px";
+// 聯絡按鈕的圓形圖示底
+const contactIcon =
+  "flex size-11 shrink-0 items-center justify-center rounded-full bg-white/15 transition group-hover:bg-brand-deep/10";
+
+// 電話圖示
+function PhoneIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" />
+    </svg>
+  );
+}
+
+// 信封圖示
+function MailIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3.5 6.5 8.5 6.5 8.5-6.5" />
+    </svg>
+  );
+}
+
+// LINE 圖示：LINE 官方 icon 圖檔，44px（裝飾用，alt 留空）
+function LineIcon() {
+  return <Image src="/brand/line-icon.png" alt="" width={1024} height={1024} className="size-11 shrink-0 rounded-[10px]" />;
+}
+
 // 首頁
 export default function Home() {
   // 讀取產品分類與特價商品圖片
@@ -56,47 +89,48 @@ export default function Home() {
         <HeroMosaic images={mosaic} />
 
         {/* 系列 */}
-        {/* 探索系列區塊；scroll-mt 讓錨點跳轉時不被固定的 header 擋住（跳轉時 header 已縮成精簡版） */}
+        {/* 產品系列區塊；scroll-mt 讓錨點跳轉時不被固定的 header 擋住（跳轉時 header 已縮成精簡版） */}
         <section id="collections" className="scroll-mt-20 sm:scroll-mt-24 py-20 sm:py-28">
           {/* 版心 */}
           <div className={container}>
             {/* 區塊標題 */}
-            <SectionTitle eyebrow="COLLECTIONS" title="探索系列" />
-            {/* 第一個分類放大為主打（2×2），其餘 12 個剛好排滿 */}
-            {/* 手機一排 2 個、電腦一排 4 個 */}
-            <div className="mt-14 grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-5 sm:gap-y-14 lg:grid-cols-4">
+            <SectionTitle eyebrow="COLLECTIONS" title="產品系列" />
+            {/* 13 個系列圖示方塊：手機一排 2 個、平板以上 5 個、大螢幕 7 個；最後一排置中 */}
+            <ul className="mt-14 flex flex-wrap justify-center gap-4 md:gap-5">
               {/* 每個分類產生一個方塊；i 為順序 */}
               {categories.map((c, i) => (
-                // 點擊後切換到該分類
-                <a
-                  // 唯一值
+                // 方塊寬度依每排數量平分（扣除間距）
+                <li
                   key={c.id}
-                  // 連到商品目錄的該分類
-                  href={`#c-${c.id}`}
-                  // 第一個方塊橫跨 2 欄，電腦版再縱跨 2 列
-                  className={`group block ${i === 0 ? "col-span-2 lg:row-span-2" : ""}`}
+                  className="w-[calc((100%-16px)/2)] md:w-[calc((100%-80px)/5)] xl:w-[calc((100%-120px)/7)]"
                 >
-                  {/* 正方形圓角圖片框（手機圓角 14px、電腦 22px） */}
-                  <div className="relative aspect-square overflow-hidden rounded-[14px] bg-white lg:rounded-[22px]">
-                    {/* 分類代表圖（產品照上有型號與標籤，不做放大裁切，確保資訊完整） */}
-                    <Image
-                      // 該分類第一張圖
-                      src={c.images[0]}
-                      // 替代文字為分類名稱
-                      alt={c.name}
-                      // 填滿外框
-                      fill
-                      // 主打圖：電腦版約半個螢幕寬、手機滿版；其他：電腦版約 1/4、手機約一半
-                      sizes={i === 0 ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 25vw, 50vw"}
-                      // 等比例填滿；滑鼠移上時緩慢放大
-                      className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
-                    />
-                  </div>
-                  {/* 分類名稱：置中，滑鼠移上變紅字 */}
-                  <p className="mt-5 text-center text-[17px] tracking-[0.1em] transition group-hover:text-brand-deep">{c.name}</p>
-                </a>
+                  {/* 點擊後切換到商品目錄的該分類 */}
+                  <a
+                    href={`#c-${c.id}`}
+                    // 直式白卡（4:5）、細框；滑鼠移上微微浮起並加陰影
+                    className="group relative flex aspect-[4/5] flex-col items-center justify-center rounded-[14px] bg-white shadow-[0_0_0_1px_rgba(15,15,14,.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_0_0_1px_rgba(214,31,42,.18),0_18px_36px_-22px_rgba(15,15,14,.35)] lg:rounded-[18px]"
+                  >
+                    {/* 左上角編號：01、02… */}
+                    <span className="absolute top-3 left-3.5 text-[11px] tracking-[0.15em] text-muted lg:top-4 lg:left-4">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {/* 系列圖示：固定大小，滑鼠移上變品牌紅 */}
+                    <CategoryIcon id={c.id} className="size-12 text-ink transition duration-300 group-hover:text-brand-deep sm:size-14 xl:size-16" />
+                    {/* 圖示下方細線：滑鼠移上拉長 */}
+                    <span aria-hidden="true" className="mt-4 h-px w-5 bg-brand/50 transition-[width] duration-300 group-hover:w-9" />
+                    {/* 系列名稱：空間不夠時只在「・」後換行，不把詞拆開；固定保留兩行高度，讓每張卡的圖示位置一致 */}
+                    <span className="mt-3 flex min-h-[2lh] flex-wrap content-center justify-center px-2 text-center text-sm leading-snug tracking-[0.08em] transition group-hover:text-brand-deep lg:text-[15px]">
+                      {c.name.split("・").map((part, j, all) => (
+                        <span key={part}>
+                          <span className="whitespace-nowrap">{j < all.length - 1 ? `${part}・` : part}</span>
+                          {j < all.length - 1 && <wbr />}
+                        </span>
+                      ))}
+                    </span>
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </section>
 
@@ -218,32 +252,48 @@ export default function Home() {
           {/* 版心 */}
           <div className={container}>
             {/* 英文小標：85% 白 */}
-            <p className="text-xs tracking-[0.35em] text-white/85">CONTACT</p>
-            {/* 主標題：手機 28px → 平板以上 42px */}
-            <h2 className="mt-5 text-2xl tracking-[0.12em] sm:text-4xl">需要規劃空間動線嗎？</h2>
-            {/* 說明文字：90% 白，最寬約 448px */}
-            <p className="mx-auto mt-6 max-w-md text-sm leading-7 text-white/90">
-              告訴我們您的場地與需求，專人將為您提供免費規劃與報價。
+            <p className="text-xs tracking-[0.35em] text-white/85">CONTACT US</p>
+            {/* 主標題：手機 28px → 平板以上 42px；手機在「立即」後換行 */}
+            <h2 className="mt-5 text-2xl tracking-[0.12em] sm:text-4xl">
+              <span className="whitespace-nowrap">線上專員立即</span>
+              <wbr />
+              <span className="whitespace-nowrap">為您提供報價服務</span>
+            </h2>
+            {/* 說明文字：90% 白；空間不夠時在「，」後換行 */}
+            <p className="mx-auto mt-6 text-sm leading-7 text-white/90">
+              <span className="whitespace-nowrap">告訴我們您的場地與需求，</span>
+              <wbr />
+              <span className="whitespace-nowrap">專員將為您提供免費規劃 &amp; 報價</span>
             </p>
-            {/* 兩顆按鈕：手機上下排列；平板以上左右並排 */}
-            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-              {/* 電話按鈕 */}
-              <a
-                // 手機上點擊直接撥號
-                href="tel:0226082585"
-                // 白框膠囊按鈕；滑鼠移上變白底紅字
-                className="inline-flex h-14 w-full max-w-60 items-center justify-center rounded-[20px] border border-white px-8 text-sm tracking-[0.2em] transition hover:bg-white hover:text-brand-deep active:translate-y-px sm:w-auto"
-              >
-                02-2608-2585
+            {/* 三顆按鈕：1280px 以下上下排列；以上左右並排，寬度相同 */}
+            <div className="mx-auto mt-12 grid max-w-sm grid-cols-[minmax(0,1fr)] gap-4 xl:max-w-none xl:grid-cols-[repeat(3,21rem)] xl:justify-center xl:gap-6">
+              {/* 電話：手機上點擊直接撥號 */}
+              <a href="tel:0226082585" className={contactBtn}>
+                <span className={contactIcon}>
+                  <PhoneIcon />
+                </span>
+                <span className="text-left">
+                  <span className="block text-xs tracking-[0.2em] opacity-80">電話</span>
+                  <span className="block text-base tracking-[0.12em]">02-2608-2585</span>
+                </span>
               </a>
-              {/* Email 按鈕 */}
-              <a
-                // 點擊開啟寄信程式
-                href="mailto:shung3758@gmail.com"
-                // 白底紅字膠囊按鈕；滑鼠移上稍微變透明
-                className="inline-flex h-14 w-full max-w-60 items-center justify-center rounded-[20px] bg-white px-8 text-sm tracking-[0.2em] text-brand-deep transition hover:bg-white/90 active:translate-y-px sm:w-auto"
-              >
-                Email 諮詢
+              {/* E-MAIL：點擊開啟寄信程式 */}
+              <a href="mailto:shung3758@gmail.com" className={contactBtn}>
+                <span className={contactIcon}>
+                  <MailIcon />
+                </span>
+                <span className="min-w-0 text-left">
+                  <span className="block text-xs tracking-[0.2em] opacity-80">E-MAIL 諮詢</span>
+                  <span className="block truncate text-[15px] tracking-[0.04em] sm:text-base">shung3758@gmail.com</span>
+                </span>
+              </a>
+              {/* LINE 官方帳號：另開新分頁加入好友 */}
+              <a href="https://lin.ee/vcMIuCv" target="_blank" rel="noopener noreferrer" className={contactBtn}>
+                <LineIcon />
+                <span className="text-left">
+                  <span className="block text-xs tracking-[0.2em] opacity-80">LINE 官方帳號</span>
+                  <span className="block text-base tracking-[0.12em]">專員立即報價</span>
+                </span>
               </a>
             </div>
           </div>

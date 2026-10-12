@@ -91,8 +91,10 @@ export default function SiteFooter({ categories }: { categories: CategoryLink[] 
             {/* 電話 */}
             <li>
               {/* 手機上點擊可直接撥號 */}
-              <a href="tel:0226082585" className={footLink}>02-2608-2585</a>
+              <a href="tel:0226082585" className={footLink}>T:(02)2608-2585</a>
             </li>
+            {/* 傳真（無法點擊撥打，只顯示號碼） */}
+            <li className="flex min-h-11 items-center">F:(02)2600-6748</li>
             {/* Email */}
             <li>
               {/* 點擊開啟寄信程式；break-all 讓長網址在窄螢幕自動換行 */}

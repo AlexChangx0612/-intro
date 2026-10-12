@@ -56,6 +56,8 @@
 html {
   /* 點選錨點連結時平滑捲動，而不是瞬間跳過去 */
   scroll-behavior: smooth;
+  /* 裁掉超出畫面寬度的內容，避免手機出現橫向捲動、把 header 推出畫面 */
+  overflow-x: clip;
 }
 
 /* 網頁內容區 */

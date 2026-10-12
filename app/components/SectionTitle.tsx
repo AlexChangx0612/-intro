@@ -24,8 +24,15 @@ export default function SectionTitle({
     <div className={align === "center" ? "text-center" : ""}>
       {/* 英文小標：14px、字距加寬、深品牌紅 */}
       <p className="text-xs tracking-[0.35em] text-brand-deep">{eyebrow}</p>
-      {/* 主標題：與小標間距 16px，品牌紅，平板以上字級加大 */}
-      <h2 className="mt-4 text-2xl tracking-[0.12em] text-brand sm:text-3xl">{title}</h2>
+      {/* 主標題：與小標間距 16px，品牌紅，平板以上字級加大；空間不夠時只在「，」後換行，不把詞拆開 */}
+      <h2 className="mt-4 text-2xl tracking-[0.12em] text-brand sm:text-3xl">
+        {title.split("，").map((part, i, all) => (
+          <span key={part}>
+            <span className="whitespace-nowrap">{i < all.length - 1 ? `${part}，` : part}</span>
+            {i < all.length - 1 && <wbr />}
+          </span>
+        ))}
+      </h2>
       {/* 有傳入說明文字時才顯示 */}
       {desc && (
         // 說明文字：灰色、最寬約 512px，置中時左右自動置中
