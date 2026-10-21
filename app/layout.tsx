@@ -1,7 +1,7 @@
 // 匯入 Next.js 的網頁中繼資料型別（標題、描述等）
 import type { Metadata } from "next";
 // 匯入 Google 字型：Noto Sans TC（思源黑體繁中）與 Archivo（英文標題用寬體字）
-import { Archivo, Noto_Sans_TC } from "next/font/google";
+import { Archivo, Caveat, Noto_Sans_TC } from "next/font/google";
 // 匯入全站共用樣式
 import "./globals.css";
 
@@ -29,6 +29,18 @@ const archivo = Archivo({
   display: "swap",
 });
 
+// 手寫字：Caveat，用於客戶案例區的手寫註記
+const caveat = Caveat({
+  // 註冊成 CSS 變數 --font-caveat
+  variable: "--font-caveat",
+  // 只需要英文字母
+  subsets: ["latin"],
+  // 只載入 600
+  weight: ["600"],
+  // 字型下載完成前先用系統字顯示
+  display: "swap",
+});
+
 // 網頁中繼資料：瀏覽器分頁標題與搜尋引擎描述
 export const metadata: Metadata = {
   // 瀏覽器分頁上顯示的標題
@@ -42,7 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   // 回傳整頁的 HTML 骨架
   return (
     // 語系設為繁體中文；套用兩組字型變數、滿版高度與文字抗鋸齒
-    <html lang="zh-Hant" className={`${notoSans.variable} ${archivo.variable} h-full antialiased`}>
+    <html lang="zh-Hant" className={`${notoSans.variable} ${archivo.variable} ${caveat.variable} h-full antialiased`}>
       {/* body 為直向排列、至少滿版高度，並全站使用無襯線粗體字；children 為各頁內容 */}
       <body className="flex min-h-full flex-col font-sans font-bold">{children}</body>
     </html>

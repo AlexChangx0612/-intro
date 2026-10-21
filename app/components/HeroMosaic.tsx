@@ -105,17 +105,17 @@ export default function HeroMosaic({ images }: { images: string[] }) {
         </p>
         {/* 行動按鈕 */}
         <div className={s.acts}>
-          {/* 主要按鈕：免費諮詢 */}
+          {/* 主要按鈕：立即諮詢產品（文字＋電話圖示合併為一顆），捲動到聯絡區 */}
           <a href="#contact" className={s.pill} style={{ "--i": 0 } as CSSProperties}>
-            免費諮詢
+            立即諮詢產品
+            {/* 右側半透明白圓底的電話圖示 */}
+            <span className={s.ico} aria-hidden="true">
+              <PhoneIcon />
+            </span>
           </a>
-          {/* 圓形按鈕：直接撥打電話 */}
-          <a href="tel:0226082585" className={s.circ} aria-label="撥打電話 02-2608-2585" style={{ "--i": 1 } as CSSProperties}>
-            <PhoneIcon />
-          </a>
-          {/* 次要連結：探索系列 */}
-          <a href="#collections" className={s.more} style={{ "--i": 2 } as CSSProperties}>
-            探索系列
+          {/* 次要連結：尋找產品 */}
+          <a href="#collections" className={s.more} style={{ "--i": 1 } as CSSProperties}>
+            尋找產品
             {/* 黑色圓形箭頭 */}
             <span className={s.dot} aria-hidden="true">
               <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">

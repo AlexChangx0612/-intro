@@ -109,10 +109,11 @@
 
 /* 主要按鈕：深品牌紅膠囊、白字 */
 .pill {
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
   height: 56px;
-  padding: 0 30px;
+  padding: 0 8px 0 28px;
   border-radius: 20px;
   background: var(--brand-deep);
   color: #fff;
@@ -120,26 +121,26 @@
   letter-spacing: 0.12em;
   transition: transform 0.3s var(--quart), background-color 0.2s;
 }
-/* 圓形圖示按鈕（撥打電話） */
-.circ {
+/* 按鈕內的電話圖示：半透明白圓底 */
+.ico {
   display: grid;
   place-items: center;
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: var(--brand-deep);
-  color: #fff;
-  transition: transform 0.3s var(--quart), background-color 0.2s;
+  background: rgb(255 255 255 / 0.18);
+  transition: transform 0.35s var(--quart);
 }
-/* 滑鼠移上：微微上浮、顏色加深 */
-.pill:hover,
-.circ:hover {
+/* 滑鼠移上：微微上浮、顏色加深，電話圖示輕輕搖動角度 */
+.pill:hover {
   transform: translateY(-2px);
   background: #b81822;
 }
+.pill:hover .ico {
+  transform: rotate(-12deg);
+}
 /* 按下時回到原位 */
-.pill:active,
-.circ:active {
+.pill:active {
   transform: none;
 }
 
@@ -405,12 +406,13 @@
     font-size: 13px;
     line-height: 1.5;
   }
-  .pill,
-  .circ {
+  .pill {
     height: 46px;
+    padding: 0 6px 0 20px;
   }
-  .circ {
-    width: 46px;
+  .ico {
+    width: 34px;
+    height: 34px;
   }
   .band {
     position: absolute;

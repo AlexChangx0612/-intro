@@ -20,6 +20,8 @@
   --color-ivory: #f6f4f0;
   /* 分隔線顏色（淡紅） */
   --color-line: #f6d5d7;
+  /* 淡紅底色：客戶案例區的標籤 */
+  --color-blush: #fce3e4;
 
   /* 全站字級放大一階 */
   /* text-xs：14px */
@@ -50,6 +52,8 @@
   --font-sans: var(--font-noto-sans), "PingFang TC", "Microsoft JhengHei", sans-serif;
   /* 英文標題字：Archivo（中文字自動改用 Noto Sans TC） */
   --font-display: var(--font-archivo), var(--font-noto-sans), sans-serif;
+  /* 手寫字：Caveat（客戶案例區的手寫註記） */
+  --font-hand: var(--font-caveat), cursive;
 }
 
 /* 整個網頁 */

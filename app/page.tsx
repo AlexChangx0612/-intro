@@ -1,5 +1,7 @@
 // 匯入 Next.js 圖片元件
 import Image from "next/image";
+// 匯入客戶案例弧形輪播
+import CaseCarousel from "./components/CaseCarousel";
 // 匯入產品系列線條圖示
 import CategoryIcon from "./components/CategoryIcon";
 // 匯入首屏主視覺（超大標題＋無限捲動磚牆）
@@ -18,6 +20,8 @@ import SiteFooter from "./components/SiteFooter";
 import SiteHeader from "./components/SiteHeader";
 // 匯入讀取產品圖片的函式
 import { getCatalog } from "./lib/products";
+// 匯入客戶案例資料（置換照片與說明請改這個檔案）
+import { cases } from "./lib/cases";
 // 匯入共用版心樣式
 import { container } from "./lib/ui";
 
@@ -88,9 +92,32 @@ export default function Home() {
         {/* 首屏：超大標題＋無限捲動磚牆 */}
         <HeroMosaic images={mosaic} />
 
+        {/* 客戶案例：弧形輪播 */}
+        <CaseCarousel cases={cases} />
+
+        {/* 特價商品 */}
+        {/* 有特價圖片時才顯示這個區塊 */}
+        {onsale.length > 0 && (
+          // 特價商品區塊（上方有分隔線）
+          <section id="onsale" className="scroll-mt-20 sm:scroll-mt-24 border-t border-line py-20 sm:py-28">
+            {/* 版心 */}
+            <div className={container}>
+              {/* 標題列：手機上下排列置中；平板以上左標題、右備註 */}
+              <div className="mb-12 flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end">
+                {/* 靠左的區塊標題 */}
+                <SectionTitle align="left" eyebrow="SPECIAL OFFERS" title="特價商品" />
+                {/* 右側備註：灰字 */}
+                <p className="text-sm text-muted">限量優惠，售完為止。</p>
+              </div>
+              {/* 橫向捲動的特價商品列 */}
+              <ProductRail images={onsale} alt="特價商品" />
+            </div>
+          </section>
+        )}
+
         {/* 系列 */}
-        {/* 產品系列區塊；scroll-mt 讓錨點跳轉時不被固定的 header 擋住（跳轉時 header 已縮成精簡版） */}
-        <section id="collections" className="scroll-mt-20 sm:scroll-mt-24 py-20 sm:py-28">
+        {/* 產品系列區塊（上方有分隔線）；scroll-mt 讓錨點跳轉時不被固定的 header 擋住（跳轉時 header 已縮成精簡版） */}
+        <section id="collections" className="scroll-mt-20 sm:scroll-mt-24 border-t border-line py-20 sm:py-28">
           {/* 版心 */}
           <div className={container}>
             {/* 區塊標題 */}
@@ -205,26 +232,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* 特價商品 */}
-        {/* 有特價圖片時才顯示這個區塊 */}
-        {onsale.length > 0 && (
-          // 特價商品區塊
-          <section id="onsale" className="scroll-mt-20 sm:scroll-mt-24 py-20 sm:py-28">
-            {/* 版心 */}
-            <div className={container}>
-              {/* 標題列：手機上下排列置中；平板以上左標題、右備註 */}
-              <div className="mb-12 flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end">
-                {/* 靠左的區塊標題 */}
-                <SectionTitle align="left" eyebrow="SPECIAL OFFERS" title="特價商品" />
-                {/* 右側備註：灰字 */}
-                <p className="text-sm text-muted">限量優惠，售完為止。</p>
-              </div>
-              {/* 橫向捲動的特價商品列 */}
-              <ProductRail images={onsale} alt="特價商品" />
-            </div>
-          </section>
-        )}
 
         {/* 服務 */}
         {/* 世紘優勢區塊（header「世紘優勢」連到這裡），上方有分隔線 */}
