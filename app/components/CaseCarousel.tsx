@@ -62,7 +62,7 @@ function roundedQuad(pts: [number, number][], r: number) {
   return `path("${parts.join("")}Z")`;
 }
 
-// 客戶案例弧形輪播區塊
+// 場域應用弧形輪播區塊
 export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
   // 整個區塊（進場動畫用）
   const rootRef = useRef<HTMLElement>(null);
@@ -314,12 +314,12 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
 
   // 回傳區塊
   return (
-    // 客戶案例區塊；scroll-mt 讓錨點跳轉時不被固定的 header 擋住
+    // 場域應用區塊；scroll-mt 讓錨點跳轉時不被固定的 header 擋住
     <section
       ref={rootRef}
       id="cases"
       aria-roledescription="carousel"
-      aria-label="客戶實際案例"
+      aria-label="場域應用"
       className="relative scroll-mt-20 overflow-hidden py-20 sm:scroll-mt-24 sm:py-28"
     >
       {/* 文字區：置中 */}
@@ -329,12 +329,12 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
           data-enter="badge"
           className="inline-flex h-9 items-center rounded-full bg-blush px-4 text-xs tracking-[0.2em] text-brand-deep"
         >
-          CASE STUDIES・客戶實際案例
+          SCENARIOS・場域應用
         </p>
         {/* 大標題：黑色特粗，兩行 */}
         <h2 className="mt-6 text-[clamp(34px,5.4vw,78px)] leading-[1.12] font-black tracking-[0.04em] text-ink">
           <span data-enter="line" className="block">
-            走進客戶現場，
+            走進各種場域，
           </span>
           <span data-enter="line" className="block text-brand">
             看見秩序的樣子
@@ -342,7 +342,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
         </h2>
         {/* 說明文字：灰字 */}
         <p data-enter="sub" className="mx-auto mt-6 max-w-xl text-sm leading-8 text-balance text-muted sm:text-base sm:leading-8">
-          從機場、醫院到影城與展演空間，看看世紘的欄柱與設備，如何在真實場域中安排從容的動線。
+          從機場、醫院到影城與展演空間，看看欄柱與公共空間設備，如何在不同場域中安排從容的動線。
         </p>
 
         {/* 左側「//」塗鴉（大螢幕才顯示） */}
@@ -355,9 +355,9 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
         <div aria-hidden="true" className="absolute top-[46%] right-[9%] hidden lg:block">
           {/* 手寫字：旋轉 14 度 */}
           <p data-enter="note" className="rotate-[14deg] font-hand text-[34px] leading-[0.95] font-semibold text-brand-deep">
-            Real sites,
+            Every space,
             <br />
-            real results
+            its own order
           </p>
           {/* 箭頭從字的下方開始，彎曲往下到卡片 */}
           <svg viewBox="0 0 120 190" className="absolute top-[110%] right-[30%] w-[110px] text-brand-deep" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -373,7 +373,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
         <div
           ref={bandRef}
           tabIndex={0}
-          aria-label="案例輪播，可拖曳或用左右鍵瀏覽"
+          aria-label="場域應用輪播，可拖曳或用左右鍵瀏覽"
           className="relative h-[calc(50cqw_+_110px)] cursor-grab touch-pan-y overflow-hidden select-none focus-visible:outline-offset-[-4px] data-dragging:cursor-grabbing min-[821px]:h-[calc(29.167cqw_+_110px)]"
         >
           {/* 每張卡片＋說明 */}
@@ -405,15 +405,15 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
                   {String(n + 1).padStart(2, "0")}
                 </span>
               </div>
-              {/* 卡片下方說明：客戶名稱＋案例內容 */}
+              {/* 卡片下方說明：場域＋應用內容 */}
               <div
                 ref={(el) => {
                   capRefs.current[i] = el;
                 }}
                 className="invisible absolute top-0 left-0 px-2 text-center will-change-transform"
               >
-                <p className="text-[11px] tracking-[0.3em] text-brand-deep sm:text-xs">CASE {String(n + 1).padStart(2, "0")}</p>
-                <p className="mt-1 truncate text-sm text-ink sm:text-base">{c.client}</p>
+                <p className="text-[11px] tracking-[0.3em] text-brand-deep sm:text-xs">SCENE {String(n + 1).padStart(2, "0")}</p>
+                <p className="mt-1 truncate text-sm text-ink sm:text-base">{c.scene}</p>
                 <p className="truncate text-xs text-muted sm:text-sm">{c.title}</p>
               </div>
             </div>

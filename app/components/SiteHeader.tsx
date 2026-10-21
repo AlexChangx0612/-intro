@@ -3,32 +3,35 @@
 
 // 匯入 Next.js 圖片元件
 import Image from "next/image";
+// 匯入 Next.js 站內連結元件
+import Link from "next/link";
 // 匯入 React 的副作用與狀態 hook
 import { useEffect, useState } from "react";
 // 匯入分類連結型別
 import type { CategoryLink } from "../lib/ui";
 
 // 主選單：大螢幕拆成 logo 左右各四個，較小螢幕收進抽屜
+// 「#」開頭為本頁錨點（每一頁底部都有聯絡區），「/」開頭為站內頁面
 // LOGO 左側四個按鈕
 const navLeft = [
-  // 產品系列 → 探索系列區塊
-  { href: "#collections", label: "產品系列" },
-  // 客製化服務（區塊待建立）
-  { href: "#custom", label: "客製化服務" },
-  // 產品電子目錄（區塊待建立）
-  { href: "#catalog", label: "產品電子目錄" },
-  // 實際案例（區塊待建立）
-  { href: "#cases", label: "實際案例" },
+  // 產品系列 → 打開產品分類 sidebar（大螢幕）；抽屜中連到產品系列頁
+  { href: "/products", label: "產品系列" },
+  // 適用場域 → 場域總覽頁
+  { href: "/solutions", label: "適用場域" },
+  // 場域應用 → 首頁輪播區塊
+  { href: "/#cases", label: "場域應用" },
+  // 客製化服務 → 關於頁的服務說明
+  { href: "/about#services", label: "客製化服務" },
 ];
 // LOGO 右側四個按鈕
 const navRight = [
-  // 關於世紘（區塊待建立）
-  { href: "#about", label: "關於世紘" },
-  // 世紘優勢 → 服務區塊
-  { href: "#advantages", label: "世紘優勢" },
-  // 企業採購（區塊待建立）
-  { href: "#procurement", label: "企業採購" },
-  // 聯絡我們 → 聯絡區塊
+  // 關於世紘 → 關於頁
+  { href: "/about", label: "關於世紘" },
+  // 世紘優勢 → 首頁優勢區塊
+  { href: "/#advantages", label: "世紘優勢" },
+  // 常見問題 → 首頁常見問題區塊
+  { href: "/#faq", label: "常見問題" },
+  // 聯絡我們 → 本頁聯絡區塊
   { href: "#contact", label: "聯絡我們" },
 ];
 
@@ -171,7 +174,7 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
               {/* 逐一產生按鈕 */}
               {navLeft.map((p) =>
                 // 「產品系列」：點擊從左側打開產品分類 sidebar
-                p.href === "#collections" ? (
+                p.href === "/products" ? (
                   <button
                     key={p.href}
                     type="button"
@@ -183,18 +186,18 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
                   </button>
                 ) : (
                   // 按鈕連結
-                  <a key={p.href} href={p.href} className={navLink}>
+                  <Link key={p.href} href={p.href} className={navLink}>
                     {/* 按鈕文字 */}
                     {p.label}
-                  </a>
+                  </Link>
                 ),
               )}
             </nav>
           </div>
 
           {/* 品牌：Shung 標誌 ｜ 公司名稱與標語 */}
-          {/* 點擊回到頁面頂端 */}
-          <a href="#" aria-label="世紘興業 回到首頁" className="flex min-h-11 items-center gap-2 sm:gap-4">
+          {/* 點擊回到首頁 */}
+          <Link href="/" aria-label="世紘興業 回到首頁" className="flex min-h-11 items-center gap-2 sm:gap-4">
             {/* 紅色 Shung 標誌 */}
             <Image
               // 圖片路徑
@@ -219,7 +222,7 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
               {/* 標語：灰字，手機 9px → 平板 14px → 電腦 16px */}
               <span className="mt-1.5 block text-[9px] tracking-[0.08em] text-muted sm:mt-2 sm:text-xs sm:tracking-[0.28em] lg:text-sm">公共空間設備專家</span>
             </span>
-          </a>
+          </Link>
 
           {/* 右欄（較小螢幕）：「聯絡我們」（手機 15px 字，平板以上 24px） */}
           <a
@@ -233,10 +236,10 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
             {/* 逐一產生按鈕 */}
             {navRight.map((p) => (
               // 按鈕連結
-              <a key={p.href} href={p.href} className={navLink}>
+              <Link key={p.href} href={p.href} className={navLink}>
                 {/* 按鈕文字 */}
                 {p.label}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>
@@ -284,10 +287,10 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
                   // 清單項目
                   <li key={p.href}>
                     {/* 點擊後跳到該區塊並關閉抽屜 */}
-                    <a href={p.href} onClick={close} className="block py-2 text-sm tracking-[0.12em] transition hover:text-brand-deep">
+                    <Link href={p.href} onClick={close} className="block py-2 text-sm tracking-[0.12em] transition hover:text-brand-deep">
                       {/* 連結文字 */}
                       {p.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -308,9 +311,9 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
                 // 清單項目
                 <li key={c.id}>
                   {/* 分類連結 */}
-                  <a
-                    // 連到該分類（商品目錄會自動切換）
-                    href={`#c-${c.id}`}
+                  <Link
+                    // 連到該分類頁
+                    href={`/products/${c.slug}`}
                     // 點擊後關閉抽屜
                     onClick={close}
                     // 20px 字，滑鼠移上變紅字
@@ -318,7 +321,7 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
                   >
                     {/* 分類名稱 */}
                     {c.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

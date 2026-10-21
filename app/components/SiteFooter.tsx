@@ -1,17 +1,21 @@
 // 匯入 Next.js 圖片元件
 import Image from "next/image";
+// 匯入 Next.js 站內連結元件
+import Link from "next/link";
 // 匯入共用版心樣式與分類連結型別
 import { container, type CategoryLink } from "../lib/ui";
 
 // 「服務」欄的連結清單
 const services = [
-  // 連到全系列商品區塊
-  { href: "#products", label: "全系列商品" },
-  // 連到特價商品區塊
-  { href: "#onsale", label: "特價商品" },
-  // 連到適用場域區塊
-  { href: "#applications", label: "適用場域" },
-  // 連到聯絡區塊
+  // 連到產品系列頁
+  { href: "/products", label: "全系列商品" },
+  // 連到首頁特價商品區塊
+  { href: "/#onsale", label: "特價商品" },
+  // 連到適用場域頁
+  { href: "/solutions", label: "適用場域" },
+  // 連到關於世紘頁
+  { href: "/about", label: "關於世紘" },
+  // 連到本頁聯絡區塊
   { href: "#contact", label: "免費空間規劃" },
 ];
 
@@ -21,7 +25,7 @@ const footLink = "inline-flex min-h-11 items-center transition hover:text-brand-
 // 頁尾每一欄的標題元件
 function ColumnTitle({ children }: { children: React.ReactNode }) {
   // 14px、字距加寬、深品牌紅
-  return <h4 className="text-xs tracking-[0.35em] text-brand-deep">{children}</h4>;
+  return <h2 className="text-xs tracking-[0.35em] text-brand-deep">{children}</h2>;
 }
 
 // 頁尾元件；categories 為產品分類清單
@@ -38,7 +42,7 @@ export default function SiteFooter({ categories }: { categories: CategoryLink[] 
           <Image src="/brand/logo.png" alt="世紘興業 Shung 標誌" width={72} height={72} />
           {/* 公司簡介：灰字、最寬約 320px */}
           <p className="mt-6 max-w-xs text-sm leading-7 text-muted">
-            專營紅龍柱、排隊欄柱與公共空間設備，為銀行、醫院、商場與各式場館打造有秩序、有質感的空間。
+            世紘興業有限公司成立於 2015 年，專營紅龍柱、排隊欄柱與公共空間設備，為銀行、醫院、商場與各式場館打造有秩序、有質感的空間。
           </p>
         </div>
 
@@ -52,11 +56,11 @@ export default function SiteFooter({ categories }: { categories: CategoryLink[] 
             {categories.slice(0, 6).map((c) => (
               // 清單項目
               <li key={c.id}>
-                {/* 點擊後切換到該分類；滑鼠移上變紅字 */}
-                <a href={`#c-${c.id}`} className={footLink}>
+                {/* 連到該分類頁；滑鼠移上變紅字 */}
+                <Link href={`/products/${c.slug}`} className={footLink}>
                   {/* 分類名稱 */}
                   {c.name}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -73,10 +77,10 @@ export default function SiteFooter({ categories }: { categories: CategoryLink[] 
               // 清單項目
               <li key={s.label}>
                 {/* 服務連結；滑鼠移上變紅字 */}
-                <a href={s.href} className={footLink}>
+                <Link href={s.href} className={footLink}>
                   {/* 服務名稱 */}
                   {s.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

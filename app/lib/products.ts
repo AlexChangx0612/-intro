@@ -5,8 +5,12 @@ import path from "node:path";
 
 // 產品分類的資料型別
 export type Category = {
-  // 分類代號（英文，用於網址錨點）
+  // 分類代號（英文，用於首頁商品目錄的錨點 #c-id）
   id: string;
+  // 分類頁網址代號：/products/<slug>
+  slug: string;
+  // 英文名稱（小標用）
+  en: string;
   // 分類名稱（顯示用）
   name: string;
   // 分類說明文字
@@ -16,10 +20,12 @@ export type Category = {
 };
 
 // 依照片實際內容分類；prefixes 比對 public/images 底下的檔名開頭
-const categoryDefs: { id: string; name: string; desc: string; prefixes: string[] }[] = [
+const categoryDefs: { id: string; slug: string; en: string; name: string; desc: string; prefixes: string[] }[] = [
   // 分類 1：伸縮帶欄柱
   {
     id: "retractable",
+    slug: "retractable-belt-stanchions",
+    en: "RETRACTABLE BELT STANCHIONS",
     name: "伸縮帶欄柱",
     desc: "萬向系列伸縮織帶紅龍柱，以及柱頭告示框、防塵蓋等配件。",
     // 檔名以這些文字開頭的圖片歸入此分類
@@ -28,6 +34,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 2：掛繩欄柱
   {
     id: "rope",
+    slug: "rope-stanchions",
+    en: "ROPE STANCHIONS",
     name: "掛繩欄柱",
     desc: "圓球頭不鏽鋼欄柱，搭配絨布繩，典雅大方。",
     prefixes: ["003-", "004-"],
@@ -35,6 +43,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 3：室內外欄柱
   {
     id: "outdoor",
+    slug: "indoor-outdoor-stanchions",
+    en: "INDOOR & OUTDOOR STANCHIONS",
     name: "室內外欄柱",
     desc: "消光黑烤漆柱身，可搭配彈力繩，室內外皆適用。",
     prefixes: ["005-", "006-"],
@@ -42,6 +52,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 4：塑膠欄柱
   {
     id: "plastic",
+    slug: "plastic-stanchions",
+    en: "PLASTIC STANCHIONS",
     name: "塑膠欄柱",
     desc: "紅白警示塑膠欄柱，底座實心配重，施工與停車場常用。",
     prefixes: ["002-"],
@@ -49,6 +61,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 5：拒馬
   {
     id: "barrier",
+    slug: "barriers",
+    en: "BARRIERS",
     name: "拒馬",
     desc: "烤漆與不鏽鋼拒馬，可放置廣告看板，入口管制好幫手。",
     prefixes: ["012-001-", "012-002-", "012-003-", "012-004-", "012-005-", "012-006-", "012-007-", "012-20221205-"],
@@ -56,6 +70,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 6：海報架・告示牌
   {
     id: "sign",
+    slug: "poster-sign-stands",
+    en: "POSTER & SIGN STANDS",
     name: "海報架・告示牌",
     desc: "壁掛海報框、立式告示牌、壓克力公佈欄與警示立牌。",
     prefixes: ["007-", "014-", "018-", "012-20221125-"],
@@ -63,6 +79,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 7：佈告欄
   {
     id: "board",
+    slug: "bulletin-boards",
+    en: "BULLETIN BOARDS",
     name: "佈告欄",
     desc: "雙面布面佈告欄，附輪移動方便。",
     prefixes: ["008-"],
@@ -70,6 +88,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 8：數位看板・燈箱
   {
     id: "display",
+    slug: "digital-signage-lightbox",
+    en: "DIGITAL SIGNAGE & LIGHTBOX",
     name: "數位看板・燈箱",
     desc: "IPS 數位看板與 LED 發光展示架，吸睛宣傳。",
     prefixes: ["009-", "20240729-"],
@@ -77,6 +97,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 9：垃圾桶・資源回收
   {
     id: "trash",
+    slug: "waste-recycling",
+    en: "WASTE & RECYCLING",
     name: "垃圾桶・資源回收",
     desc: "不鏽鋼垃圾桶、煙灰桶、分類回收桶與分類貼紙。",
     prefixes: ["011-002-", "011-004-", "011-005-", "011-006-", "011-009-", "011-20221125-"],
@@ -84,6 +106,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 10：清潔衛生
   {
     id: "hygiene",
+    slug: "cleaning-hygiene",
+    en: "CLEANING & HYGIENE",
     name: "清潔衛生",
     desc: "感應給皂機、擦鞋機，維護公共空間衛生。",
     prefixes: ["011-001-", "011-003-"],
@@ -91,6 +115,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 11：傘架・傘桶
   {
     id: "umbrella",
+    slug: "umbrella-stands",
+    en: "UMBRELLA STANDS",
     name: "傘架・傘桶",
     desc: "鋁合金摺疊傘架與不鏽鋼傘桶，保持入口乾爽。",
     prefixes: ["016-"],
@@ -98,6 +124,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 12：推車・工具車
   {
     id: "cart",
+    slug: "carts-tool-carts",
+    en: "CARTS & TOOL CARTS",
     name: "推車・工具車",
     desc: "房務整備車、手推車、工具車與不鏽鋼工作桌。",
     prefixes: ["013-", "011-007-", "011-008-"],
@@ -105,6 +133,8 @@ const categoryDefs: { id: string; name: string; desc: string; prefixes: string[]
   // 分類 13：鑰匙箱
   {
     id: "key",
+    slug: "key-boxes",
+    en: "KEY BOXES",
     name: "鑰匙箱",
     desc: "防鏽鋼板鑰匙箱，20～120 支容量。",
     prefixes: ["012-008-", "012-009-", "012-01"],
@@ -154,4 +184,9 @@ export function getCatalog() {
 
   // 回傳有圖片的分類（空分類不顯示）與特價商品
   return { categories: categories.filter((c) => c.images.length > 0), onsale };
+}
+
+// 依網址代號取得單一分類（找不到回傳 undefined）
+export function getCategory(slug: string) {
+  return getCatalog().categories.find((c) => c.slug === slug);
 }

@@ -48,10 +48,10 @@
   padding: clamp(20px, 4svh, 40px) 20px clamp(18px, 3svh, 32px);
 }
 
-/* 英文小標：Archivo 粗體大寫、字距加寬、深品牌紅 */
+/* 小標（H1）：Archivo 粗體大寫、字距加寬、深品牌紅；中文字改用全站的 Noto Sans TC */
 .eyebrow {
   margin: 0;
-  font-family: var(--font-archivo), sans-serif;
+  font-family: var(--font-archivo), var(--font-noto-sans), sans-serif;
   font-weight: 800;
   font-stretch: 90%;
   font-size: 13px;

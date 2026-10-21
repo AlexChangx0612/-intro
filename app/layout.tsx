@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Archivo, Caveat, Noto_Sans_TC } from "next/font/google";
 // 匯入全站共用樣式
 import "./globals.css";
+// 匯入網站網址與公司資料
+import { company, HOME_DESCRIPTION, HOME_TITLE, SITE_URL } from "./lib/site";
 
 // 全站統一使用 Noto Sans TC 粗體
 const notoSans = Noto_Sans_TC({
@@ -41,12 +43,16 @@ const caveat = Caveat({
   display: "swap",
 });
 
-// 網頁中繼資料：瀏覽器分頁標題與搜尋引擎描述
+// 網頁中繼資料：全站預設值（各頁會再設定自己的標題、描述與 canonical）
 export const metadata: Metadata = {
-  // 瀏覽器分頁上顯示的標題
-  title: "世紘興業｜公共空間設備專家",
-  // 搜尋結果下方顯示的網站描述
-  description: "專營紅龍柱、排隊欄柱與各式公共空間設備。",
+  // canonical、Open Graph 等網址一律以正式網域為準
+  metadataBase: new URL(SITE_URL),
+  // 預設標題（各頁以 pageMetadata 覆寫）
+  title: HOME_TITLE,
+  // 預設描述
+  description: HOME_DESCRIPTION,
+  // 網站名稱
+  applicationName: company.shortName,
 };
 
 // 根版面：每一頁都會包在這個 <html><body> 結構裡

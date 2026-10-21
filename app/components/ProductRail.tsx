@@ -60,7 +60,7 @@ export default function ProductRail({ images, alt }: { images: string[]; alt: st
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] sm:gap-5 [&::-webkit-scrollbar]:hidden"
       >
         {/* 每張圖片產生一個連結 */}
-        {images.map((src) => (
+        {images.map((src, i) => (
           // 點擊圖片在新分頁開啟大圖
           <a
             // React 用來辨識每個項目的唯一值
@@ -80,8 +80,8 @@ export default function ProductRail({ images, alt }: { images: string[]; alt: st
               <Image
                 // 圖片網址
                 src={src}
-                // 替代文字
-                alt={alt}
+                // 替代文字（加上編號，避免每張都相同）
+                alt={`${alt} ${i + 1}`}
                 // 填滿外框
                 fill
                 // 告訴瀏覽器各螢幕下圖片的顯示寬度，以載入合適尺寸

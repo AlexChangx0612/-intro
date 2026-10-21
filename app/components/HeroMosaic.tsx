@@ -15,7 +15,7 @@ const columns: { cls: string; up?: boolean; tiles: Tile[] }[] = [
   // 左欄：往上捲
   {
     cls: s.c1,
-    tiles: [{ tone: "red", en: "Made in Taiwan", zh: "台灣製造" }, { img: 0 }, { img: 1 }, { tone: "cream", logo: true }, { img: 2 }],
+    tiles: [{ tone: "red", en: "Made in Taiwan", zh: "多款台灣製造" }, { img: 0 }, { img: 1 }, { tone: "cream", logo: true }, { img: 2 }],
   },
   // 中欄：往下捲
   {
@@ -85,10 +85,14 @@ export default function HeroMosaic({ images }: { images: string[] }) {
     <section className={s.hero} aria-labelledby="hero-title">
       {/* 左側（手機為上方）文字 */}
       <div className={s.copy}>
-        {/* 英文小標 */}
-        <p className={s.eyebrow}>Public Space Essentials</p>
-        {/* 主標題：逐行升起 */}
-        <h1 id="hero-title" className={s.title}>
+        {/* 網頁主標題（H1）：公司名稱與定位，沿用原小標樣式；空間不夠時在「｜」後換行 */}
+        <h1 id="hero-title" className={s.eyebrow}>
+          <span className="whitespace-nowrap">世紘興業｜</span>
+          <wbr />
+          <span className="whitespace-nowrap">台灣公共與商業空間設備專業供應商</span>
+        </h1>
+        {/* 品牌標語：超大字、逐行升起 */}
+        <p className={s.title}>
           {/* 逐行輸出 */}
           {lines.map((l, i) => (
             // 一行（裁切容器）
@@ -97,11 +101,11 @@ export default function HeroMosaic({ images }: { images: string[] }) {
               <span style={{ "--i": i } as CSSProperties}>{l.text}</span>
             </span>
           ))}
-        </h1>
+        </p>
         {/* 說明文字 */}
         <p className={s.lead}>
-          紅龍柱、排隊欄柱與公共空間設備，為銀行、醫院、商場與各式場館，打造從容而有分寸的動線。
-          <strong>台灣製造</strong>，提供<strong>免費空間規劃</strong>。
+          專業提供紅龍柱、伸縮帶欄柱、排隊欄柱、告示牌、展示設備、垃圾桶、清潔設備與公共空間周邊設備，服務企業、政府機關、學校、銀行、醫院、商場及各類公共場域。
+          <strong>多款產品台灣製造</strong>，提供<strong>免費空間規劃</strong>。
         </p>
         {/* 行動按鈕 */}
         <div className={s.acts}>
