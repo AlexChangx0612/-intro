@@ -60,7 +60,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   // 回傳整頁的 HTML 骨架
   return (
     // 語系設為繁體中文；套用兩組字型變數、滿版高度與文字抗鋸齒
-    <html lang="zh-Hant" className={`${notoSans.variable} ${archivo.variable} ${caveat.variable} h-full antialiased`}>
+    // data-scroll-behavior：換頁時直接跳到頂端，不用平滑捲動（同頁錨點仍平滑捲動）
+    <html lang="zh-Hant" data-scroll-behavior="smooth" className={`${notoSans.variable} ${archivo.variable} ${caveat.variable} h-full antialiased`}>
       {/* body 為直向排列、至少滿版高度，並全站使用無襯線粗體字；children 為各頁內容 */}
       <body className="flex min-h-full flex-col font-sans font-bold">{children}</body>
     </html>

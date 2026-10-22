@@ -53,7 +53,7 @@ export const solutions: Solution[] = [
       { title: "入口管制與雨天設備", desc: "營業時間外以拒馬管制出入口，拒馬看板可置入品牌視覺；雨天在入口放置傘架或傘桶，保持大廳乾爽。", categories: ["barriers", "umbrella-stands"] },
     ],
     faqs: [
-      { q: "銀行適合哪種排隊欄柱？", a: "銀行櫃台多使用伸縮帶欄柱，動線調整方便；重視形象的貴賓區或入口也可搭配掛繩欄柱。", link: { href: "/products/retractable-belt-stanchions", label: "了解伸縮帶欄柱" } },
+      { q: "銀行適合哪種排隊欄柱？", a: "銀行櫃台多使用伸縮帶欄柱，動線調整方便；重視形象的貴賓區或入口也可搭配迎賓欄柱。", link: { href: "/products/retractable-belt-stanchions", label: "了解伸縮帶欄柱" } },
     ],
   },
   {
@@ -81,17 +81,17 @@ export const solutions: Solution[] = [
     en: "SHOPPING MALLS",
     h1: "百貨・商場排隊動線與宣傳展示設備規劃",
     title: "百貨・商場排隊欄柱與展示設備｜世紘興業",
-    description: "百貨商場的結帳與活動排隊動線、樓層告示、數位看板、垃圾桶與入口設備規劃。世紘提供伸縮帶欄柱、掛繩欄柱、海報架、數位看板與免費空間規劃。",
+    description: "百貨商場的結帳與活動排隊動線、樓層告示、數位看板、垃圾桶與入口設備規劃。世紘提供伸縮帶欄柱、迎賓欄柱、海報架、數位看板與免費空間規劃。",
     intro: "百貨商場同時有日常購物、週年慶、快閃活動等不同人流需求，動線設備要能快速調整，宣傳展示也要兼顧質感。",
     challenges: ["週年慶、限量活動時排隊人潮暴增", "專櫃與活動需要吸睛又有質感的宣傳", "美食街與公共區域需要維持整潔", "雨天入口地面濕滑"],
     needs: [
-      { title: "結帳與活動排隊", desc: "伸縮帶欄柱可依人潮快速調整排隊長度；精品專櫃或 VIP 入口可搭配掛繩欄柱，營造迎賓感。", categories: ["retractable-belt-stanchions", "rope-stanchions"] },
+      { title: "結帳與活動排隊", desc: "伸縮帶欄柱可依人潮快速調整排隊長度；精品專櫃或 VIP 入口可搭配迎賓欄柱，營造迎賓感。", categories: ["retractable-belt-stanchions", "rope-stanchions"] },
       { title: "宣傳與指示", desc: "以海報架、立式告示牌標示活動與樓層資訊；需要經常更換內容時，可使用數位看板或 LED 發光展示架。", categories: ["poster-sign-stands", "digital-signage-lightbox"] },
       { title: "公共區域整潔", desc: "美食街、電梯間與出入口設置不鏽鋼垃圾桶、分類回收桶與煙灰桶。", categories: ["waste-recycling"] },
       { title: "入口設備", desc: "雨天在入口放置傘架或傘桶。", categories: ["umbrella-stands"] },
     ],
     faqs: [
-      { q: "百貨適合哪種排隊欄柱？", a: "一般結帳與活動排隊建議使用伸縮帶欄柱，調整快速；精品專櫃、VIP 區域可使用掛繩欄柱。兩者也可搭配使用。", link: { href: "/products/rope-stanchions", label: "了解掛繩欄柱" } },
+      { q: "百貨適合哪種排隊欄柱？", a: "一般結帳與活動排隊建議使用伸縮帶欄柱，調整快速；精品專櫃、VIP 區域可使用迎賓欄柱。兩者也可搭配使用。", link: { href: "/products/rope-stanchions", label: "了解迎賓欄柱" } },
     ],
   },
   {
@@ -119,12 +119,12 @@ export const solutions: Solution[] = [
     en: "EXHIBITIONS & EVENTS",
     h1: "展覽・活動入場動線與臨時區隔設備規劃",
     title: "展覽・活動排隊動線與入場管制設備｜世紘興業",
-    description: "展覽、演唱會、記者會與戶外活動的入場排隊、區隔與宣傳設備規劃。世紘提供伸縮帶欄柱、掛繩欄柱、室內外欄柱、拒馬、海報架與數位看板。",
+    description: "展覽、演唱會、記者會與戶外活動的入場排隊、區隔與宣傳設備規劃。世紘提供伸縮帶欄柱、迎賓欄柱、室內外欄柱、拒馬、海報架與數位看板。",
     intro: "展覽與活動的場地每次都不同，需要在短時間內布置入場動線、區隔 VIP 與工作區，並放置宣傳與指示。設備要好搬運、好組裝。",
     challenges: ["入場時段人潮集中，需要快速排出動線", "需要區隔 VIP、媒體與工作人員區域", "戶外活動需要室內外皆可用的設備", "活動宣傳與報到指示"],
     needs: [
       { title: "入場排隊動線", desc: "伸縮帶欄柱收放快速，適合活動當天布置與撤場。", categories: ["retractable-belt-stanchions"] },
-      { title: "VIP 與典禮區隔", desc: "紅毯、頒獎典禮與 VIP 區域常使用掛繩欄柱，營造儀式感；展品保護也可使用掛繩欄柱。", categories: ["rope-stanchions"] },
+      { title: "VIP 與典禮區隔", desc: "紅毯、頒獎典禮與 VIP 區域常使用迎賓欄柱，營造儀式感；展品保護也可使用迎賓欄柱。", categories: ["rope-stanchions"] },
       { title: "戶外與入口管制", desc: "戶外場地可使用室內外欄柱、塑膠欄柱；入口以拒馬管制，並在拒馬看板上放置活動視覺。", categories: ["indoor-outdoor-stanchions", "plastic-stanchions", "barriers"] },
       { title: "宣傳與報到指示", desc: "以海報架、立式告示牌、佈告欄或數位看板，放置活動主視覺、報到與場地資訊。", categories: ["poster-sign-stands", "bulletin-boards", "digital-signage-lightbox"] },
     ],
@@ -138,17 +138,17 @@ export const solutions: Solution[] = [
     en: "HOTELS & RESTAURANTS",
     h1: "飯店・餐廳迎賓動線與房務設備規劃",
     title: "飯店・餐廳迎賓欄柱與房務設備｜世紘興業",
-    description: "飯店與餐廳的迎賓入口、候位動線、活動告示、房務整備車、鑰匙箱與清潔衛生設備規劃。世紘提供掛繩欄柱、伸縮帶欄柱、告示牌、推車與免費空間規劃。",
+    description: "飯店與餐廳的迎賓入口、候位動線、活動告示、房務整備車、鑰匙箱與清潔衛生設備規劃。世紘提供迎賓欄柱、伸縮帶欄柱、告示牌、推車與免費空間規劃。",
     intro: "飯店與餐廳重視第一印象。從迎賓入口、候位區到宴會廳的活動告示，設備要兼顧秩序與質感；後場的房務、清潔與鑰匙管理，也需要耐用好用的設備。",
     challenges: ["迎賓入口與候位區需要有質感的區隔", "宴會與活動需要清楚的告示", "房務整備需要收納備品與清潔用品", "客房與設備鑰匙需要集中管理"],
     needs: [
-      { title: "迎賓入口與候位區", desc: "迎賓入口、宴會廳與 VIP 區常使用掛繩欄柱；餐廳候位與自助餐排隊可使用伸縮帶欄柱。", categories: ["rope-stanchions", "retractable-belt-stanchions"] },
+      { title: "迎賓入口與候位區", desc: "迎賓入口、宴會廳與 VIP 區常使用迎賓欄柱；餐廳候位與自助餐排隊可使用伸縮帶欄柱。", categories: ["rope-stanchions", "retractable-belt-stanchions"] },
       { title: "活動告示與宣傳", desc: "宴會廳門口以立式告示牌或海報架標示活動資訊；大廳可使用數位看板播放資訊。", categories: ["poster-sign-stands", "digital-signage-lightbox"] },
       { title: "房務與後場設備", desc: "房務整備車收納備品與清潔用品，工具車與不鏽鋼工作桌用於維修與後場作業；鑰匙箱集中管理鑰匙。", categories: ["carts-tool-carts", "key-boxes"] },
       { title: "入口與衛生", desc: "雨天入口放置傘架或傘桶；洗手間設置感應給皂機。", categories: ["umbrella-stands", "cleaning-hygiene"] },
     ],
     faqs: [
-      { q: "飯店迎賓適合用哪種欄柱？", a: "迎賓入口與宴會廳多使用掛繩欄柱，搭配絨布繩較有質感；需要頻繁調整的排隊區則使用伸縮帶欄柱。", link: { href: "/products/rope-stanchions", label: "了解掛繩欄柱" } },
+      { q: "飯店迎賓適合用哪種欄柱？", a: "迎賓入口與宴會廳多使用迎賓欄柱，搭配絨布繩較有質感；需要頻繁調整的排隊區則使用伸縮帶欄柱。", link: { href: "/products/rope-stanchions", label: "了解迎賓欄柱" } },
     ],
   },
 ];

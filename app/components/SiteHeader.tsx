@@ -11,15 +11,15 @@ import { useEffect, useState } from "react";
 import type { CategoryLink } from "../lib/ui";
 
 // 主選單：大螢幕拆成 logo 左右各四個，較小螢幕收進抽屜
-// 「#」開頭為本頁錨點（每一頁底部都有聯絡區），「/」開頭為站內頁面
+// 「/」開頭為站內頁面，「/#」為首頁區塊
 // LOGO 左側四個按鈕
 const navLeft = [
   // 產品系列 → 打開產品分類 sidebar（大螢幕）；抽屜中連到產品系列頁
   { href: "/products", label: "產品系列" },
   // 適用場域 → 場域總覽頁
   { href: "/solutions", label: "適用場域" },
-  // 場域應用 → 首頁輪播區塊
-  { href: "/#cases", label: "場域應用" },
+  // 客戶實際案例 → 首頁輪播區塊
+  { href: "/#cases", label: "客戶實際案例" },
   // 客製化服務 → 關於頁的服務說明
   { href: "/about#services", label: "客製化服務" },
 ];
@@ -31,8 +31,8 @@ const navRight = [
   { href: "/#advantages", label: "世紘優勢" },
   // 常見問題 → 首頁常見問題區塊
   { href: "/#faq", label: "常見問題" },
-  // 聯絡我們 → 本頁聯絡區塊
-  { href: "#contact", label: "聯絡我們" },
+  // 聯絡我們 → 聯絡我們頁面
+  { href: "/contact", label: "聯絡我們" },
 ];
 
 // 抽屜：較小螢幕使用（大螢幕選單已全部顯示在 header）
@@ -224,13 +224,13 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
             </span>
           </Link>
 
-          {/* 右欄（較小螢幕）：「聯絡我們」（手機 15px 字，平板以上 24px） */}
-          <a
-            href="#contact"
+          {/* 右欄（較小螢幕）：「聯絡我們」→ 聯絡我們頁面（手機 15px 字，平板以上 24px） */}
+          <Link
+            href="/contact"
             className="flex min-h-11 items-center justify-self-end text-[15px] tracking-[0.1em] whitespace-nowrap transition hover:text-brand-deep sm:text-xl sm:tracking-[0.15em] 2xl:hidden"
           >
             聯絡我們
-          </a>
+          </Link>
           {/* 右側四個按鈕（大螢幕才顯示，靠左貼近 LOGO） */}
           <nav aria-label="主選單" className={navGroup}>
             {/* 逐一產生按鈕 */}

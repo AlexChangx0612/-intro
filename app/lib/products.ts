@@ -2,6 +2,34 @@
 import fs from "node:fs";
 // 匯入路徑處理模組，用來組合資料夾路徑
 import path from "node:path";
+// 匯入已登錄產品（有型號與規格的產品）
+import { productByImage, type ProductDetail } from "./product-details";
+
+// 單一品項：每張產品照一個品項，各自有獨立介紹頁 /products/<分類>/<slug>
+export type CatalogItem = {
+  // 網址代號：已登錄產品用型號（例如 rs-a4bk），其餘用小寫檔名（例如 001-006-001）
+  slug: string;
+  // 品項編號：產品照檔名（不含副檔名），詢價時可提供給專員
+  code: string;
+  // 產品照網址
+  image: string;
+  // 介紹頁網址
+  href: string;
+  // 顯示名稱：已登錄產品用產品名稱，其餘用分類名稱
+  name: string;
+  // 已登錄產品的完整資料（型號、規格、特色）；未登錄為 undefined
+  detail?: ProductDetail;
+};
+
+// 特價商品：沒有獨立分類頁，列表在首頁 #onsale；品項頁網址為 /products/special-offers/<slug>
+export const ONSALE = {
+  slug: "special-offers",
+  en: "SPECIAL OFFERS",
+  name: "特價商品",
+  desc: "限量優惠，售完為止。",
+  // 返回列表的位置
+  listHref: "/#onsale",
+};
 
 // 產品分類的資料型別
 export type Category = {
@@ -17,6 +45,8 @@ export type Category = {
   desc: string;
   // 此分類的所有產品圖片網址
   images: string[];
+  // 此分類的所有品項（與 images 同順序）
+  items: CatalogItem[];
 };
 
 // 依照片實際內容分類；prefixes 比對 public/images 底下的檔名開頭
@@ -31,12 +61,12 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     // 檔名以這些文字開頭的圖片歸入此分類
     prefixes: ["001-", "20230821-", "new-"],
   },
-  // 分類 2：掛繩欄柱
+  // 分類 2：迎賓欄柱
   {
     id: "rope",
     slug: "rope-stanchions",
     en: "ROPE STANCHIONS",
-    name: "掛繩欄柱",
+    name: "迎賓欄柱",
     desc: "圓球頭不鏽鋼欄柱，搭配絨布繩，典雅大方。",
     prefixes: ["003-", "004-"],
   },
@@ -163,7 +193,18 @@ function fileName(url: string) {
   return url.slice(url.lastIndexOf("/") + 1);
 }
 
-// 取得產品目錄：回傳各分類與特價商品圖片
+// 把產品照轉成品項；categorySlug 為所屬分類網址代號，fallbackName 為未登錄產品的顯示名稱
+function toItem(url: string, categorySlug: string, fallbackName: string): CatalogItem {
+  // 檔名去掉副檔名，作為品項編號
+  const code = fileName(url).replace(IMAGE_EXT, "");
+  // 已登錄產品（以照片比對）
+  const detail = productByImage(url);
+  // 網址代號：已登錄用型號代號，否則用小寫檔名
+  const slug = detail?.slug ?? code.toLowerCase();
+  return { slug, code, image: url, href: `/products/${categorySlug}/${slug}`, name: detail?.name ?? fallbackName, detail };
+}
+
+// 取得產品目錄：回傳各分類與特價商品
 export function getCatalog() {
   // 取得 public/images 底下所有圖片網址
   const all = listImages(IMAGE_DIR, "/images")
@@ -172,15 +213,17 @@ export function getCatalog() {
     .sort();
 
   // 依分類定義，把檔名符合開頭規則的圖片放進各分類
-  const categories: Category[] = categoryDefs.map(({ prefixes, ...rest }) => ({
-    // 保留分類的 id、名稱、說明
-    ...rest,
+  const categories: Category[] = categoryDefs.map(({ prefixes, ...rest }) => {
     // 篩選出檔名開頭符合任一規則的圖片
-    images: all.filter((url) => prefixes.some((p) => fileName(url).startsWith(p))),
-  }));
+    const images = all.filter((url) => prefixes.some((p) => fileName(url).startsWith(p)));
+    // 保留分類的 id、名稱、說明，並把每張圖片轉成品項
+    return { ...rest, images, items: images.map((url) => toItem(url, rest.slug, rest.name)) };
+  });
 
   // 特價商品：檔名以 onsale- 開頭的圖片
-  const onsale = all.filter((url) => fileName(url).startsWith("onsale-"));
+  const onsale = all
+    .filter((url) => fileName(url).startsWith("onsale-"))
+    .map((url) => toItem(url, ONSALE.slug, ONSALE.name));
 
   // 回傳有圖片的分類（空分類不顯示）與特價商品
   return { categories: categories.filter((c) => c.images.length > 0), onsale };
@@ -189,4 +232,31 @@ export function getCatalog() {
 // 依網址代號取得單一分類（找不到回傳 undefined）
 export function getCategory(slug: string) {
   return getCatalog().categories.find((c) => c.slug === slug);
+}
+
+// 依網址取得單一品項，連同所屬列表（同分類的品項）；找不到回傳 undefined
+export function getItem(categorySlug: string, slug: string) {
+  const { categories, onsale } = getCatalog();
+  // 一般分類的列表在分類頁；特價商品沒有分類頁，列表在首頁
+  const cat = categories.find((c) => c.slug === categorySlug);
+  const list = cat
+    ? { slug: cat.slug, en: cat.en, name: cat.name, desc: cat.desc, listHref: `/products/${cat.slug}`, items: cat.items }
+    : categorySlug === ONSALE.slug
+      ? { ...ONSALE, items: onsale }
+      : undefined;
+  if (!list) return undefined;
+  // 品項在列表中的位置（上一項／下一項用）
+  const index = list.items.findIndex((i) => i.slug === slug);
+  if (index < 0) return undefined;
+  return { item: list.items[index], index, list };
+}
+
+// 全部品項的網址參數（建置時產生每個品項頁）
+export function allItemParams() {
+  const { categories, onsale } = getCatalog();
+  return [...categories.flatMap((c) => c.items), ...onsale].map((i) => {
+    // href 格式為 /products/<分類>/<slug>
+    const [, , category, slug] = i.href.split("/");
+    return { category, slug };
+  });
 }

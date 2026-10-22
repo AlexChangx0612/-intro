@@ -3,11 +3,15 @@
 
 // 匯入 Next.js 圖片元件（自動壓縮與延遲載入）
 import Image from "next/image";
+// 匯入 Next.js 站內連結元件
+import Link from "next/link";
 // 匯入 React 的副作用、DOM 參照與狀態 hook
 import { useEffect, useRef, useState } from "react";
+// 匯入品項型別
+import type { CatalogItem } from "../lib/products";
 
-// 橫向捲動的商品列；images 為圖片網址清單，alt 為圖片替代文字
-export default function ProductRail({ images, alt }: { images: string[]; alt: string }) {
+// 橫向捲動的商品列；items 為品項清單（每張連到介紹頁），alt 為圖片替代文字
+export default function ProductRail({ items, alt }: { items: CatalogItem[]; alt: string }) {
   // 取得捲動容器的 DOM 參照
   const ref = useRef<HTMLDivElement>(null);
   // 是否已捲到最左邊／最右邊（用來停用對應的箭頭）
@@ -59,18 +63,14 @@ export default function ProductRail({ images, alt }: { images: string[]; alt: st
         // 橫向排列、捲動時對齊每張圖片、隱藏捲軸
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] sm:gap-5 [&::-webkit-scrollbar]:hidden"
       >
-        {/* 每張圖片產生一個連結 */}
-        {images.map((src, i) => (
-          // 點擊圖片在新分頁開啟大圖
-          <a
+        {/* 每個品項產生一個連結 */}
+        {items.map((item) => (
+          // 點擊圖片在目前分頁進入該品項的介紹頁
+          <Link
             // React 用來辨識每個項目的唯一值
-            key={src}
-            // 連結到原始圖片
-            href={src}
-            // 在新分頁開啟
-            target="_blank"
-            // 安全性設定：新分頁不帶來源資訊
-            rel="noreferrer"
+            key={item.slug}
+            // 連結到品項介紹頁
+            href={item.href}
             // 寬度：手機 72%、平板 42%、電腦一排 4 張；不縮小、捲動時對齊左緣；焦點框畫在內側，避免被捲動區裁掉
             className="group block focus-visible:outline-offset-[-3px] w-[72%] shrink-0 snap-start sm:w-[42%] lg:w-[calc((100%-3.75rem)/4)]"
           >
@@ -79,9 +79,9 @@ export default function ProductRail({ images, alt }: { images: string[]; alt: st
               {/* 商品圖片 */}
               <Image
                 // 圖片網址
-                src={src}
-                // 替代文字（加上編號，避免每張都相同）
-                alt={`${alt} ${i + 1}`}
+                src={item.image}
+                // 替代文字（加上品項編號，避免每張都相同）
+                alt={`${alt} ${item.code}`}
                 // 填滿外框
                 fill
                 // 告訴瀏覽器各螢幕下圖片的顯示寬度，以載入合適尺寸
@@ -90,7 +90,7 @@ export default function ProductRail({ images, alt }: { images: string[]; alt: st
                 className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
               />
             </div>
-          </a>
+          </Link>
         ))}
       </div>
 

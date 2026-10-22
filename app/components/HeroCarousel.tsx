@@ -57,9 +57,9 @@ const productSlides: ProductSlide[] = [
     title: "台灣製造",
     desc: "多款欄柱與設備於台灣在地生產，品質穩定，溝通即時。",
     image: "/images/003/003-001-001.png",
-    alt: "圓球頭不鏽鋼掛繩欄柱 SW-R1S(A)",
-    // 按鈕連到掛繩欄柱分類
-    cta: { href: "#c-rope", label: "查看掛繩欄柱" },
+    alt: "圓球頭不鏽鋼迎賓欄柱 SW-R1S(A)",
+    // 按鈕連到迎賓欄柱分類
+    cta: { href: "#c-rope", label: "查看迎賓欄柱" },
   },
 ];
 

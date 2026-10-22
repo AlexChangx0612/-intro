@@ -15,7 +15,7 @@ const icons: Record<string, ReactNode> = {
       <path d="M15 15.5h18v3H15z" />
     </>
   ),
-  // 掛繩欄柱：圓球頭欄柱＋下垂的絨布繩
+  // 迎賓欄柱：圓球頭欄柱＋下垂的絨布繩
   rope: (
     <>
       <circle cx="12" cy="10" r="2.5" />

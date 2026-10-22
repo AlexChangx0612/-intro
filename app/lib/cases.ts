@@ -1,7 +1,7 @@
-// 場域應用資料：首頁「場域應用」輪播使用
+// 客戶實際案例資料：首頁「客戶實際案例」輪播使用
 // 目前照片為網路示意圖、非世紘實際案例，因此只標示「場域」，不標示客戶名稱
 // 取得真實案例後：把照片（建議 1920×1080）放進 public/cases/，修改下方的 image、scene、title、alt，
-// 並將 CaseCarousel.tsx 的標籤改回「CASE STUDIES・客戶實際案例」；
+// 並確認 CaseCarousel.tsx 的標籤「CASE STUDIES・客戶實際案例」與內容相符；
 // 想增加或減少案例，直接新增或刪除一筆資料（建議至少 3 筆）
 
 // 單一案例的資料型別
@@ -36,8 +36,8 @@ export const cases: CaseStudy[] = [
   {
     image: "/cases/case-03.jpg",
     scene: "美術館",
-    title: "展間掛繩欄柱展品保護",
-    alt: "美術館彩色拱窗下的絨布掛繩欄柱",
+    title: "展間迎賓欄柱展品保護",
+    alt: "美術館彩色拱窗下的絨布迎賓欄柱",
   },
   // 案例 4
   {
@@ -50,7 +50,7 @@ export const cases: CaseStudy[] = [
   {
     image: "/cases/case-05.jpg",
     scene: "飯店",
-    title: "迎賓入口金色掛繩欄柱",
+    title: "迎賓入口金色迎賓欄柱",
     alt: "飯店旋轉門入口兩側的金色欄柱與紅色絨布掛繩",
   },
   // 案例 6

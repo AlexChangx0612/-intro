@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "/",
     "/about",
+    "/contact",
     "/products",
     ...getCatalog().categories.map((c) => `/products/${c.slug}`),
     ...products.map((p) => `/products/${p.category}/${p.slug}`),

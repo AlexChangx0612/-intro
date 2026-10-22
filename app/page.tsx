@@ -4,10 +4,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 // 匯入 Next.js 站內連結元件
 import Link from "next/link";
-// 匯入場域應用弧形輪播
+// 匯入客戶實際案例弧形輪播
 import CaseCarousel from "./components/CaseCarousel";
-// 匯入產品系列方塊
-import CollectionGrid from "./components/CollectionGrid";
 // 匯入聯絡區塊
 import ContactSection from "./components/ContactSection";
 // 匯入常見問題清單
@@ -30,7 +28,7 @@ import SiteFooter from "./components/SiteFooter";
 import SiteHeader from "./components/SiteHeader";
 // 匯入讀取產品圖片的函式
 import { getCatalog } from "./lib/products";
-// 匯入場域應用資料（置換照片與說明請改這個檔案）
+// 匯入客戶實際案例資料（置換照片與說明請改這個檔案）
 import { cases } from "./lib/cases";
 // 匯入首頁常見問題
 import { homeFaqs } from "./lib/faq";
@@ -58,9 +56,9 @@ const services = [
 export default function Home() {
   // 讀取產品分類與特價商品圖片
   const { categories, onsale } = getCatalog();
-  // 只取分類的 id、網址代號與名稱，傳給頁首、頁尾與產品系列方塊使用
+  // 只取分類的 id、網址代號與名稱，傳給頁首與頁尾使用
   const links = categories.map(({ id, slug, name }) => ({ id, slug, name }));
-  // 「適用場域」的大圖：掛繩欄柱的第一張（找不到就用第一個分類）
+  // 「適用場域」的大圖：迎賓欄柱的第一張（找不到就用第一個分類）
   const featureImage = (categories.find((c) => c.id === "rope") ?? categories[0])?.images[0];
   // 首屏磚牆用的產品照：各分類第一張
   const mosaic = categories.map((c) => c.images[0]);
@@ -103,7 +101,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 場域應用：弧形輪播 */}
+        {/* 客戶實際案例：弧形輪播 */}
         <CaseCarousel cases={cases} />
 
         {/* 特價商品 */}
@@ -121,35 +119,20 @@ export default function Home() {
                 <p className="text-sm text-muted">限量優惠，售完為止。</p>
               </div>
               {/* 橫向捲動的特價商品列 */}
-              <ProductRail images={onsale} alt="世紘特價商品" />
+              <ProductRail items={onsale} alt="世紘特價商品" />
             </div>
           </section>
         )}
 
-        {/* 系列 */}
-        {/* 產品系列區塊（上方有分隔線）；scroll-mt 讓錨點跳轉時不被固定的 header 擋住（跳轉時 header 已縮成精簡版） */}
+        {/* 產品系列＋全系列商品（整合為同一區塊）：上方系列圖示方塊切換分類，下方顯示該系列商品 */}
+        {/* 上方有分隔線；scroll-mt 讓錨點跳轉時不被固定的 header 擋住（跳轉時 header 已縮成精簡版） */}
         <section id="collections" className="scroll-mt-20 sm:scroll-mt-24 border-t border-line py-20 sm:py-28">
           {/* 版心 */}
           <div className={container}>
-            {/* 區塊標題 */}
-            <SectionTitle eyebrow="COLLECTIONS" title="產品系列" />
-            {/* 13 個系列圖示方塊：點擊進入分類頁 */}
-            <CollectionGrid categories={links} />
-          </div>
-        </section>
-
-        {/* 全系列商品 */}
-        {/* 上方有分隔線 */}
-        <section id="products" className="scroll-mt-20 sm:scroll-mt-24 border-t border-line py-20 sm:py-28">
-          {/* 版心 */}
-          <div className={container}>
             {/* 區塊標題與說明 */}
-            <SectionTitle eyebrow="ALL PRODUCTS" title="全系列商品" desc="點擊圖片可檢視大圖。" />
-            {/* 與標題間距 56px */}
-            <div className="mt-14">
-              {/* 商品目錄（分類選單＋圖片） */}
-              <ProductCatalog categories={categories} />
-            </div>
+            <SectionTitle eyebrow="COLLECTIONS" title="產品系列" desc="選擇系列瀏覽商品，點擊圖片查看產品介紹。" />
+            {/* 商品目錄（系列方塊＋商品圖片） */}
+            <ProductCatalog categories={categories} />
           </div>
         </section>
 
@@ -164,12 +147,12 @@ export default function Home() {
               <Parallax speed={0.06}>
                 {/* 正方形圓角圖片框，白底 */}
                 <div className="relative aspect-square overflow-hidden rounded-[14px] bg-white lg:rounded-[22px]">
-                  {/* 掛繩欄柱大圖 */}
+                  {/* 迎賓欄柱大圖 */}
                   <Image
                     // 圖片網址
                     src={featureImage}
                     // 替代文字
-                    alt="世紘掛繩欄柱產品照"
+                    alt="世紘迎賓欄柱產品照"
                     // 填滿外框
                     fill
                     // 電腦版約半個螢幕寬，手機滿版

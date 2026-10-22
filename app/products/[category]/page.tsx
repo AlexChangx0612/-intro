@@ -18,8 +18,6 @@ import PageShell from "../../components/PageShell";
 import SectionTitle from "../../components/SectionTitle";
 // 匯入分類頁文字內容
 import { categoryContent } from "../../lib/category-content";
-// 匯入已登錄的產品資料
-import { productByImage } from "../../lib/product-details";
 // 匯入產品目錄
 import { getCatalog, getCategory } from "../../lib/products";
 // 匯入 SEO 工具
@@ -103,13 +101,57 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
               { name: cat.name, path },
             ]}
           />
-          <div className="mt-10 max-w-3xl">
-            <SectionTitle as="h1" align="left" eyebrow={cat.en} title={content.h1} />
-            <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{content.intro}</p>
-            <a href="#contact" className={`${outlineBtn} mt-10`}>
-              免費規劃與報價
-            </a>
+          {/* 左：標題與介紹；右：該系列代表產品去背圖（平板以上才顯示） */}
+          <div className="mt-10 grid items-center gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-16">
+            <div className="max-w-3xl">
+              <SectionTitle as="h1" align="left" eyebrow={cat.en} title={content.h1} />
+              <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{content.intro}</p>
+              <a href="#contact" className={`${outlineBtn} mt-10`}>
+                免費規劃與報價
+              </a>
+            </div>
+            <div className="relative hidden h-80 md:block lg:h-[420px]">
+              <Image
+                src={`/cutouts/${cat.slug}.png`}
+                alt={`世紘${cat.name}`}
+                fill
+                loading="eager"
+                fetchPriority="high"
+                sizes="(min-width: 1440px) 520px, 36vw"
+                quality={90}
+                className="object-contain drop-shadow-[0_24px_28px_rgba(15,15,14,.18)]"
+              />
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* 產品照 */}
+      <section id="products" className={section}>
+        <div className={container}>
+          <SectionTitle eyebrow="PRODUCTS" title={cat.name} desc={`${cat.desc}點擊圖片查看產品介紹。`} />
+          {/* 商品圖片格：手機一排 2 張、平板 3 張、電腦 4 張；每張連到該品項的介紹頁 */}
+          <ul className="mt-14 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+            {cat.items.map((item) => (
+              <li key={item.slug}>
+                <Link href={item.href} className="group block">
+                  {/* 正方形圓角圖片框（與首頁商品目錄相同） */}
+                  <div className="relative aspect-square overflow-hidden rounded-[14px] bg-white lg:rounded-[18px]">
+                    <Image
+                      src={item.image}
+                      alt={item.detail ? `世紘 ${item.detail.model} ${item.detail.name}` : `世紘${cat.name} 品項 ${item.code}`}
+                      fill
+                      sizes="(min-width: 1024px) 330px, (min-width: 768px) 33vw, 50vw"
+                      className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+                    />
+                  </div>
+                  {/* 已登錄產品顯示型號與名稱，其餘顯示品項編號 */}
+                  <span className="mt-3 block text-sm tracking-[0.08em] transition group-hover:text-brand-deep">{item.detail?.model ?? item.code}</span>
+                  {item.detail && <span className="block text-xs leading-6 text-muted">{item.detail.name}</span>}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -119,48 +161,6 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
           <InfoColumn title="這類產品適合哪些場所？" items={content.places} />
           <InfoColumn title="這類產品有哪些規格或選擇？" items={content.options} />
           <InfoColumn title="如何選擇適合的產品？" items={content.choose} />
-        </div>
-      </section>
-
-      {/* 產品照 */}
-      <section id="products" className={section}>
-        <div className={container}>
-          <SectionTitle eyebrow="PRODUCTS" title="世紘相關產品" desc={`${cat.desc}點擊圖片可檢視大圖或產品介紹。`} />
-          {/* 商品圖片格：手機一排 2 張、平板 3 張、電腦 4 張 */}
-          <ul className="mt-14 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
-            {cat.images.map((src, i) => {
-              // 有產品頁的照片連到產品頁，其餘在新分頁開啟大圖
-              const product = productByImage(src);
-              // 正方形圓角圖片框（與首頁商品目錄相同）
-              const img = (
-                <div className="relative aspect-square overflow-hidden rounded-[14px] bg-white lg:rounded-[18px]">
-                  <Image
-                    src={src}
-                    alt={product ? `世紘 ${product.model} ${product.name}` : `世紘${cat.name}產品照 ${i + 1}`}
-                    fill
-                    sizes="(min-width: 1024px) 330px, (min-width: 768px) 33vw, 50vw"
-                    className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
-                  />
-                </div>
-              );
-              return (
-                <li key={src}>
-                  {product ? (
-                    <Link href={`${path}/${product.slug}`} className="group block">
-                      {img}
-                      {/* 型號與名稱 */}
-                      <span className="mt-3 block text-sm tracking-[0.08em] transition group-hover:text-brand-deep">{product.model}</span>
-                      <span className="block text-xs leading-6 text-muted">{product.name}</span>
-                    </Link>
-                  ) : (
-                    <a href={src} target="_blank" rel="noreferrer" className="group block">
-                      {img}
-                    </a>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
         </div>
       </section>
 

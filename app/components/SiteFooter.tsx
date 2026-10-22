@@ -15,8 +15,8 @@ const services = [
   { href: "/solutions", label: "適用場域" },
   // 連到關於世紘頁
   { href: "/about", label: "關於世紘" },
-  // 連到本頁聯絡區塊
-  { href: "#contact", label: "免費空間規劃" },
+  // 連到聯絡我們頁面
+  { href: "/contact", label: "免費空間規劃" },
 ];
 
 // 頁尾連結樣式：點擊高度至少 44px、文字垂直置中，滑鼠移上變紅字

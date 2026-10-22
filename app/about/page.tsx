@@ -12,6 +12,8 @@ import JsonLd from "../components/JsonLd";
 import PageShell from "../components/PageShell";
 // 匯入區塊標題
 import SectionTitle from "../components/SectionTitle";
+// 匯入企業理念卡片格
+import ValuesGrid, { type Value } from "../components/ValuesGrid";
 // 匯入產品目錄
 import { getCatalog } from "../lib/products";
 // 匯入 SEO 工具
@@ -33,10 +35,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 // 企業理念
-const values = [
-  { title: "創新", desc: "持續開發與整合新產品，回應公共空間不斷改變的動線、展示與管理需求。" },
-  { title: "品質", desc: "多款欄柱與設備於台灣在地生產，品質穩定，溝通即時。" },
-  { title: "誠信", desc: "依場地與需求提供規劃與報價建議，說明清楚、承諾實在。" },
+const values: Value[] = [
+  { title: "創新", desc: "持續開發與整合新產品，回應公共空間不斷改變的動線、展示與管理需求。", icon: "idea" },
+  { title: "品質", desc: "多款欄柱與設備於台灣在地生產，品質穩定，溝通即時。", icon: "quality" },
+  { title: "誠信", desc: "依場地與需求提供規劃與報價建議，說明清楚、承諾實在。", icon: "trust" },
 ];
 
 // 服務項目
@@ -49,7 +51,7 @@ const services = [
   {
     id: "commercial",
     title: "商業空間設備",
-    desc: "為銀行、百貨商場、飯店、餐廳與展覽活動，提供伸縮帶欄柱、掛繩欄柱、拒馬、海報架、數位看板與燈箱，兼顧動線與品牌形象；拒馬看板、告示牌與海報架皆可置入企業識別。",
+    desc: "為銀行、百貨商場、飯店、餐廳與展覽活動，提供伸縮帶欄柱、迎賓欄柱、拒馬、海報架、數位看板與燈箱，兼顧動線與品牌形象；拒馬看板、告示牌與海報架皆可置入企業識別。",
   },
   {
     id: "property",
@@ -88,7 +90,7 @@ export default function AboutPage() {
           </div>
           <div className="space-y-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8 lg:pt-16">
             <p>
-              世紘興業有限公司成立於 {company.foundingYear} 年，是台灣專業的公共與商業空間周邊設備研製與供應商。產品涵蓋紅龍柱、伸縮帶欄柱、掛繩欄柱、室內外欄柱、塑膠欄柱、拒馬、告示牌、海報架、展示設備、數位看板、垃圾桶、資源回收設備、清潔衛生設備、傘架、推車、工具車與鑰匙箱。
+              世紘興業有限公司成立於 {company.foundingYear} 年，是台灣專業的公共與商業空間周邊設備研製與供應商。產品涵蓋紅龍柱、伸縮帶欄柱、迎賓欄柱、室內外欄柱、塑膠欄柱、拒馬、告示牌、海報架、展示設備、數位看板、垃圾桶、資源回收設備、清潔衛生設備、傘架、推車、工具車與鑰匙箱。
             </p>
             <p>
               我們服務企業、政府機關、學校、銀行、郵局、醫院、診所、百貨商場、飯店、餐廳、機場、車站、展覽活動及其他公共空間，並整合相關產業資源，提供從排隊動線規劃到設備供應的服務。
@@ -97,19 +99,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 企業理念：三欄（與首頁「世紘優勢」相同樣式） */}
+      {/* 企業理念：三張圖示卡片，進入畫面時依序淡入 */}
       <section className={section}>
         <div className={container}>
           <SectionTitle eyebrow="OUR VALUES" title="創新、品質、誠信" desc="世紘以「創新、品質、誠信」為核心理念，經營每一項產品與服務。" />
-          <div className="mt-14 grid gap-12 md:grid-cols-3 md:gap-10">
-            {values.map((v, i) => (
-              <div key={v.title} className="text-center md:text-left">
-                <p className="text-xs text-brand">{String(i + 1).padStart(2, "0")}</p>
-                <h3 className="mt-4 text-xl tracking-[0.1em] text-brand-deep">{v.title}</h3>
-                <p className="mx-auto mt-4 max-w-xs text-sm leading-7 text-pretty text-muted md:mx-0">{v.desc}</p>
-              </div>
-            ))}
-          </div>
+          <ValuesGrid values={values} />
         </div>
       </section>
 

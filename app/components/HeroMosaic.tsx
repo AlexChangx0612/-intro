@@ -58,8 +58,8 @@ export default function HeroMosaic({ images }: { images: string[] }) {
     "img" in t ? (
       // 產品照磚
       <div key={key} className={s.cell}>
-        {/* 產品照：正方形完整呈現，電腦版約 220px 寬 */}
-        <Image src={pic(t.img)} alt="" fill sizes="(min-width: 1024px) 230px, 33vw" className={s.img} />
+        {/* 產品照：正方形完整呈現，電腦版約 220px 寬；首屏磚牆（其中一張是 LCP）立即載入，三組重複磚網址相同，瀏覽器只下載一次 */}
+        <Image src={pic(t.img)} alt="" fill sizes="(min-width: 1024px) 230px, 33vw" loading="eager" className={s.img} />
       </div>
     ) : (
       // 色塊磚

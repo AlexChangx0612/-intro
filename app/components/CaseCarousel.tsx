@@ -3,6 +3,8 @@
 
 // 匯入 Next.js 圖片元件
 import Image from "next/image";
+// 匯入 Next.js 站內連結元件
+import Link from "next/link";
 // 匯入 React 的 hook：副作用、DOM 參照
 import { useEffect, useRef } from "react";
 // 匯入案例資料型別
@@ -62,7 +64,7 @@ function roundedQuad(pts: [number, number][], r: number) {
   return `path("${parts.join("")}Z")`;
 }
 
-// 場域應用弧形輪播區塊
+// 客戶實際案例弧形輪播區塊
 export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
   // 整個區塊（進場動畫用）
   const rootRef = useRef<HTMLElement>(null);
@@ -314,12 +316,12 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
 
   // 回傳區塊
   return (
-    // 場域應用區塊；scroll-mt 讓錨點跳轉時不被固定的 header 擋住
+    // 客戶實際案例區塊；scroll-mt 讓錨點跳轉時不被固定的 header 擋住
     <section
       ref={rootRef}
       id="cases"
       aria-roledescription="carousel"
-      aria-label="場域應用"
+      aria-label="客戶實際案例"
       className="relative scroll-mt-20 overflow-hidden py-20 sm:scroll-mt-24 sm:py-28"
     >
       {/* 文字區：置中 */}
@@ -329,7 +331,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
           data-enter="badge"
           className="inline-flex h-9 items-center rounded-full bg-blush px-4 text-xs tracking-[0.2em] text-brand-deep"
         >
-          SCENARIOS・場域應用
+          CASE STUDIES・客戶實際案例
         </p>
         {/* 大標題：黑色特粗，兩行 */}
         <h2 className="mt-6 text-[clamp(34px,5.4vw,78px)] leading-[1.12] font-black tracking-[0.04em] text-ink">
@@ -373,7 +375,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
         <div
           ref={bandRef}
           tabIndex={0}
-          aria-label="場域應用輪播，可拖曳或用左右鍵瀏覽"
+          aria-label="客戶實際案例輪播，可拖曳或用左右鍵瀏覽"
           className="relative h-[calc(50cqw_+_110px)] cursor-grab touch-pan-y overflow-hidden select-none focus-visible:outline-offset-[-4px] data-dragging:cursor-grabbing min-[821px]:h-[calc(29.167cqw_+_110px)]"
         >
           {/* 每張卡片＋說明 */}
@@ -384,7 +386,8 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
                 ref={(el) => {
                   cardRefs.current[i] = el;
                 }}
-                className="invisible absolute top-0 left-0 overflow-hidden bg-white will-change-transform"
+                // 預設與輪播帶同尺寸（畫面外的卡片不會被程式設定尺寸，避免圖片以 0 高度載入）
+                className="invisible absolute top-0 left-0 size-full overflow-hidden bg-white will-change-transform"
               >
                 {/* 案例照片：1920×1080，等比例填滿 */}
                 <Image
@@ -425,17 +428,18 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
       <div className="relative mt-10 flex justify-center px-5">
         {/* 虛線圓環包住的深紅按鈕 */}
         <span data-enter="cta" className="inline-flex rounded-full border-2 border-dashed border-brand-deep/50 p-2">
-          <a
-            href="#contact"
+          {/* 連到客戶實際案例總覽頁 */}
+          <Link
+            href="/cases"
             className="inline-flex h-14 items-center rounded-full bg-brand-deep px-8 text-sm tracking-[0.2em] text-white transition hover:bg-brand active:translate-y-px"
           >
-            免費規劃我的場地
-          </a>
+            看更多實際案例
+          </Link>
         </span>
-        {/* 「免費」手寫註記＋小箭頭（平板以上顯示，放在按鈕左側） */}
+        {/* 手寫註記＋小箭頭（平板以上顯示，放在按鈕左側） */}
         <div aria-hidden="true" className="absolute top-1/2 right-[calc(50%+170px)] hidden -translate-y-1/2 sm:block">
           <p data-enter="note" className="-rotate-[14deg] font-hand text-[30px] font-semibold whitespace-nowrap text-brand-deep">
-            It&apos;s free!
+            Watch More!
           </p>
           <svg viewBox="0 0 70 40" className="absolute top-[60%] left-[90%] w-16 text-brand-deep" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path data-enter="stroke" pathLength={1} strokeDasharray="1" d="M4 8c14 20 34 26 56 20" />
