@@ -80,8 +80,8 @@ export default function ProductRail({ items, alt }: { items: CatalogItem[]; alt:
               <Image
                 // 圖片網址
                 src={item.image}
-                // 替代文字（加上品項編號，避免每張都相同）
-                alt={`${alt} ${item.code}`}
+                // 替代文字（加上型號，避免每張都相同）
+                alt={`${alt} ${item.model}`}
                 // 填滿外框
                 fill
                 // 告訴瀏覽器各螢幕下圖片的顯示寬度，以載入合適尺寸

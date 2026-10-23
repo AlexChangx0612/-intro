@@ -4,6 +4,8 @@ import fs from "node:fs";
 import path from "node:path";
 // 匯入已登錄產品（有型號與規格的產品）
 import { productByImage, type ProductDetail } from "./product-details";
+// 匯入產品照上的型號與規格
+import { productModels } from "./product-models";
 
 // 單一品項：每張產品照一個品項，各自有獨立介紹頁 /products/<分類>/<slug>
 export type CatalogItem = {
@@ -17,6 +19,10 @@ export type CatalogItem = {
   href: string;
   // 顯示名稱：已登錄產品用產品名稱，其餘用分類名稱
   name: string;
+  // 型號：產品照右下角黃色字（未登錄時用品項編號）
+  model: string;
+  // 規格說明：例如「不鏽鋼色柱身・紅色織帶」（未登錄時為 undefined）
+  spec?: string;
   // 已登錄產品的完整資料（型號、規格、特色）；未登錄為 undefined
   detail?: ProductDetail;
 };
@@ -201,7 +207,9 @@ function toItem(url: string, categorySlug: string, fallbackName: string): Catalo
   const detail = productByImage(url);
   // 網址代號：已登錄用型號代號，否則用小寫檔名
   const slug = detail?.slug ?? code.toLowerCase();
-  return { slug, code, image: url, href: `/products/${categorySlug}/${slug}`, name: detail?.name ?? fallbackName, detail };
+  // 產品照上的型號與規格
+  const [model, spec] = productModels[code] ?? [detail?.model ?? code, undefined];
+  return { slug, code, image: url, href: `/products/${categorySlug}/${slug}`, name: detail?.name ?? fallbackName, model, spec, detail };
 }
 
 // 取得產品目錄：回傳各分類與特價商品

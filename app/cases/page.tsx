@@ -46,14 +46,13 @@ export default function CasesPage() {
 
           {/* 案例卡片：手機 1 欄、平板 2 欄、電腦 3 欄；照片 16:9（與首頁輪播相同比例） */}
           <ul className="mt-14 grid gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
-            {cases.map((c, i) => (
+            {cases.map((c) => (
               <li key={c.image} className={`overflow-hidden ${card}`}>
                 <div className="relative aspect-video bg-white">
                   <Image src={c.image} alt={c.alt} fill sizes="(min-width: 1024px) 460px, (min-width: 640px) 50vw, 100vw" className="object-cover" />
                 </div>
                 <div className="p-6 lg:p-8">
-                  <span className="text-xs tracking-[0.3em] text-brand-deep">SCENE {String(i + 1).padStart(2, "0")}</span>
-                  <h2 className="mt-3 text-lg tracking-[0.1em]">{c.scene}</h2>
+                  <h2 className="text-lg tracking-[0.1em]">{c.scene}</h2>
                   <p className={`${bodyText} mt-1`}>{c.title}</p>
                 </div>
               </li>

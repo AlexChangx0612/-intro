@@ -15,7 +15,7 @@ const columns: { cls: string; up?: boolean; tiles: Tile[] }[] = [
   // 左欄：往上捲
   {
     cls: s.c1,
-    tiles: [{ tone: "red", en: "Made in Taiwan", zh: "多款台灣製造" }, { img: 0 }, { img: 1 }, { tone: "cream", logo: true }, { img: 2 }],
+    tiles: [{ tone: "red", en: "Made in Taiwan", zh: "全系列台灣製造" }, { img: 0 }, { img: 1 }, { tone: "cream", logo: true }, { img: 2 }],
   },
   // 中欄：往下捲
   {
@@ -105,7 +105,7 @@ export default function HeroMosaic({ images }: { images: string[] }) {
         {/* 說明文字 */}
         <p className={s.lead}>
           專業提供紅龍柱、伸縮帶欄柱、排隊欄柱、告示牌、展示設備、垃圾桶、清潔設備與公共空間周邊設備，服務企業、政府機關、學校、銀行、醫院、商場及各類公共場域。
-          <strong>多款產品台灣製造</strong>，提供<strong>免費空間規劃</strong>。
+          <strong>全系列產品台灣製造</strong>，提供<strong>免費空間規劃</strong>。
         </p>
         {/* 行動按鈕 */}
         <div className={s.acts}>

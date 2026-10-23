@@ -9,11 +9,18 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 // 匯入分類的資料型別
 import type { Category } from "../lib/products";
+// 匯入共用卡片樣式
+import { card, cardHover } from "../lib/ui";
 
 // 每次顯示的商品數量（按「顯示更多」再加 12 張）
 const PAGE_SIZE = 12;
 // 記住目前分類與顯示數量（從商品頁按「上一頁」回來時恢復），只存在這個分頁
 const STORAGE_KEY = "catalog-state";
+
+// 商品卡片下方文字：型號（產品照右下角黃色字）＋規格（例如「不鏽鋼色柱身・紅色織帶」）；沒有規格時顯示分類名稱
+function cardText(item: Category["items"][number], categoryName: string) {
+  return { title: item.model, sub: item.spec ?? categoryName };
+}
 
 // 產品系列目錄：左側系列清單（電腦版滑鼠移上展開顯示產品圖）、右側商品圖片
 export default function ProductCatalog({ categories }: { categories: Category[] }) {
@@ -109,19 +116,19 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
 
   // 回傳目錄畫面
   return (
-    // 手機上下排列；電腦左側 280px 系列清單＋右側商品區
-    <div className="mt-14 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14">
+    // 手機上下排列；電腦左側系列清單（280px，1536px 以上 320px）＋右側商品區
+    <div className="mt-14 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14 2xl:grid-cols-[320px_minmax(0,1fr)] 2xl:gap-16">
       {/* 系列清單：電腦版捲動時固定在 header 下方（top-28 = 112px，避開捲動後 80px 高的精簡 header） */}
       <aside className="min-w-0 lg:sticky lg:top-28 lg:self-start">
         {/* 「分類」小標，只在電腦版顯示 */}
-        <p className="hidden text-xs tracking-[0.35em] text-muted lg:block">分類</p>
+        <p className="hidden pl-5 text-lg tracking-[0.2em] text-ink lg:block">分類</p>
         {/* 手機：可橫向滑動的一排（右側漸淡，提示可往右滑）；電腦：直向清單，滑鼠移上的那一列展開顯示產品圖（Hover Expand），其他列淡出 */}
         <ul
           ref={stripRef}
           onMouseLeave={() => setHovered(null)}
           className="relative [mask-image:linear-gradient(to_right,black_calc(100%-48px),transparent)] lg:[mask-image:none] -mx-5 flex gap-7 overflow-x-auto border-b border-line px-5 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:mx-0 lg:mt-5 lg:flex-col lg:gap-1 lg:overflow-visible lg:border-b-0 lg:px-0 [&::-webkit-scrollbar]:hidden"
         >
-          {categories.map((c, i) => {
+          {categories.map((c) => {
             // 是否為目前選中的系列
             const on = c.id === active.id;
             // 是否為滑鼠移上（展開）的那一列
@@ -139,21 +146,20 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
                   onBlur={() => setHovered(null)}
                   // 告訴輔助科技哪一個系列已選中
                   aria-pressed={on}
-                  // 手機：底線分頁樣式；電腦：收合 44px、展開 168px 的圓角列，展開時變白卡；高度用略帶回彈的曲線（模擬彈簧）
-                  className={`relative -mb-px block min-h-11 min-w-11 border-b py-3.5 text-sm tracking-[0.08em] whitespace-nowrap transition focus-visible:outline-offset-[-3px] lg:mb-0 lg:flex lg:w-full lg:flex-col lg:justify-start lg:overflow-hidden lg:rounded-[14px] lg:border-b-0 lg:py-0 lg:text-left lg:transition-[height,background-color,box-shadow,color] lg:duration-500 lg:ease-[cubic-bezier(.34,1.25,.64,1)] ${
-                    open ? "lg:h-[168px] lg:bg-white lg:shadow-[0_0_0_1px_rgba(214,31,42,.18),0_18px_36px_-22px_rgba(15,15,14,.35)]" : "lg:h-11"
-                  } ${on ? "border-brand text-brand-deep" : "border-transparent text-muted hover:text-brand-deep"}`}
+                  // 手機：底線分頁樣式；電腦：收合 48px、展開 172px 的圓角列（18px 字）；選中時淡紅底，展開時變白卡；高度用略帶回彈的曲線（模擬彈簧）
+                  className={`relative -mb-px block min-h-11 min-w-11 border-b py-3.5 text-sm tracking-[0.08em] whitespace-nowrap transition focus-visible:outline-offset-[-3px] lg:mb-0 lg:flex lg:w-full lg:flex-col lg:justify-start lg:overflow-hidden lg:rounded-[10px] lg:border-b-0 lg:py-0 lg:text-left lg:text-base lg:transition-[height,background-color,box-shadow,color] lg:duration-500 lg:ease-[cubic-bezier(.34,1.25,.64,1)] ${
+                    open ? "lg:h-[172px] lg:bg-white lg:shadow-[0_0_0_1px_rgba(214,31,42,.18),0_18px_36px_-22px_rgba(15,15,14,.35)]" : `lg:h-12 ${on ? "lg:bg-blush/70" : ""}`
+                  } ${on ? "border-brand text-brand-deep" : "border-transparent text-ink/80 hover:text-brand-deep"}`}
                 >
-                  {/* 選中標記：左側紅色短線（電腦版） */}
-                  <span aria-hidden="true" className={`absolute top-3 left-0 hidden h-5 w-px bg-brand transition-opacity lg:block ${on ? "opacity-100" : "opacity-0"}`} />
-                  {/* 編號＋系列名稱 */}
-                  <span className="lg:flex lg:h-11 lg:items-center lg:gap-3 lg:px-5">
-                    <span className={`hidden text-[11px] tracking-[0.15em] lg:inline ${on || open ? "text-brand" : "text-muted"}`}>{String(i + 1).padStart(2, "0")}</span>
+                  {/* 選中標記：左側紅色直線（電腦版） */}
+                  <span aria-hidden="true" className={`absolute top-3 left-0 hidden h-6 w-[3px] rounded-full bg-brand transition-opacity lg:block ${on ? "opacity-100" : "opacity-0"}`} />
+                  {/* 系列名稱 */}
+                  <span className="lg:flex lg:h-12 lg:items-center lg:gap-4 lg:px-5">
                     <span className={open ? "lg:text-brand-deep" : ""}>{c.name}</span>
                   </span>
                   {/* 系列說明：展開後延遲 0.12 秒由左滑入（電腦版）；右緣留到產品圖左側再空 20px，避免文字和圖太近 */}
                   <span
-                    className={`absolute top-11 right-[calc(36%+2.25rem)] left-5 hidden text-xs leading-5 tracking-[0.04em] whitespace-normal text-muted transition duration-300 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:4] lg:block ${
+                    className={`absolute top-12 right-[calc(36%+2.25rem)] left-5 hidden text-xs leading-5 tracking-[0.04em] whitespace-normal text-muted transition duration-300 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:4] lg:block ${
                       open ? "translate-x-0 opacity-100 delay-[120ms]" : "-translate-x-2 opacity-0"
                     }`}
                   >
@@ -162,7 +168,7 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
                   {/* 該系列去背產品圖：固定在右側 36% 寬、100px 高的框內完整呈現，框的上緣在名稱列下方，避免高的產品圖碰到名稱（固定高度，收合時圖片也不會以 0 高度載入）；展開時由 1.06 倍縮回原尺寸並淡入（電腦版） */}
                   <span
                     aria-hidden="true"
-                    className={`absolute top-[52px] right-4 hidden h-[100px] w-[36%] transition duration-500 ease-out lg:block ${open ? "scale-100 opacity-100" : "scale-[1.06] opacity-0"}`}
+                    className={`absolute top-[56px] right-4 hidden h-[100px] w-[36%] transition duration-500 ease-out lg:block ${open ? "scale-100 opacity-100" : "scale-[1.06] opacity-0"}`}
                   >
                     <Image src={`/cutouts/${c.slug}.png`} alt="" fill sizes="110px" className="object-contain" />
                   </span>
@@ -179,7 +185,7 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
         <div className="flex flex-col gap-5 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             {/* 系列名稱：品牌紅大字 */}
-            <h3 className="text-2xl tracking-[0.1em] text-brand">{active.name}</h3>
+            <h3 className="text-2xl tracking-[0.1em] text-brand lg:text-3xl">{active.name}</h3>
             {/* 系列說明：灰字 */}
             <p className="mt-3 text-sm leading-7 text-muted">{active.desc}</p>
           </div>
@@ -196,30 +202,44 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
           </Link>
         </div>
 
-        {/* 商品圖片格：手機一排 2 張、平板 3 張、電腦 4 張 */}
-        <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-3 sm:gap-x-5 sm:gap-y-5 md:grid-cols-3">
-          {/* 每個品項產生一個連結 */}
-          {shown.map((item) => (
-            // 點擊在目前分頁進入該品項的介紹頁
-            <Link key={item.slug} href={item.href} className="group block">
-              {/* 正方形圓角圖片框 */}
-              <div className="relative aspect-square overflow-hidden rounded-[14px] bg-white lg:rounded-[18px]">
-                {/* 商品圖片 */}
-                <Image
-                  // 圖片網址
-                  src={item.image}
-                  // 替代文字：已登錄產品用型號與名稱，其餘用分類名稱與品項編號
-                  alt={item.detail ? `${item.detail.model} ${item.detail.name}` : `${active.name} 品項 ${item.code}`}
-                  // 填滿外框
-                  fill
-                  // 各螢幕下的顯示寬度
-                  sizes="(min-width: 1024px) 360px, (min-width: 768px) 33vw, 50vw"
-                  // 等比例裁切；滑鼠移上時緩慢放大
-                  className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
-                />
-              </div>
-            </Link>
-          ))}
+        {/* 商品卡片格：手機一排 2 張、平板與電腦 3 張、1536px 以上 4 張、1900px 以上 5 張 */}
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
+          {/* 每個品項產生一張卡片 */}
+          {shown.map((item) => {
+            // 卡片下方的標題與說明
+            const { title, sub } = cardText(item, active.name);
+            return (
+              // 點擊在目前分頁進入該品項的介紹頁；白色卡片，滑鼠移上微微浮起
+              <Link key={item.slug} href={item.href} className={`group block p-1.5 sm:p-2 ${card} ${cardHover}`}>
+                {/* 正方形圓角圖片框 */}
+                <div className="relative aspect-square overflow-hidden rounded-[10px] bg-paper lg:rounded-[12px]">
+                  {/* 商品圖片 */}
+                  <Image
+                    // 圖片網址
+                    src={item.image}
+                    // 替代文字：已登錄產品用型號與名稱，其餘用分類名稱與品項編號
+                    alt={`${item.model} ${item.spec ?? active.name}`}
+                    // 填滿外框
+                    fill
+                    // 各螢幕下的顯示寬度
+                    sizes="(min-width: 1900px) 20vw, (min-width: 1536px) 25vw, (min-width: 768px) 33vw, 50vw"
+                    // 等比例裁切；滑鼠移上時緩慢放大
+                    className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+                  />
+                </div>
+                {/* 型號（或分類名稱）、規格（或品項編號）與紅色箭頭 */}
+                <div className="flex items-end gap-3 px-2 pt-3 pb-1.5 sm:px-3 sm:pt-4 sm:pb-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm tracking-[0.06em] text-ink sm:text-lg">{title}</p>
+                    <p className="mt-0.5 truncate text-xs text-muted sm:text-sm">{sub}</p>
+                  </div>
+                  <span aria-hidden="true" className="hidden pb-0.5 text-lg text-brand-deep transition group-hover:translate-x-1 sm:inline">
+                    →
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         {/* 還有未顯示的圖片時，才顯示「顯示更多」 */}
@@ -232,10 +252,11 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
               type="button"
               // 點擊時多顯示 12 張
               onClick={() => show(active.id, visible + PAGE_SIZE)}
-              // 紅框紅字；滑鼠移上時變成紅底白字
-              className="border border-brand-deep px-12 py-3.5 text-sm tracking-[0.2em] text-brand-deep transition hover:bg-brand-deep hover:text-white"
+              // 紅框紅字圓角按鈕；滑鼠移上時變成紅底白字，箭頭往下移
+              className="group inline-flex items-center gap-3 rounded-full border border-brand-deep px-12 py-3.5 text-sm tracking-[0.2em] text-brand-deep transition hover:bg-brand-deep hover:text-white"
             >
               顯示更多
+              <span aria-hidden="true" className="transition group-hover:translate-y-0.5">↓</span>
             </button>
             {/* 顯示進度，例如「已顯示 12 / 30」 */}
             <p className="mt-3 text-xs text-muted">

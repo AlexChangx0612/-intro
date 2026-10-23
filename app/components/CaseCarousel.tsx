@@ -70,9 +70,8 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
   const rootRef = useRef<HTMLElement>(null);
   // 輪播帶（量寬度、拖曳用）
   const bandRef = useRef<HTMLDivElement>(null);
-  // 每張卡片、卡片上的編號、卡片下的說明
+  // 每張卡片、卡片下的說明
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const badgeRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const capRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // 案例太少時重複排列，讓輪播帶永遠填滿畫面、不會出現空隙
@@ -81,7 +80,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
     ...[DESKTOP, MOBILE].map((g) => Math.ceil((2 * g.F + g.W0) / (cases.length * g.pitch))),
   );
   // 實際要畫的卡片清單（重複的部分對輔助工具隱藏）
-  const items = Array.from({ length: cases.length * reps }, (_, i) => ({ c: cases[i % cases.length], n: i % cases.length, dup: i >= cases.length }));
+  const items = Array.from({ length: cases.length * reps }, (_, i) => ({ c: cases[i % cases.length], dup: i >= cases.length }));
   // 卡片總數
   const count = items.length;
 
@@ -118,8 +117,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
       for (let i = 0; i < count; i++) {
         const card = cardRefs.current[i];
         const cap = capRefs.current[i];
-        const badge = badgeRefs.current[i];
-        if (!card || !cap || !badge) continue;
+        if (!card || !cap) continue;
         // 未推開前與中心的距離，循環在 ±L/2 之間
         let t = (((i * geo.pitch - offset) % L) + L) % L;
         if (t >= L / 2) t -= L;
@@ -164,9 +162,6 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
           ],
           RADIUS * u,
         );
-        // 左下角編號：貼著左邊的下緣
-        badge.style.top = `${pH - yl - 14 * u - 40}px`;
-        badge.style.left = `${16 * u}px`;
         // 說明文字：放在卡片正下方、與卡片同寬；越外側越淡
         cap.style.width = `${pw}px`;
         cap.style.transform = `translate3d(${xl * u}px, ${top + pH + 16}px, 0)`;
@@ -379,7 +374,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
           className="relative h-[calc(50cqw_+_110px)] cursor-grab touch-pan-y overflow-hidden select-none focus-visible:outline-offset-[-4px] data-dragging:cursor-grabbing min-[821px]:h-[calc(29.167cqw_+_110px)]"
         >
           {/* 每張卡片＋說明 */}
-          {items.map(({ c, n, dup }, i) => (
+          {items.map(({ c, dup }, i) => (
             <div key={i} aria-hidden={dup || undefined}>
               {/* 卡片：位置、尺寸、裁切由程式逐格設定；載入前先隱藏 */}
               <div
@@ -398,15 +393,6 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
                   sizes="(max-width: 820px) 85vw, 45vw"
                   className="pointer-events-none object-cover"
                 />
-                {/* 左下角毛玻璃編號 */}
-                <span
-                  ref={(el) => {
-                    badgeRefs.current[i] = el;
-                  }}
-                  className="absolute flex size-10 items-center justify-center rounded-full bg-white/35 text-xs text-white backdrop-blur-md"
-                >
-                  {String(n + 1).padStart(2, "0")}
-                </span>
               </div>
               {/* 卡片下方說明：場域＋應用內容 */}
               <div
@@ -415,8 +401,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
                 }}
                 className="invisible absolute top-0 left-0 px-2 text-center will-change-transform"
               >
-                <p className="text-[11px] tracking-[0.3em] text-brand-deep sm:text-xs">SCENE {String(n + 1).padStart(2, "0")}</p>
-                <p className="mt-1 truncate text-sm text-ink sm:text-base">{c.scene}</p>
+                <p className="truncate text-sm text-ink sm:text-base">{c.scene}</p>
                 <p className="truncate text-xs text-muted sm:text-sm">{c.title}</p>
               </div>
             </div>

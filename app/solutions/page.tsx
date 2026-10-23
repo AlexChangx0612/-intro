@@ -59,11 +59,10 @@ export default function SolutionsPage() {
           </div>
           {/* 場域卡片：手機 1 欄、平板 2 欄、電腦 3 欄 */}
           <ul className="mt-14 grid gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">
-            {solutions.map((s, i) => (
+            {solutions.map((s) => (
               <li key={s.slug}>
                 <Link href={`/solutions/${s.slug}`} className={`group flex h-full flex-col p-6 lg:p-8 ${card} ${cardHover}`}>
-                  <span className="text-xs text-brand">{String(i + 1).padStart(2, "0")}</span>
-                  <h2 className={`${cardTitle} mt-4 transition group-hover:text-brand`}>{s.name}</h2>
+                  <h2 className={`${cardTitle} transition group-hover:text-brand`}>{s.name}</h2>
                   <p className={`${bodyText} mt-3`}>{s.intro}</p>
                   <span className="mt-6 text-sm tracking-[0.12em] text-brand-deep">查看規劃重點 →</span>
                 </Link>

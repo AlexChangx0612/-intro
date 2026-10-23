@@ -9,7 +9,7 @@ import SiteHeader from "./SiteHeader";
 
 // 內頁外框：頁首＋主要內容＋聯絡區＋頁尾（與首頁相同的底色與文字顏色）
 export default function PageShell({ children }: { children: React.ReactNode }) {
-  // 頁首抽屜與頁尾需要的分類連結
+  // 頁首抽屜需要的分類連結
   const links = getCatalog().categories.map(({ id, slug, name }) => ({ id, slug, name }));
   return (
     <div className="bg-paper text-ink">
@@ -19,7 +19,7 @@ export default function PageShell({ children }: { children: React.ReactNode }) {
         {/* 每一頁底部都提供詢價方式 */}
         <ContactSection />
       </main>
-      <SiteFooter categories={links} />
+      <SiteFooter />
     </div>
   );
 }

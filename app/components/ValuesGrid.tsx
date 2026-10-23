@@ -75,8 +75,6 @@ export default function ValuesGrid({ values }: { values: Value[] }) {
         >
           {/* 白色卡片：細框圓角；滑鼠移上浮起並加陰影 */}
           <article className={`relative h-full p-6 lg:p-8 ${card} ${cardHover}`}>
-            {/* 右上角編號 */}
-            <p className="absolute top-6 right-6 text-xs tracking-[0.15em] text-brand lg:top-8 lg:right-8">{String(i + 1).padStart(2, "0")}</p>
             {/* 圖示：淡紅底圓角方塊＋品牌紅線條 */}
             <div className="inline-flex rounded-[12px] bg-blush p-3 text-brand-deep">
               <svg aria-hidden="true" className="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">

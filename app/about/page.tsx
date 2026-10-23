@@ -1,5 +1,7 @@
 // 匯入 Next.js 網頁中繼資料型別
 import type { Metadata } from "next";
+// 匯入 Next.js 圖片元件
+import Image from "next/image";
 // 匯入 Next.js 站內連結元件
 import Link from "next/link";
 // 匯入麵包屑
@@ -18,10 +20,8 @@ import ValuesGrid, { type Value } from "../components/ValuesGrid";
 import { getCatalog } from "../lib/products";
 // 匯入 SEO 工具
 import { absoluteUrl, company, ORG_ID, organizationJsonLd, pageMetadata } from "../lib/site";
-// 匯入適用場域資料
-import { solutions } from "../lib/solutions";
 // 匯入共用樣式
-import { bodyText, card, cardTitle, container, outlineBtn, pageTop, section } from "../lib/ui";
+import { container, pageTop, section } from "../lib/ui";
 
 // 頁面描述
 const description =
@@ -37,31 +37,39 @@ export const metadata: Metadata = pageMetadata({
 // 企業理念
 const values: Value[] = [
   { title: "創新", desc: "持續開發與整合新產品，回應公共空間不斷改變的動線、展示與管理需求。", icon: "idea" },
-  { title: "品質", desc: "多款欄柱與設備於台灣在地生產，品質穩定，溝通即時。", icon: "quality" },
+  { title: "品質", desc: "所有欄柱與設備皆於台灣在地生產，品質穩定，溝通即時。", icon: "quality" },
   { title: "誠信", desc: "依場地與需求提供規劃與報價建議，說明清楚、承諾實在。", icon: "trust" },
 ];
 
-// 服務項目
-const services = [
+// 三大產品領域：13 個產品系列依用途分成三組（ids 為產品分類 id）
+// glow 為卡片背景的柔焦色塊（品牌紅、暖橘、淡藍），位置各不相同
+const areas = [
   {
-    id: "public",
-    title: "公共空間設備",
-    desc: "為政府機關、學校、醫院、車站等公共場域，提供排隊欄柱、告示牌、佈告欄、垃圾桶與資源回收、清潔衛生、傘架等設備，協助維持秩序與整潔。",
+    title: "排隊動線",
+    badge: "QUEUE",
+    places: "銀行・醫院・機場",
+    detail: "櫃台排隊、入場管制與 VIP 區隔",
+    cutout: "/cutouts/retractable-belt-stanchions.png",
+    ids: ["retractable", "rope", "outdoor", "plastic", "barrier"],
+    glow: "radial-gradient(38% 26% at 34% 66%, rgba(255,55,64,.75), transparent 70%), radial-gradient(34% 22% at 66% 72%, rgba(255,168,64,.7), transparent 70%), radial-gradient(42% 30% at 50% 32%, rgba(126,178,236,.45), transparent 70%)",
   },
   {
-    id: "commercial",
-    title: "商業空間設備",
-    desc: "為銀行、百貨商場、飯店、餐廳與展覽活動，提供伸縮帶欄柱、迎賓欄柱、拒馬、海報架、數位看板與燈箱，兼顧動線與品牌形象；拒馬看板、告示牌與海報架皆可置入企業識別。",
+    title: "告示展示",
+    badge: "DISPLAY",
+    places: "百貨・飯店・展覽",
+    detail: "活動宣傳、樓層指示與品牌視覺",
+    cutout: "/cutouts/poster-sign-stands.png",
+    ids: ["sign", "board", "display"],
+    glow: "radial-gradient(40% 26% at 62% 58%, rgba(255,55,64,.7), transparent 70%), radial-gradient(30% 24% at 30% 74%, rgba(255,186,72,.75), transparent 70%), radial-gradient(44% 30% at 40% 30%, rgba(140,190,240,.5), transparent 70%)",
   },
   {
-    id: "property",
-    title: "物業與後場設備",
-    desc: "房務整備車、手推車、工具車、不鏽鋼工作桌與鑰匙箱，支援飯店房務、大樓物業管理與日常維修作業。",
-  },
-  {
-    id: "gifts",
-    title: "禮贈品服務",
-    desc: "世紘亦提供企業禮贈品相關服務，品項、數量與客製方式，歡迎與專員洽詢。",
+    title: "環境與物業",
+    badge: "FACILITY",
+    places: "學校・車站・大樓",
+    detail: "清潔回收、雨天入口與後場管理",
+    cutout: "/cutouts/waste-recycling.png",
+    ids: ["trash", "hygiene", "umbrella", "cart", "key"],
+    glow: "radial-gradient(36% 26% at 44% 70%, rgba(255,150,56,.75), transparent 70%), radial-gradient(34% 24% at 70% 52%, rgba(255,55,64,.65), transparent 70%), radial-gradient(40% 30% at 30% 34%, rgba(126,178,236,.45), transparent 70%)",
   },
 ];
 
@@ -79,23 +87,91 @@ export default function AboutPage() {
         ]}
       />
 
-      {/* 頁首：公司簡介 */}
+      {/* 頁首：小標籤＋細線、左大標右簡介、三大領域卡片（滑鼠移上由下方滑出詳細資訊） */}
       <section className={`${pageTop} pb-20 sm:pb-28`}>
-        <div className={`${container} grid gap-12 lg:grid-cols-2 lg:gap-20`}>
-          <div>
-            <Breadcrumbs items={[{ name: "首頁", path: "/" }, { name: "關於世紘", path: "/about" }]} />
-            <div className="mt-10">
-              <SectionTitle as="h1" align="left" eyebrow="ABOUT SHIHHUNG" title="世紘興業｜公共與商業空間設備專業供應商" />
-            </div>
-          </div>
-          <div className="space-y-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8 lg:pt-16">
-            <p>
-              世紘興業有限公司成立於 {company.foundingYear} 年，是台灣專業的公共與商業空間周邊設備研製與供應商。產品涵蓋紅龍柱、伸縮帶欄柱、迎賓欄柱、室內外欄柱、塑膠欄柱、拒馬、告示牌、海報架、展示設備、數位看板、垃圾桶、資源回收設備、清潔衛生設備、傘架、推車、工具車與鑰匙箱。
-            </p>
-            <p>
-              我們服務企業、政府機關、學校、銀行、郵局、醫院、診所、百貨商場、飯店、餐廳、機場、車站、展覽活動及其他公共空間，並整合相關產業資源，提供從排隊動線規劃到設備供應的服務。
+        <div className={container}>
+          <Breadcrumbs items={[{ name: "首頁", path: "/" }, { name: "關於世紘", path: "/about" }]} />
+
+          {/* 小標籤（白色膠囊）＋下方細分隔線 */}
+          <div className="mt-8 border-b border-line pb-5">
+            <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs tracking-[0.2em] text-brand-deep shadow-[0_0_0_1px_rgba(15,15,14,.06)]">
+              <span aria-hidden="true">→</span>
+              ABOUT SHIHHUNG
             </p>
           </div>
+
+          {/* 左大標、右簡介（電腦並排） */}
+          <div className="mt-10 flex flex-col items-start justify-between gap-8 lg:flex-row lg:gap-20">
+            <h1 className="text-[30px] leading-[1.3] tracking-[0.06em] text-ink sm:text-[40px] lg:text-[44px]">
+              三大產品領域，
+              <br />
+              <span className="text-brand">同一份台灣製造的標準。</span>
+            </h1>
+            <p className="max-w-xl text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8 lg:pt-2">
+              世紘興業成立於 {company.foundingYear} 年，專注公共與商業空間周邊設備的研製與供應，{categories.length}{" "}
+              個產品系列全部在台灣生產，並提供企業禮贈品服務。服務企業、政府機關、學校、醫院、商場與交通場站——將滑鼠移到領域上查看細節。
+            </p>
+          </div>
+
+          {/* 三張直式卡片：手機 1 欄、平板以上 3 欄 */}
+          <ul className="mt-12 grid gap-5 md:grid-cols-3">
+            {areas.map((a) => {
+              // 這個領域包含的產品系列
+              const cats = a.ids.map((id) => categories.find((c) => c.id === id)).filter((c) => c !== undefined);
+              return (
+                <li key={a.title}>
+                  {/* 卡片：細框圓角；tabIndex 讓鍵盤也能展開詳細資訊 */}
+                  <div
+                    tabIndex={0}
+                    className="group relative flex h-[440px] flex-col overflow-hidden rounded-[18px] bg-[linear-gradient(180deg,#fdfcfa,#f1eee9)] shadow-[0_0_0_1px_rgba(15,15,14,.07)] outline-none focus-visible:shadow-[0_0_0_2px_var(--color-brand-deep)] lg:h-[480px]"
+                  >
+                    {/* 柔焦色塊：品牌紅、暖橘、淡藍，模糊成光暈 */}
+                    <div aria-hidden="true" className="absolute inset-0 blur-2xl transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: a.glow }} />
+                    {/* 去背產品圖（手機、平板在上半部，避開固定顯示的詳細資訊）：微微柔焦、與光暈相乘；滑鼠移上變清楚並微微放大 */}
+                    <div className="absolute inset-x-8 top-[16%] bottom-[40%] lg:top-[18%] lg:bottom-[22%] transition duration-700 [filter:blur(1.5px)_saturate(1.1)] group-hover:scale-[1.04] group-hover:[filter:blur(0)_saturate(1.1)]">
+                      <Image src={a.cutout} alt={`${a.title}代表產品`} fill sizes="(min-width: 768px) 30vw, 80vw" className="object-contain mix-blend-multiply" />
+                    </div>
+                    {/* 上方淡白霧面，讓標題清楚 */}
+                    <div aria-hidden="true" className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/80 to-white/0" />
+
+                    {/* 頂列：領域名稱＋英文膠囊 */}
+                    <div className="relative flex items-center justify-between px-5 pt-5">
+                      <h2 className="text-lg tracking-[0.1em] text-ink">{a.title}</h2>
+                      <span className="rounded-full bg-white/80 px-2.5 py-0.5 text-[11px] tracking-[0.15em] text-muted shadow-[0_0_0_1px_rgba(15,15,14,.08)]">{a.badge}</span>
+                    </div>
+
+                    {/* 底列：適用場所＋箭頭；詳細資訊滑出時淡出（電腦版） */}
+                    <div className="relative mt-auto flex items-end justify-between px-5 pb-5 transition-opacity duration-300 lg:group-hover:opacity-0 lg:group-focus-within:opacity-0 max-lg:hidden">
+                      <span className="text-xs tracking-[0.25em] text-muted">{a.places}</span>
+                      <span aria-hidden="true" className="text-lg text-brand">↗</span>
+                    </div>
+
+                    {/* 詳細資訊：手機、平板固定顯示在底部；電腦版滑鼠移上或聚焦時由下方滑出 */}
+                    <div className="absolute inset-x-0 bottom-0 bg-white/75 px-5 pt-4 pb-5 backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] lg:translate-y-full lg:group-hover:translate-y-0 lg:group-focus-within:translate-y-0">
+                      <p className="text-xs tracking-[0.25em] text-brand-deep">
+                        <span aria-hidden="true">→ </span>
+                        {a.detail}
+                      </p>
+                      {/* 產品系列連結 */}
+                      <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-ink/10 pt-3">
+                        {cats.map((c) => (
+                          <li key={c.id}>
+                            <Link href={`/products/${c.slug}`} className="text-sm tracking-[0.06em] text-ink transition hover:text-brand-deep">
+                              {c.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                      {/* 頁尾：系列數＋適用場所 */}
+                      <p className="mt-3 border-t border-ink/10 pt-3 text-[11px] tracking-[0.25em] text-muted">
+                        {cats.length} 大系列・{a.places}
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </section>
 
@@ -107,49 +183,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 服務項目：白色卡片 */}
-      <section id="services" className={section}>
-        <div className={container}>
-          <SectionTitle eyebrow="SERVICES" title="世紘的服務" desc="提供場地與需求，專人為您規劃排隊動線並提供報價，規劃服務免費。" />
-          <div className="mt-14 grid gap-4 md:grid-cols-2 md:gap-5">
-            {services.map((s, i) => (
-              <article key={s.id} id={s.id} className={`scroll-mt-28 p-6 lg:p-8 ${card}`}>
-                <p className="text-xs text-brand">{String(i + 1).padStart(2, "0")}</p>
-                <h3 className={`${cardTitle} mt-4`}>{s.title}</h3>
-                <p className={`${bodyText} mt-3`}>{s.desc}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* 產品系列 */}
       <section className={section}>
         <div className={container}>
           <SectionTitle eyebrow="COLLECTIONS" title="產品系列" />
           <CollectionGrid categories={categories} />
-        </div>
-      </section>
-
-      {/* 服務場域 */}
-      <section className={section}>
-        <div className={`${container} grid gap-12 lg:grid-cols-2 lg:gap-20`}>
-          <div>
-            <SectionTitle align="left" eyebrow="APPLICATIONS" title="服務場域" desc="依場域查看動線規劃重點與建議設備配置。" />
-            <Link href="/solutions" className={`${outlineBtn} mt-10`}>
-              查看全部場域
-            </Link>
-          </div>
-          <ol className="border-t border-line">
-            {solutions.map((s, i) => (
-              <li key={s.slug} className="border-b border-line">
-                <Link href={`/solutions/${s.slug}`} className="flex items-baseline gap-6 py-4 transition hover:text-brand-deep">
-                  <span className="w-6 text-xs text-brand">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="text-lg tracking-[0.1em]">{s.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ol>
         </div>
       </section>
     </PageShell>

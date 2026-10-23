@@ -95,9 +95,8 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
           <div className="lg:pt-16">
             <h2 className={cardTitle}>{s.name}常見的挑戰</h2>
             <ol className="mt-6 border-t border-line">
-              {s.challenges.map((c, i) => (
+              {s.challenges.map((c) => (
                 <li key={c} className="flex items-baseline gap-6 border-b border-line py-4">
-                  <span className="w-6 text-xs text-brand">{String(i + 1).padStart(2, "0")}</span>
                   <span className="text-base tracking-[0.06em]">{c}</span>
                 </li>
               ))}
@@ -111,10 +110,9 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
         <div className={container}>
           <SectionTitle eyebrow="SOLUTIONS" title="世紘建議的設備配置" />
           <div className="mt-14 grid gap-4 md:grid-cols-2 md:gap-5">
-            {s.needs.map((n, i) => (
+            {s.needs.map((n) => (
               <article key={n.title} className={`p-6 lg:p-8 ${card}`}>
-                <p className="text-xs text-brand">{String(i + 1).padStart(2, "0")}</p>
-                <h3 className={`${cardTitle} mt-4`}>{n.title}</h3>
+                <h3 className={cardTitle}>{n.title}</h3>
                 <p className={`${bodyText} mt-3`}>{n.desc}</p>
                 {/* 相關產品分類連結 */}
                 <ul className="mt-4 flex flex-wrap gap-x-6">

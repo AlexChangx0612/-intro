@@ -26,3 +26,6 @@ export const bodyText = "text-sm leading-7 text-pretty text-muted";
 
 // 分類連結的資料型別：id 用於首頁商品目錄錨點（#c-id），slug 用於分類頁網址，name 為顯示名稱
 export type CategoryLink = { id: string; slug: string; name: string };
+
+// 滿版版心：不限最大寬度，佔滿整個畫面（左右留白同 container，1536px 以上 64px）
+export const wide = "w-full px-5 sm:px-8 lg:px-12 2xl:px-16";

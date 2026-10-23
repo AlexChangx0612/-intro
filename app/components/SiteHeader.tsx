@@ -9,6 +9,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 // 匯入分類連結型別
 import type { CategoryLink } from "../lib/ui";
+// 匯入站內搜尋（放大鏡）
+import SiteSearch from "./SiteSearch";
+// 匯入主選單滑動底色與產品系列下拉選單
+import { MotionNavList } from "./MotionNav";
+// 匯入手機、平板側欄選單
+import MobileSidebar from "./MobileSidebar";
 
 // 主選單：大螢幕拆成 logo 左右各四個，較小螢幕收進抽屜
 // 「/」開頭為站內頁面，「/#」為首頁區塊
@@ -16,19 +22,19 @@ import type { CategoryLink } from "../lib/ui";
 const navLeft = [
   // 產品系列 → 打開產品分類 sidebar（大螢幕）；抽屜中連到產品系列頁
   { href: "/products", label: "產品系列" },
-  // 適用場域 → 場域總覽頁
-  { href: "/solutions", label: "適用場域" },
-  // 客戶實際案例 → 首頁輪播區塊
-  { href: "/#cases", label: "客戶實際案例" },
-  // 客製化服務 → 關於頁的服務說明
-  { href: "/about#services", label: "客製化服務" },
+  // 產品電子目錄 → 目錄預覽與下載頁
+  { href: "/catalog", label: "產品電子目錄" },
+  // 客戶實際案例 → 案例總覽頁
+  { href: "/cases", label: "客戶實際案例" },
+  // 客製化服務 → 客製化服務頁
+  { href: "/custom", label: "客製化服務" },
 ];
 // LOGO 右側四個按鈕
 const navRight = [
   // 關於世紘 → 關於頁
   { href: "/about", label: "關於世紘" },
-  // 世紘優勢 → 首頁優勢區塊
-  { href: "/#advantages", label: "世紘優勢" },
+  // 世紘優勢 → 優勢、專利與檢驗報告頁
+  { href: "/advantages", label: "世紘優勢" },
   // 常見問題 → 首頁常見問題區塊
   { href: "/#faq", label: "常見問題" },
   // 聯絡我們 → 聯絡我們頁面
@@ -39,12 +45,12 @@ const navRight = [
 // 合併左右兩組，作為抽屜選單的連結
 const pages = [...navLeft, ...navRight];
 
-// 按鈕字級：一般 24px（選單、聯絡）；1536 起左右八個按鈕並排 22.5px
+// 按鈕字級：一般 24px（選單、聯絡）；1536 起左右八個按鈕並排 21px，1900px 以上 22.5px
 // 按鈕共用樣式：不換行、滑鼠移上變紅字
 const navLink =
-  "py-2 text-xl tracking-[0.15em] whitespace-nowrap transition hover:text-brand-deep 2xl:text-[22.5px] 2xl:tracking-[0.1em]";
-// 按鈕群組樣式：1536px 以下隱藏；以上橫向排列，間距 20px，1900px 以上間距 30px
-const navGroup = "hidden items-center gap-5 2xl:flex 3xl:gap-[30px]";
+  "py-2 text-xl tracking-[0.15em] whitespace-nowrap transition hover:text-brand-deep 2xl:text-[21px] 2xl:tracking-[0.1em] 3xl:text-[22.5px]";
+// 按鈕群組樣式：1536px 以下隱藏；以上橫向排列，間距 16px，1900px 以上間距 30px
+const navGroup = "hidden items-center gap-4 2xl:flex 3xl:gap-[30px]";
 
 // 電話圖示（14px）
 function PhoneIcon() {
@@ -69,12 +75,8 @@ function MailIcon() {
 
 // 網站頁首元件；categories 為產品分類（抽屜選單使用）
 export default function SiteHeader({ categories }: { categories: CategoryLink[] }) {
-  // 抽屜內容：menu＝完整選單、products＝只顯示產品分類、null＝關閉
-  const [drawer, setDrawer] = useState<"menu" | "products" | null>(null);
-  // 抽屜選單是否打開
-  const open = drawer !== null;
-  // 打開完整選單
-  const setOpen = (v: boolean) => setDrawer(v ? "menu" : null);
+  // 側欄選單是否打開
+  const [open, setOpen] = useState(false);
   // 頁面是否已往下捲動（決定 header 是否切換成精簡版）
   const [scrolled, setScrolled] = useState(false);
   // 關閉抽屜選單
@@ -98,7 +100,7 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
     // 抽屜沒打開就不處理
     if (!open) return;
     // 按下 Esc 鍵時關閉抽屜
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setDrawer(null);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     // 禁止背景頁面捲動
     document.body.style.overflow = "hidden";
     // 監聽鍵盤
@@ -169,30 +171,8 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
               {/* 「選單」文字 */}
               <span>選單</span>
             </button>
-            {/* 左側四個按鈕（大螢幕才顯示） */}
-            <nav aria-label="主選單" className={navGroup}>
-              {/* 逐一產生按鈕 */}
-              {navLeft.map((p) =>
-                // 「產品系列」：點擊從左側打開產品分類 sidebar
-                p.href === "/products" ? (
-                  <button
-                    key={p.href}
-                    type="button"
-                    onClick={() => setDrawer("products")}
-                    aria-expanded={drawer === "products"}
-                    className={navLink}
-                  >
-                    {p.label}
-                  </button>
-                ) : (
-                  // 按鈕連結
-                  <Link key={p.href} href={p.href} className={navLink}>
-                    {/* 按鈕文字 */}
-                    {p.label}
-                  </Link>
-                ),
-              )}
-            </nav>
+            {/* 左側四個按鈕（大螢幕才顯示）：滑動底色；「產品系列」為下拉選單 */}
+            <MotionNavList items={navLeft} categories={categories} linkClassName={navLink} className={navGroup} />
           </div>
 
           {/* 品牌：Shung 標誌 ｜ 公司名稱與標語 */}
@@ -224,110 +204,27 @@ export default function SiteHeader({ categories }: { categories: CategoryLink[] 
             </span>
           </Link>
 
-          {/* 右欄（較小螢幕）：「聯絡我們」→ 聯絡我們頁面（手機 15px 字，平板以上 24px） */}
-          <Link
-            href="/contact"
-            className="flex min-h-11 items-center justify-self-end text-[15px] tracking-[0.1em] whitespace-nowrap transition hover:text-brand-deep sm:text-xl sm:tracking-[0.15em] 2xl:hidden"
-          >
-            聯絡我們
-          </Link>
-          {/* 右側四個按鈕（大螢幕才顯示，靠左貼近 LOGO） */}
-          <nav aria-label="主選單" className={navGroup}>
-            {/* 逐一產生按鈕 */}
-            {navRight.map((p) => (
-              // 按鈕連結
-              <Link key={p.href} href={p.href} className={navLink}>
-                {/* 按鈕文字 */}
-                {p.label}
-              </Link>
-            ))}
-          </nav>
+          {/* 右欄：較小螢幕靠右；大螢幕靠左（貼近 LOGO）；最右側為放大鏡 */}
+          <div className="flex items-center justify-self-end sm:gap-3 2xl:justify-self-start 2xl:gap-5 3xl:gap-8">
+            {/* 「聯絡我們」→ 聯絡我們頁面（較小螢幕；手機 15px 字，平板以上 24px） */}
+            {/* 手機右側另有放大鏡，空間不足，只顯示「聯絡」 */}
+            <Link
+              href="/contact"
+              aria-label="聯絡我們"
+              className="flex min-h-11 items-center text-[15px] tracking-[0.1em] whitespace-nowrap transition hover:text-brand-deep sm:text-xl sm:tracking-[0.15em] 2xl:hidden"
+            >
+              聯絡<span className="hidden sm:inline">我們</span>
+            </Link>
+            {/* 右側四個按鈕（大螢幕才顯示）：滑鼠移過時淡紅底色以彈簧動態滑動 */}
+            <MotionNavList items={navRight} linkClassName={navLink} className={navGroup} />
+            {/* 放大鏡：站內搜尋（所有尺寸都顯示，位於最右側） */}
+            <SiteSearch />
+          </div>
         </div>
       </header>
 
-      {/* 抽屜選單：open 為 true 時才顯示 */}
-      {open && (
-        // 覆蓋整個畫面的容器，層級高於 header
-        <div className="fixed inset-0 z-50">
-          {/* 半透明黑色背景，點擊可關閉 */}
-          <button
-            // 一般按鈕
-            type="button"
-            // 螢幕閱讀器讀出的名稱
-            aria-label="關閉選單"
-            // 點擊關閉
-            onClick={close}
-            // 滿版、淡入動畫、30% 透明黑
-            className="absolute inset-0 animate-[fade-in_.3s_ease-out] bg-ink/30"
-          />
-          {/* 抽屜面板：從左側滑入、白底、內容過長可捲動 */}
-          <nav className="absolute inset-y-0 left-0 flex w-full max-w-md animate-[drawer-in_.4s_cubic-bezier(.2,.7,.2,1)] flex-col overflow-y-auto bg-white px-8 pt-5 pb-12 sm:px-12">
-            {/* 關閉按鈕 */}
-            <button
-              // 一般按鈕
-              type="button"
-              // 點擊關閉
-              onClick={close}
-              // 圖示與文字橫向排列，靠左
-              className="flex h-11 items-center gap-3 self-start text-sm tracking-[0.15em]"
-            >
-              {/* X 圖示 */}
-              <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-                {/* 兩條交叉斜線 */}
-                <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.2" />
-              </svg>
-              關閉
-            </button>
-
-            {/* 八個頁面連結（只在完整選單顯示） */}
-            {drawer === "menu" && (
-              <ul className="mt-10 space-y-1">
-                {/* 逐一產生連結 */}
-                {pages.map((p) => (
-                  // 清單項目
-                  <li key={p.href}>
-                    {/* 點擊後跳到該區塊並關閉抽屜 */}
-                    <Link href={p.href} onClick={close} className="block py-2 text-sm tracking-[0.12em] transition hover:text-brand-deep">
-                      {/* 連結文字 */}
-                      {p.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {/* 「產品系列」小標；完整選單時上方有分隔線 */}
-            <p
-              className={`text-xs tracking-[0.35em] text-brand-deep ${
-                drawer === "menu" ? "mt-10 border-t border-line pt-8" : "mt-10"
-              }`}
-            >
-              產品系列
-            </p>
-            {/* 產品分類連結 */}
-            <ul className="mt-4 space-y-1">
-              {/* 逐一產生分類連結 */}
-              {categories.map((c) => (
-                // 清單項目
-                <li key={c.id}>
-                  {/* 分類連結 */}
-                  <Link
-                    // 連到該分類頁
-                    href={`/products/${c.slug}`}
-                    // 點擊後關閉抽屜
-                    onClick={close}
-                    // 20px 字，滑鼠移上變紅字
-                    className="block py-2 text-lg tracking-[0.08em] transition hover:text-brand-deep"
-                  >
-                    {/* 分類名稱 */}
-                    {c.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      )}
+      {/* 手機、平板側欄選單（尺規刻度樣式，從左側以彈簧動態滑入） */}
+      <MobileSidebar open={open} onClose={close} pages={pages} categories={categories} />
     </>
   );
 }

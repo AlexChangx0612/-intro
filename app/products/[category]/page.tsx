@@ -50,10 +50,8 @@ function InfoColumn({ title, items }: { title: string; items: string[] }) {
     <div>
       <h2 className={cardTitle}>{title}</h2>
       <ol className="mt-6 space-y-4">
-        {items.map((item, i) => (
+        {items.map((item) => (
           <li key={item} className="flex gap-4">
-            {/* 編號：品牌紅 */}
-            <span className="w-6 shrink-0 pt-1 text-xs text-brand">{String(i + 1).padStart(2, "0")}</span>
             <span className={bodyText}>{item}</span>
           </li>
         ))}
@@ -139,15 +137,15 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
                   <div className="relative aspect-square overflow-hidden rounded-[14px] bg-white lg:rounded-[18px]">
                     <Image
                       src={item.image}
-                      alt={item.detail ? `世紘 ${item.detail.model} ${item.detail.name}` : `世紘${cat.name} 品項 ${item.code}`}
+                      alt={`世紘${cat.name} ${item.model} ${item.spec ?? ""}`}
                       fill
                       sizes="(min-width: 1024px) 330px, (min-width: 768px) 33vw, 50vw"
                       className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
                     />
                   </div>
-                  {/* 已登錄產品顯示型號與名稱，其餘顯示品項編號 */}
-                  <span className="mt-3 block text-sm tracking-[0.08em] transition group-hover:text-brand-deep">{item.detail?.model ?? item.code}</span>
-                  {item.detail && <span className="block text-xs leading-6 text-muted">{item.detail.name}</span>}
+                  {/* 型號（產品照右下角黃色字）與規格 */}
+                  <span className="mt-3 block text-sm tracking-[0.08em] transition group-hover:text-brand-deep">{item.model}</span>
+                  {item.spec && <span className="block text-xs leading-6 text-muted">{item.spec}</span>}
                 </Link>
               </li>
             ))}
@@ -170,10 +168,9 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
           <div className={`${container} grid gap-12 lg:grid-cols-2 lg:gap-20`}>
             <SectionTitle align="left" eyebrow="APPLICATIONS" title="常見的應用場域" desc="依場域查看動線規劃重點與建議設備配置。" />
             <ol className="border-t border-line">
-              {related.map((s, i) => (
+              {related.map((s) => (
                 <li key={s.slug} className="border-b border-line">
                   <Link href={`/solutions/${s.slug}`} className="flex items-baseline gap-6 py-4 transition hover:text-brand-deep">
-                    <span className="w-6 text-xs text-brand">{String(i + 1).padStart(2, "0")}</span>
                     <span className="text-lg tracking-[0.1em]">{s.name}</span>
                   </Link>
                 </li>

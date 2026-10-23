@@ -31,9 +31,9 @@ export function generateStaticParams() {
   return allItemParams();
 }
 
-// 品項標題：已登錄產品用「型號 名稱」，其餘用「分類名稱 品項編號」
+// 品項標題：已登錄產品用「型號 名稱」，其餘用「型號 分類名稱（規格）」
 function itemTitle(item: CatalogItem) {
-  return item.detail ? `${item.detail.model} ${item.detail.name}` : `${item.name} 品項 ${item.code}`;
+  return item.detail ? `${item.detail.model} ${item.detail.name}` : `${item.model} ${item.name}${item.spec ? `（${item.spec}）` : ""}`;
 }
 
 // 每個品項頁各自的標題、描述、canonical 與分享圖
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: PageProps<"/products/[categor
     title: `${itemTitle(item)}｜世紘興業`,
     description:
       item.detail?.description ??
-      `世紘興業${list.name}，品項編號 ${item.code}。${list.desc}型號、尺寸與報價請洽世紘專員。`,
+      `世紘興業${list.name} ${item.model}${item.spec ? `，${item.spec}` : ""}。${list.desc}尺寸與報價請洽世紘專員。`,
     path: item.href,
     image: item.image,
   });
@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
   const title = itemTitle(item);
   const images = detail?.images ?? [item.image];
   // 詢價信件主旨：帶入型號或品項編號，方便專員辨識
-  const mailSubject = encodeURIComponent(`產品詢價：${detail?.model ?? `${list.name} ${item.code}`}`);
+  const mailSubject = encodeURIComponent(`產品詢價：${item.model}`);
 
   return (
     <PageShell>
@@ -120,7 +120,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
                     { name: "產品系列", path: "/products" },
                     { name: list.name, path: list.listHref },
                   ]),
-              { name: detail?.model ?? item.code, path: item.href },
+              { name: item.model, path: item.href },
             ]}
           />
           <div className="mt-10 grid items-start gap-12 lg:grid-cols-2 lg:gap-20">
@@ -145,14 +145,14 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
               <SectionTitle
                 as="h1"
                 align="left"
-                eyebrow={detail ? detail.model : `${list.en}・NO. ${item.code}`}
-                title={detail ? detail.name : list.name}
+                eyebrow={detail ? detail.model : `${list.en}・${item.model}`}
+                title={detail ? detail.name : `${item.model} ${list.name}`}
               />
               <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{detail?.description ?? list.desc}</p>
               {/* 未登錄規格的品項：說明型號以產品照為準 */}
               {!detail && (
                 <p className="mt-3 text-xs leading-6 text-muted">
-                  品項編號 {item.code}。型號與主要標示請見產品照；尺寸、材質與報價，請洽世紘專員確認。
+                  {item.spec && <>{item.spec}。</>}品項編號 {item.code}。尺寸、材質與報價，請洽世紘專員確認。
                 </p>
               )}
 
@@ -204,7 +204,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
 
               {/* 詢價：電話、Email（主旨帶入型號）、LINE、聯絡頁 */}
               <h2 className={`${cardTitle} mt-12`}>詢價與免費規劃</h2>
-              <p className={`${bodyText} mt-3`}>詢價時提供{detail ? "型號" : "品項編號"}「{detail?.model ?? item.code}」，專員可更快為您確認。</p>
+              <p className={`${bodyText} mt-3`}>詢價時提供型號「{item.model}」，專員可更快為您確認。</p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <a href={company.phoneHref} className={inquiryBtn}>
                   電話 {company.phone}
@@ -252,9 +252,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
           <div className={`${container} grid gap-12 lg:grid-cols-2 lg:gap-20`}>
             <SectionTitle align="left" eyebrow="APPLICATIONS" title="適用場所" />
             <ol className="border-t border-line">
-              {places.map((p, i) => (
+              {places.map((p) => (
                 <li key={p} className="flex items-baseline gap-6 border-b border-line py-4">
-                  <span className="w-6 text-xs text-brand">{String(i + 1).padStart(2, "0")}</span>
                   <span className="text-base tracking-[0.06em]">{p}</span>
                 </li>
               ))}
@@ -281,8 +280,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
                         className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
                       />
                     </div>
-                    <span className="mt-3 block text-sm tracking-[0.08em] transition group-hover:text-brand-deep">{p.detail?.model ?? p.code}</span>
-                    {p.detail && <span className="block text-xs leading-6 text-muted">{p.detail.name}</span>}
+                    <span className="mt-3 block text-sm tracking-[0.08em] transition group-hover:text-brand-deep">{p.model}</span>
+                    {p.spec && <span className="block text-xs leading-6 text-muted">{p.spec}</span>}
                   </Link>
                 </li>
               ))}

@@ -55,7 +55,7 @@ const productSlides: ProductSlide[] = [
   {
     eyebrow: "MADE IN TAIWAN",
     title: "台灣製造",
-    desc: "多款欄柱與設備於台灣在地生產，品質穩定，溝通即時。",
+    desc: "所有欄柱與設備皆於台灣在地生產，品質穩定，溝通即時。",
     image: "/images/003/003-001-001.png",
     alt: "圓球頭不鏽鋼迎賓欄柱 SW-R1S(A)",
     // 按鈕連到迎賓欄柱分類
