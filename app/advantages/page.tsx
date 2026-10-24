@@ -1,7 +1,5 @@
 // 匯入 Next.js 網頁中繼資料型別
 import type { Metadata } from "next";
-// 匯入麵包屑
-import Breadcrumbs from "../components/Breadcrumbs";
 // 匯入證書格（點擊放大）
 import CertificateGallery from "../components/CertificateGallery";
 // 匯入結構化資料元件
@@ -10,12 +8,14 @@ import JsonLd from "../components/JsonLd";
 import PageShell from "../components/PageShell";
 // 匯入區塊標題
 import SectionTitle from "../components/SectionTitle";
+// 匯入品牌故事版型（頁首大圖、引言、圖文交錯段落、收尾宣言、延伸閱讀）
+import { StoryBand, StoryHero, StoryIntro, StoryLinks, StoryRows } from "../components/Story";
 // 匯入優勢、專利與檢驗報告資料
 import { advantages, patents, reach, reports } from "../lib/advantages";
 // 匯入 SEO 工具
 import { absoluteUrl, pageMetadata } from "../lib/site";
 // 匯入共用樣式
-import { container, pageTop, section } from "../lib/ui";
+import { container, section } from "../lib/ui";
 
 // 頁面描述
 const description =
@@ -35,28 +35,28 @@ export default function AdvantagesPage() {
       {/* 結構化資料 */}
       <JsonLd data={[{ "@type": "WebPage", name: "世紘優勢", description, url: absoluteUrl("/advantages") }]} />
 
-      {/* 頁首＋三項優勢 */}
-      <section className={`${pageTop} pb-20 sm:pb-28`}>
-        <div className={container}>
-          <Breadcrumbs items={[{ name: "首頁", path: "/" }, { name: "世紘優勢", path: "/advantages" }]} />
-          <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-end lg:gap-20">
-            <SectionTitle as="h1" align="left" eyebrow="WHY SHIHHUNG" title="世紘優勢，經得起檢驗的品質" />
-            <p className="text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">
-              從設計、專利到第三方檢驗，世紘的欄柱與公共空間設備在多國取得專利，並通過 SGS 與金屬工業研究發展中心等單位的測試。
-            </p>
-          </div>
+      {/* 頁首大圖 */}
+      <StoryHero
+        crumbs={[{ name: "首頁", path: "/" }, { name: "世紘優勢", path: "/advantages" }]}
+        eyebrow="WHY SHIHHUNG"
+        title="世紘優勢"
+        subtitle="經得起檢驗的品質：從規劃、客製到台灣製造，一次到位。"
+        image="/about/workshop.jpg"
+        alt="CNC 加工中心切削鋁件"
+      />
 
-          {/* 三項優勢（與首頁「世紘優勢」相同樣式） */}
-          <div className="mt-16 grid gap-12 md:grid-cols-3 md:gap-10">
-            {advantages.map((s) => (
-              <div key={s.title} className="border-t border-line pt-8 text-center md:text-left">
-                <h2 className="text-xl tracking-[0.1em] text-brand-deep">{s.title}</h2>
-                <p className="mx-auto mt-4 max-w-xs text-sm leading-7 text-pretty text-muted md:mx-0">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 引言 */}
+      <StoryIntro
+        strike="說得好聽。"
+        statement="不如經得起檢驗。"
+        paragraphs={[
+          "從設計、專利到第三方檢驗，世紘的欄柱與公共空間設備在多國取得專利，並通過 SGS 與金屬工業研究發展中心等單位的測試。",
+          "選擇世紘，您得到的不只是設備，而是三項實在的保障：",
+        ]}
+      />
+
+      {/* 三項優勢：圖文交錯段落 */}
+      <StoryRows stories={advantages} />
 
       {/* 專利證書：各國一張，橫式合併圖，電腦 2 欄 */}
       <section id="patents" className={section}>
@@ -81,6 +81,22 @@ export default function AdvantagesPage() {
           </div>
         </div>
       </section>
+
+      {/* 收尾宣言 */}
+      <StoryBand
+        image="/about/versatile.jpg"
+        alt="機場報到大廳以伸縮帶欄柱規劃的排隊動線"
+        lines={["免費規劃、品牌客製、台灣製造。", "把空間交給世紘，", "把心力留給您的客人。"]}
+      />
+
+      {/* 延伸閱讀 */}
+      <StoryLinks
+        links={[
+          { href: "/about", label: "了解更多關於世紘", image: "/about/closing.jpg", alt: "陽光灑落的機場航廈長廊" },
+          { href: "/products", label: "了解更多產品系列", image: "/about/manufacturing.jpg", alt: "CNC 銑床精密加工金屬零件" },
+          { href: "/solutions", label: "了解更多場域方案", image: "/cases/xiaomi-store/05.jpg", alt: "小米門市門口的欄柱與雨傘架" },
+        ]}
+      />
     </PageShell>
   );
 }

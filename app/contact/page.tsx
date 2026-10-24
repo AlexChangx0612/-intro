@@ -39,7 +39,7 @@ const rows: { label: string; value: string; href?: string; external?: boolean }[
 // 聯絡我們頁
 export default function ContactPage() {
   return (
-    <PageShell>
+    <PageShell footerBarOnly>
       {/* 結構化資料：聯絡頁＋公司（含地址、電話與營業時間） */}
       <JsonLd data={[{ "@type": "ContactPage", name: "聯絡我們", description, url: absoluteUrl("/contact") }, organizationJsonLd()]} />
 
@@ -63,7 +63,8 @@ export default function ContactPage() {
             {rows.map((r) => (
               <div key={r.label} className="flex gap-6 border-b border-line py-4 text-sm sm:text-base">
                 <dt className="w-24 shrink-0 text-xs tracking-[0.2em] text-muted sm:pt-1">{r.label}</dt>
-                <dd className="min-w-0 break-words">
+                {/* 不加 break-words：沿用全站的 overflow-wrap: anywhere，地址這類沒有標點的長字串才不會把欄位撐寬 */}
+                <dd className="min-w-0">
                   {r.href ? (
                     <a
                       href={r.href}

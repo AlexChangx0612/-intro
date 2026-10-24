@@ -27,15 +27,6 @@ export type CatalogItem = {
   detail?: ProductDetail;
 };
 
-// 特價商品：沒有獨立分類頁，列表在首頁 #onsale；品項頁網址為 /products/special-offers/<slug>
-export const ONSALE = {
-  slug: "special-offers",
-  en: "SPECIAL OFFERS",
-  name: "特價商品",
-  desc: "限量優惠，售完為止。",
-  // 返回列表的位置
-  listHref: "/#onsale",
-};
 
 // 產品分類的資料型別
 export type Category = {
@@ -53,19 +44,84 @@ export type Category = {
   images: string[];
   // 此分類的所有品項（與 images 同順序）
   items: CatalogItem[];
+  // 小系列（有定義時，分類頁依小系列分區顯示；未定義為 undefined）
+  groups?: CategoryGroup[];
 };
 
+// 分類底下的小系列：例如伸縮帶欄柱分為四向、八向、萬向、壁掛式圍欄與配件
+export type CategoryGroup = {
+  // 錨點代號（分類頁 #<id>）
+  id: string;
+  // 英文名稱（小標用）
+  en: string;
+  // 小系列名稱
+  name: string;
+  // 小系列說明
+  desc: string;
+  // 代表圖（小系列導覽卡片用）
+  cover: string;
+  // 此小系列的品項（依分類內原本的順序）
+  items: CatalogItem[];
+};
+
+// 小系列定義：match 判斷品項是否屬於此小系列（各小系列的條件互不重疊）；cover 為代表圖的品項編號，省略時用第一個品項
+type GroupDef = Omit<CategoryGroup, "items" | "cover"> & { match: (item: CatalogItem) => boolean; cover?: string };
+
 // 依照片實際內容分類；prefixes 比對 public/images 底下的檔名開頭
-const categoryDefs: { id: string; slug: string; en: string; name: string; desc: string; prefixes: string[] }[] = [
+const categoryDefs: { id: string; slug: string; en: string; name: string; desc: string; prefixes: string[]; groups?: GroupDef[] }[] = [
   // 分類 1：伸縮帶欄柱
   {
     id: "retractable",
     slug: "retractable-belt-stanchions",
     en: "RETRACTABLE BELT STANCHIONS",
     name: "伸縮帶欄柱",
-    desc: "萬向系列伸縮織帶紅龍柱，以及柱頭告示框、防塵蓋等配件。",
+    desc: "四向、八向、萬向伸縮帶欄柱與壁掛式圍欄，以及柱頭告示框、防塵蓋等配件。",
     // 檔名以這些文字開頭的圖片歸入此分類
     prefixes: ["001-", "20230821-", "new-"],
+    // 依產品照左上角標籤分成五個小系列（標籤已寫在 product-models.ts 的規格說明與型號）
+    groups: [
+      {
+        id: "four-way",
+        en: "4-WAY",
+        name: "四向伸縮欄柱",
+        desc: "柱頭設有四個織帶扣接方向，可排出直線與直角轉折的動線；織帶長 200cm，柱身有不鏽鋼、黑、金、古銅等色。",
+        match: (i) => i.spec?.startsWith("四向系列") ?? false,
+      },
+      {
+        id: "eight-way",
+        en: "8-WAY",
+        name: "八向伸縮欄柱",
+        desc: "柱頭設有八個織帶扣接方向，可再加上斜向轉折；含紅藍、黃黑、紅白雙層織帶款，織帶長 200cm。",
+        match: (i) => i.spec?.startsWith("八向系列") ?? false,
+        // 雙柱雙層織帶的產品照，最能看出八向的特色
+        cover: "001-051-001",
+      },
+      {
+        id: "universal",
+        en: "UNIVERSAL",
+        name: "萬向伸縮欄柱",
+        desc: "柱頭可往任意方向扣接織帶，動線排法最自由；織帶長 200／400／500cm，柱身有多種顏色、警示條紋、透明與木紋款。",
+        // 其餘欄柱的產品照標籤皆為「萬向系列」（規格說明沒有寫系列名稱）
+        match: (i) => !/^(四向系列|八向系列|掛壁式圍欄)/.test(i.spec ?? "") && !/^(RP|RV|P4)-/.test(i.model),
+      },
+      {
+        id: "wall-mounted",
+        en: "WALL MOUNT",
+        name: "壁掛式圍欄",
+        desc: "固定在牆面或柱面，拉出織帶扣到對面即可封住通道；織帶長 200／400／500cm，含紅白、黃黑警示織帶。",
+        match: (i) => i.spec?.startsWith("掛壁式圍欄") ?? false,
+      },
+      {
+        id: "accessories",
+        en: "ACCESSORIES",
+        name: "欄柱配件",
+        desc: "A3／A4 柱頭告示框、拍拍框、防塵蓋與 LED 背光板，讓欄柱同時傳遞指示與宣傳資訊。",
+        // 型號開頭：RP 告示框、RV 防塵蓋、P4 LED 背光板
+        match: (i) => /^(RP|RV|P4)-/.test(i.model),
+        // 欄柱裝上告示框的產品照
+        cover: "001-102-001",
+      },
+    ],
   },
   // 分類 2：迎賓欄柱
   {
@@ -73,7 +129,7 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     slug: "rope-stanchions",
     en: "ROPE STANCHIONS",
     name: "迎賓欄柱",
-    desc: "圓球頭不鏽鋼欄柱，搭配絨布繩，典雅大方。",
+    desc: "不鏽鋼迎賓欄柱，有圓球頭、皇冠頭、平蓋頭等柱頭造型，搭配絨布繩，典雅大方。",
     prefixes: ["003-", "004-"],
   },
   // 分類 3：室內外欄柱
@@ -82,7 +138,7 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     slug: "indoor-outdoor-stanchions",
     en: "INDOOR & OUTDOOR STANCHIONS",
     name: "室內外欄柱",
-    desc: "消光黑烤漆柱身，可搭配彈力繩，室內外皆適用。",
+    desc: "消光烤漆柱身，可搭配彈力繩或鋁合金橫桿，室內外皆適用。",
     prefixes: ["005-", "006-"],
   },
   // 分類 4：塑膠欄柱
@@ -91,7 +147,7 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     slug: "plastic-stanchions",
     en: "PLASTIC STANCHIONS",
     name: "塑膠欄柱",
-    desc: "紅白警示塑膠欄柱，底座實心配重，施工與停車場常用。",
+    desc: "紅白、黃黑警示塑膠欄柱，底座有實心配重與空心可灌水款式，施工與停車場常用。",
     prefixes: ["002-"],
   },
   // 分類 5：拒馬
@@ -118,7 +174,7 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     slug: "bulletin-boards",
     en: "BULLETIN BOARDS",
     name: "佈告欄",
-    desc: "雙面布面佈告欄，附輪移動方便。",
+    desc: "雙面布面與面布搭配磁白板的佈告欄，附輪移動方便。",
     prefixes: ["008-"],
   },
   // 分類 8：數位看板・燈箱
@@ -172,7 +228,7 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     slug: "key-boxes",
     en: "KEY BOXES",
     name: "鑰匙箱",
-    desc: "防鏽鋼板鑰匙箱，20～120 支容量。",
+    desc: "防鏽鋼板鑰匙箱，20～240 支容量。",
     prefixes: ["012-008-", "012-009-", "012-01"],
   },
 ];
@@ -212,7 +268,7 @@ function toItem(url: string, categorySlug: string, fallbackName: string): Catalo
   return { slug, code, image: url, href: `/products/${categorySlug}/${slug}`, name: detail?.name ?? fallbackName, model, spec, detail };
 }
 
-// 取得產品目錄：回傳各分類與特價商品
+// 取得產品目錄：回傳各分類
 export function getCatalog() {
   // 取得 public/images 底下所有圖片網址
   const all = listImages(IMAGE_DIR, "/images")
@@ -221,20 +277,21 @@ export function getCatalog() {
     .sort();
 
   // 依分類定義，把檔名符合開頭規則的圖片放進各分類
-  const categories: Category[] = categoryDefs.map(({ prefixes, ...rest }) => {
+  const categories: Category[] = categoryDefs.map(({ prefixes, groups, ...rest }) => {
     // 篩選出檔名開頭符合任一規則的圖片
     const images = all.filter((url) => prefixes.some((p) => fileName(url).startsWith(p)));
     // 保留分類的 id、名稱、說明，並把每張圖片轉成品項
-    return { ...rest, images, items: images.map((url) => toItem(url, rest.slug, rest.name)) };
+    const items = images.map((url) => toItem(url, rest.slug, rest.name));
+    // 有小系列定義時，把品項分進各小系列，並找出代表圖
+    const grouped = groups?.map(({ match, cover, ...g }) => {
+      const list = items.filter(match);
+      return { ...g, cover: (list.find((i) => i.code === cover) ?? list[0]).image, items: list };
+    });
+    return { ...rest, images, items, ...(grouped && { groups: grouped }) };
   });
 
-  // 特價商品：檔名以 onsale- 開頭的圖片
-  const onsale = all
-    .filter((url) => fileName(url).startsWith("onsale-"))
-    .map((url) => toItem(url, ONSALE.slug, ONSALE.name));
-
-  // 回傳有圖片的分類（空分類不顯示）與特價商品
-  return { categories: categories.filter((c) => c.images.length > 0), onsale };
+  // 回傳有圖片的分類（空分類不顯示）
+  return { categories: categories.filter((c) => c.images.length > 0) };
 }
 
 // 依網址代號取得單一分類（找不到回傳 undefined）
@@ -244,15 +301,10 @@ export function getCategory(slug: string) {
 
 // 依網址取得單一品項，連同所屬列表（同分類的品項）；找不到回傳 undefined
 export function getItem(categorySlug: string, slug: string) {
-  const { categories, onsale } = getCatalog();
-  // 一般分類的列表在分類頁；特價商品沒有分類頁，列表在首頁
-  const cat = categories.find((c) => c.slug === categorySlug);
-  const list = cat
-    ? { slug: cat.slug, en: cat.en, name: cat.name, desc: cat.desc, listHref: `/products/${cat.slug}`, items: cat.items }
-    : categorySlug === ONSALE.slug
-      ? { ...ONSALE, items: onsale }
-      : undefined;
-  if (!list) return undefined;
+  const cat = getCatalog().categories.find((c) => c.slug === categorySlug);
+  if (!cat) return undefined;
+  // 列表在分類頁
+  const list = { slug: cat.slug, en: cat.en, name: cat.name, desc: cat.desc, listHref: `/products/${cat.slug}`, items: cat.items };
   // 品項在列表中的位置（上一項／下一項用）
   const index = list.items.findIndex((i) => i.slug === slug);
   if (index < 0) return undefined;
@@ -261,8 +313,7 @@ export function getItem(categorySlug: string, slug: string) {
 
 // 全部品項的網址參數（建置時產生每個品項頁）
 export function allItemParams() {
-  const { categories, onsale } = getCatalog();
-  return [...categories.flatMap((c) => c.items), ...onsale].map((i) => {
+  return getCatalog().categories.flatMap((c) => c.items).map((i) => {
     // href 格式為 /products/<分類>/<slug>
     const [, , category, slug] = i.href.split("/");
     return { category, slug };

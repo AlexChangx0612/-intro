@@ -70,11 +70,20 @@ body {
   background: var(--color-paper);
   /* 文字使用主要文字顏色 */
   color: var(--color-ink);
+  /* 中文斷行：只在標點（，。、）與空白處換行，一句話、一個名詞寫完才換行，不把詞拆開 */
+  word-break: keep-all;
+  /* 單一句子比整行還長時，才退而在任意位置換行，避免文字超出畫面 */
+  overflow-wrap: anywhere;
 }
 
-/* 鍵盤操作時的焦點框：全站統一為深品牌紅外框（滑鼠點擊不顯示） */
+/* 基礎樣式：標題換行、鍵盤焦點框 */
 @layer base {
-  /* 連結與按鈕取得鍵盤焦點時 */
+  /* 標題換行時讓每一行長度接近，避免最後一行只剩一兩個字 */
+  :where(h1, h2, h3) {
+    text-wrap: balance;
+  }
+
+  /* 鍵盤操作時的焦點框：全站統一為深品牌紅外框（滑鼠點擊不顯示） */
   :where(a, button):focus-visible {
     /* 2px 深品牌紅實線 */
     outline: 2px solid var(--color-brand-deep);

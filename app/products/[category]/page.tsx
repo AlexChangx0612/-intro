@@ -19,13 +19,13 @@ import SectionTitle from "../../components/SectionTitle";
 // 匯入分類頁文字內容
 import { categoryContent } from "../../lib/category-content";
 // 匯入產品目錄
-import { getCatalog, getCategory } from "../../lib/products";
+import { getCatalog, getCategory, type CatalogItem } from "../../lib/products";
 // 匯入 SEO 工具
 import { absoluteUrl, faqJsonLd, ORG_ID, pageMetadata } from "../../lib/site";
 // 匯入適用場域資料
 import { getSolution } from "../../lib/solutions";
 // 匯入共用樣式
-import { bodyText, cardTitle, container, outlineBtn, pageTop, section } from "../../lib/ui";
+import { bodyText, card, cardHover, cardTitle, container, outlineBtn, pageTop, section } from "../../lib/ui";
 
 // 只產生已知的分類頁，其他網址回傳 404
 export const dynamicParams = false;
@@ -57,6 +57,33 @@ function InfoColumn({ title, items }: { title: string; items: string[] }) {
         ))}
       </ol>
     </div>
+  );
+}
+
+// 商品卡片格：手機一排 2 張、平板 3 張、電腦 4 張；每張連到該品項的介紹頁
+function ProductGrid({ items, categoryName }: { items: CatalogItem[]; categoryName: string }) {
+  return (
+    <ul className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
+      {items.map((item) => (
+        <li key={item.slug}>
+          <Link href={item.href} className="group block">
+            {/* 正方形圓角圖片框（與首頁商品目錄相同） */}
+            <div className="relative aspect-square overflow-hidden rounded-[14px] bg-white lg:rounded-[18px]">
+              <Image
+                src={item.image}
+                alt={`世紘${categoryName} ${item.model} ${item.spec ?? ""}`}
+                fill
+                sizes="(min-width: 1024px) 330px, (min-width: 768px) 33vw, 50vw"
+                className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
+              />
+            </div>
+            {/* 型號（產品照右下角黃色字）與規格 */}
+            <span className="mt-3 block text-sm tracking-[0.08em] transition group-hover:text-brand-deep">{item.model}</span>
+            {item.spec && <span className="block text-xs leading-6 text-muted">{item.spec}</span>}
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -124,34 +151,79 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
         </div>
       </section>
 
-      {/* 產品照 */}
-      <section id="products" className={section}>
-        <div className={container}>
-          <SectionTitle eyebrow="PRODUCTS" title={cat.name} desc={`${cat.desc}點擊圖片查看產品介紹。`} />
-          {/* 商品圖片格：手機一排 2 張、平板 3 張、電腦 4 張；每張連到該品項的介紹頁 */}
-          <ul className="mt-14 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
-            {cat.items.map((item) => (
-              <li key={item.slug}>
-                <Link href={item.href} className="group block">
-                  {/* 正方形圓角圖片框（與首頁商品目錄相同） */}
-                  <div className="relative aspect-square overflow-hidden rounded-[14px] bg-white lg:rounded-[18px]">
-                    <Image
-                      src={item.image}
-                      alt={`世紘${cat.name} ${item.model} ${item.spec ?? ""}`}
-                      fill
-                      sizes="(min-width: 1024px) 330px, (min-width: 768px) 33vw, 50vw"
-                      className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
-                    />
-                  </div>
-                  {/* 型號（產品照右下角黃色字）與規格 */}
-                  <span className="mt-3 block text-sm tracking-[0.08em] transition group-hover:text-brand-deep">{item.model}</span>
-                  {item.spec && <span className="block text-xs leading-6 text-muted">{item.spec}</span>}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {cat.groups ? (
+        <>
+          {/* 有小系列：先列小系列導覽卡片，再依小系列分區顯示產品 */}
+          <section id="products" className={section}>
+            <div className={container}>
+              <SectionTitle eyebrow="PRODUCTS" title={`${cat.groups.length} 大系列，${cat.items.length} 款產品`} desc={`${cat.desc}選擇系列快速查看。`} />
+              {/* 小系列導覽卡片：手機與平板為可橫向滑動的一排，電腦 5 欄一排；點擊跳到該系列 */}
+              <ul className="-mx-5 mt-14 flex snap-x scroll-px-5 gap-3 overflow-x-auto px-5 pt-1 pb-3 [scrollbar-width:none] sm:-mx-8 sm:scroll-px-8 sm:gap-5 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:p-0 [&::-webkit-scrollbar]:hidden">
+                {cat.groups.map((g) => (
+                  <li key={g.id} className="w-[44%] shrink-0 snap-start sm:w-[30%] lg:w-auto">
+                    <a href={`#${g.id}`} className={`group flex h-full flex-col p-1.5 sm:p-2 ${card} ${cardHover}`}>
+                      <div className="relative aspect-square overflow-hidden rounded-[10px] bg-paper lg:rounded-[12px]">
+                        <Image src={g.cover} alt={`世紘${g.name}`} fill sizes="(min-width: 1024px) 270px, (min-width: 640px) 30vw, 44vw" className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]" />
+                      </div>
+                      <div className="flex flex-1 items-end gap-3 px-2 pt-3 pb-1.5 sm:px-3 sm:pt-4 sm:pb-2">
+                        <div className="min-w-0 flex-1">
+                          {/* 英文小標 */}
+                          <p className="text-[11px] tracking-[0.2em] whitespace-nowrap text-brand-deep sm:text-xs lg:tracking-[0.12em] xl:tracking-[0.2em]">{g.en}</p>
+                          <p className="mt-1 text-sm tracking-[0.06em] whitespace-nowrap text-ink sm:text-lg lg:text-base xl:text-lg">{g.name}</p>
+                          <p className="mt-0.5 text-xs text-muted sm:text-sm">{g.items.length} 款</p>
+                        </div>
+                        {/* 向下箭頭：滑鼠移上往下移（1024～1279px 卡片較窄，隱藏以免擠到英文小標） */}
+                        <span aria-hidden="true" className="hidden pb-0.5 text-lg text-brand-deep transition group-hover:translate-y-0.5 sm:inline lg:hidden xl:inline">
+                          ↓
+                        </span>
+                      </div>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          {/* 小系列快速切換列：捲動時固定在 header 下方，可橫向滑動 */}
+          <nav aria-label={`${cat.name}系列`} className="sticky top-20 z-20 border-y border-line bg-paper/90 backdrop-blur-md sm:top-22">
+            <ul className={`${container} flex gap-2 overflow-x-auto py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}>
+              {cat.groups.map((g) => (
+                <li key={g.id} className="shrink-0">
+                  <a href={`#${g.id}`} className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm tracking-[0.08em] text-ink shadow-[0_0_0_1px_rgba(15,15,14,.08)] transition hover:text-brand-deep hover:shadow-[0_0_0_1px_rgba(214,31,42,.4)]">
+                    {g.name}
+                    <span className="text-xs text-muted">{g.items.length}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* 各小系列：左側標題與說明（電腦版捲動時固定），右側產品格 */}
+          {cat.groups.map((g, i) => (
+            <section key={g.id} id={g.id} className={`scroll-mt-40 py-16 sm:scroll-mt-44 sm:py-20 ${i > 0 ? "border-t border-line" : ""}`}>
+              <div className={`${container} grid gap-10 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-14 2xl:grid-cols-[300px_minmax(0,1fr)]`}>
+                <div className="lg:sticky lg:top-48 lg:self-start">
+                  <p className="text-xs tracking-[0.35em] text-brand-deep">{g.en}</p>
+                  <h2 className="mt-4 text-2xl tracking-[0.12em] text-brand sm:text-3xl">{g.name}</h2>
+                  <p className="mt-4 text-sm leading-7 text-pretty text-muted">{g.desc}</p>
+                  <p className="mt-6 border-t border-line pt-4 text-xs tracking-[0.25em] text-muted">共 {g.items.length} 款</p>
+                </div>
+                <ProductGrid items={g.items} categoryName={cat.name} />
+              </div>
+            </section>
+          ))}
+        </>
+      ) : (
+        // 沒有小系列：直接列出全部產品
+        <section id="products" className={section}>
+          <div className={container}>
+            <SectionTitle eyebrow="PRODUCTS" title={cat.name} desc={`${cat.desc}點擊圖片查看產品介紹。`} />
+            <div className="mt-14">
+              <ProductGrid items={cat.items} categoryName={cat.name} />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 適合場所、規格選擇、如何選擇：手機上下排列，電腦三欄 */}
       <section className={section}>

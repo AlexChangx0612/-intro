@@ -20,8 +20,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       ...legacyRedirects.map((r) => ({ ...r, permanent: true })),
-      // 特價商品沒有分類頁（列表在首頁），手動刪掉品項頁網址最後一段時導回首頁特價區
-      { source: "/products/special-offers", destination: "/#onsale", permanent: false },
+      // 特價商品已下架：舊的特價商品網址一律導到產品系列總覽
+      { source: "/products/special-offers/:path*", destination: "/products", permanent: true },
     ];
   },
 };

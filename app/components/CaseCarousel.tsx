@@ -5,10 +5,15 @@
 import Image from "next/image";
 // 匯入 Next.js 站內連結元件
 import Link from "next/link";
+// 匯入 Next.js 換頁（點擊卡片進入案例頁）
+import { useRouter } from "next/navigation";
 // 匯入 React 的 hook：副作用、DOM 參照
 import { useEffect, useRef } from "react";
-// 匯入案例資料型別
-import type { CaseStudy } from "../lib/cases";
+// 匯入案例資料型別與案例頁網址
+import { caseHref, type CaseStudy } from "../lib/cases";
+
+// 按下到放開移動不超過這個距離（像素）就當作點擊，而不是拖曳
+const TAP = 6;
 
 // 弧形輪播的幾何設定（單位為「畫框單位」，實際像素 = 單位 × u）
 type Geo = {
@@ -30,7 +35,7 @@ type Geo = {
   speed: number;
 };
 
-// 案例照片的寬高比：1920×1080（16:9）
+// 卡片的寬高比：16:9（封面照不足 16:9 時等比例裁切填滿）
 const RATIO = 1920 / 1080;
 // 桌機（> 820px）設定：中央卡片 560×315
 const DESKTOP: Geo = { F: 1440, W0: 560, pitch: 610, dw: 90, dh: 80, k: 0.1, cy: 210, speed: 45 };
@@ -73,6 +78,8 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
   // 每張卡片、卡片下的說明
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const capRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // 換頁
+  const router = useRouter();
 
   // 案例太少時重複排列，讓輪播帶永遠填滿畫面、不會出現空隙
   const reps = Math.max(
@@ -103,6 +110,10 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
     let dragging = false;
     let lastX = 0;
     let lastT = 0;
+    // 這次按下後累計移動的距離（像素），用來分辨點擊與拖曳
+    let moved = 0;
+    // 這次按下是否只是讓滑行中的輪播停住
+    let stopping = false;
     // 動畫迴圈的編號與上一格時間
     let raf = 0;
     let prev = 0;
@@ -215,7 +226,10 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
     const down = (e: PointerEvent) => {
       if (e.button !== 0) return;
       dragging = true;
+      // 按下時輪播還在慣性滑行：這一下只是讓它停住，不算點擊
+      stopping = Math.abs(vel) > 60;
       vel = 0;
+      moved = 0;
       lastX = e.clientX;
       lastT = e.timeStamp;
       band.setPointerCapture(e.pointerId);
@@ -224,6 +238,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
     // 拖曳中：卡片 1:1 跟著指標移動，並估算速度
     const move = (e: PointerEvent) => {
       if (!dragging) return;
+      moved += Math.abs(e.clientX - lastX);
       const dx = (e.clientX - lastX) / u;
       const dt = (e.timeStamp - lastT) / 1000;
       offset -= dx;
@@ -237,12 +252,28 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
       dragging = false;
       if (e.timeStamp - lastT > 100) vel = 0;
       delete band.dataset.dragging;
+      // 幾乎沒移動就是點擊：找出指標下的卡片或說明，進入該案例頁
+      // （輪播帶捕捉了指標，點擊事件到不了卡片本身，所以由這裡判斷）
+      if (e.type !== "pointerup" || moved > TAP || stopping) return;
+      const hit = document.elementsFromPoint(e.clientX, e.clientY).find((el) => el instanceof HTMLElement && el.dataset.case);
+      if (!(hit instanceof HTMLElement) || !hit.dataset.case) return;
+      // 按住 Ctrl／Cmd 點擊：在新分頁開啟
+      if (e.ctrlKey || e.metaKey) window.open(hit.dataset.case, "_blank", "noopener");
+      else router.push(hit.dataset.case);
     };
-    // 鍵盤：左右鍵推動輪播
+    // 鍵盤：左右鍵推動輪播；Enter 進入最靠近中央的案例
     const key = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") vel -= 900;
       else if (e.key === "ArrowRight") vel += 900;
-      else return;
+      else if (e.key === "Enter") {
+        const mid = band.getBoundingClientRect().left + band.clientWidth / 2;
+        const center = (el: HTMLElement) => {
+          const r = el.getBoundingClientRect();
+          return Math.abs(r.left + r.width / 2 - mid);
+        };
+        const near = cardRefs.current.filter((el): el is HTMLDivElement => !!el && el.style.visibility === "visible").sort((a, b) => center(a) - center(b))[0];
+        if (near?.dataset.case) router.push(near.dataset.case);
+      } else return;
       e.preventDefault();
     };
     band.addEventListener("pointerdown", down);
@@ -262,7 +293,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
       band.removeEventListener("pointercancel", up);
       band.removeEventListener("keydown", key);
     };
-  }, [count]);
+  }, [count, router]);
 
   // 進場動畫：先停在起始狀態，區塊進入畫面時才播放一次
   useEffect(() => {
@@ -370,7 +401,7 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
         <div
           ref={bandRef}
           tabIndex={0}
-          aria-label="客戶實際案例輪播，可拖曳或用左右鍵瀏覽"
+          aria-label="客戶實際案例輪播，可拖曳或用左右鍵瀏覽，按 Enter 查看中央的案例"
           className="relative h-[calc(50cqw_+_110px)] cursor-grab touch-pan-y overflow-hidden select-none focus-visible:outline-offset-[-4px] data-dragging:cursor-grabbing min-[821px]:h-[calc(29.167cqw_+_110px)]"
         >
           {/* 每張卡片＋說明 */}
@@ -381,32 +412,48 @@ export default function CaseCarousel({ cases }: { cases: CaseStudy[] }) {
                 ref={(el) => {
                   cardRefs.current[i] = el;
                 }}
+                // 點擊時進入的案例頁
+                data-case={caseHref(c.slug)}
                 // 預設與輪播帶同尺寸（畫面外的卡片不會被程式設定尺寸，避免圖片以 0 高度載入）
-                className="invisible absolute top-0 left-0 size-full overflow-hidden bg-white will-change-transform"
+                className="invisible absolute top-0 left-0 size-full cursor-pointer overflow-hidden bg-white will-change-transform"
               >
-                {/* 案例照片：1920×1080，等比例填滿 */}
+                {/* 案例封面照：等比例填滿 */}
                 <Image
-                  src={c.image}
-                  alt={dup ? "" : c.alt}
+                  src={c.cover.src}
+                  alt={dup ? "" : c.cover.alt}
                   fill
                   draggable={false}
                   sizes="(max-width: 820px) 85vw, 45vw"
                   className="pointer-events-none object-cover"
                 />
               </div>
-              {/* 卡片下方說明：場域＋應用內容 */}
+              {/* 卡片下方說明：案例名稱＋場域；點擊同樣進入案例頁 */}
               <div
                 ref={(el) => {
                   capRefs.current[i] = el;
                 }}
-                className="invisible absolute top-0 left-0 px-2 text-center will-change-transform"
+                data-case={caseHref(c.slug)}
+                className="invisible absolute top-0 left-0 cursor-pointer px-2 text-center will-change-transform"
               >
-                <p className="truncate text-sm text-ink sm:text-base">{c.scene}</p>
-                <p className="truncate text-xs text-muted sm:text-sm">{c.title}</p>
+                <p className="truncate text-sm text-ink sm:text-base">{c.title}</p>
+                <p className="truncate text-xs text-muted sm:text-sm">{c.scene}</p>
               </div>
             </div>
           ))}
         </div>
+        {/* 給螢幕閱讀器與鍵盤的案例連結清單：輪播卡片只能用滑鼠或觸控點，這裡提供真正的連結；平常隱藏，用 Tab 聚焦時才在畫面下方顯示 */}
+        <ul>
+          {cases.map((c) => (
+            <li key={c.slug}>
+              <Link
+                href={caseHref(c.slug)}
+                className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:bottom-6 focus-visible:left-1/2 focus-visible:z-50 focus-visible:-translate-x-1/2 focus-visible:rounded-full focus-visible:bg-white focus-visible:px-5 focus-visible:py-3 focus-visible:text-sm focus-visible:whitespace-nowrap focus-visible:text-brand-deep focus-visible:shadow-[0_8px_24px_-8px_rgba(15,15,14,.4)]"
+              >
+                客戶案例：{c.title}（{c.scene}）
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* 行動按鈕＋手寫註記 */}

@@ -22,8 +22,10 @@ const contacts: { label: string; value: string; href?: string; external?: boolea
   { label: "HOURS", value: company.hours },
 ];
 
-// 頁尾元件
-export default function SiteFooter() {
+// 頁尾元件；barOnly 為 true 時只顯示底部紅色色帶（不顯示公司簡介與聯絡資訊）
+export default function SiteFooter({ barOnly = false }: { barOnly?: boolean }) {
+  // 只留色帶
+  if (barOnly) return <FooterBar />;
   // 回傳頁尾
   return (
     // 頁尾：上方淡紅分隔線、白底

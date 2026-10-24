@@ -30,11 +30,10 @@ const columns: { cls: string; up?: boolean; tiles: Tile[] }[] = [
   },
 ];
 
-// 標題的三行（第一行使用品牌紅強調）
+// 標題的兩行（第一行使用品牌紅強調）
 const lines = [
   { text: "秩序，", accent: true },
-  { text: "是空間的", accent: false },
-  { text: "禮儀", accent: false },
+  { text: "是空間的禮儀", accent: false },
 ];
 
 // 電話圖示

@@ -14,8 +14,6 @@ import JsonLd from "./components/JsonLd";
 import HeroMosaic from "./components/HeroMosaic";
 // 匯入全系列商品目錄
 import ProductCatalog from "./components/ProductCatalog";
-// 匯入橫向捲動商品列（特價商品用）
-import ProductRail from "./components/ProductRail";
 // 匯入區塊標題元件
 import SectionTitle from "./components/SectionTitle";
 // 匯入底部品牌紅色色帶
@@ -45,8 +43,8 @@ const more = [
 
 // 首頁
 export default function Home() {
-  // 讀取產品分類與特價商品圖片
-  const { categories, onsale } = getCatalog();
+  // 讀取產品分類
+  const { categories } = getCatalog();
   // 只取分類的 id、網址代號與名稱，傳給頁首使用
   const links = categories.map(({ id, slug, name }) => ({ id, slug, name }));
   // 首屏磚牆用的產品照：各分類第一張
@@ -79,7 +77,7 @@ export default function Home() {
           <div className={wide}>
             {/* 區塊標題與說明 */}
             <SectionTitle eyebrow="COLLECTIONS" title="產品系列" desc="選擇系列瀏覽商品，點擊圖片查看產品介紹。" />
-            {/* 電子目錄連結（與「系列介紹與選購建議」相同的紅字箭頭樣式） */}
+            {/* 電子目錄連結（與「點擊查看○○所有產品」相同的紅字箭頭樣式） */}
             <p className="mt-5 text-center">
               <Link href="/catalog" className="group inline-flex items-center gap-3 text-sm tracking-[0.15em] text-brand-deep">
                 瀏覽產品電子目錄
@@ -90,26 +88,6 @@ export default function Home() {
             <ProductCatalog categories={categories} />
           </div>
         </section>
-
-        {/* 特價商品 */}
-        {/* 有特價圖片時才顯示這個區塊 */}
-        {onsale.length > 0 && (
-          // 特價商品區塊（上方有分隔線）
-          <section id="onsale" className="scroll-mt-20 sm:scroll-mt-24 border-t border-line py-20 sm:py-28">
-            {/* 版心 */}
-            <div className={container}>
-              {/* 標題列：手機上下排列置中；平板以上左標題、右備註 */}
-              <div className="mb-12 flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end">
-                {/* 靠左的區塊標題 */}
-                <SectionTitle align="left" eyebrow="SPECIAL OFFERS" title="特價商品" />
-                {/* 右側備註：灰字 */}
-                <p className="text-sm text-muted">限量優惠，售完為止。</p>
-              </div>
-              {/* 橫向捲動的特價商品列 */}
-              <ProductRail items={onsale} alt="世紘特價商品" />
-            </div>
-          </section>
-        )}
 
         {/* 客戶實際案例：弧形輪播（上方有分隔線，與其他區塊一致） */}
         <div className="border-t border-line">

@@ -2,14 +2,41 @@
 // 專利與檢驗報告圖檔放在 public/certificates；取自關係企業中衛聯合開發官網最大解析度的版本
 // 拿到原始高解析檔案（PDF 或掃描檔）後，用同檔名覆蓋並更新下方的 width／height 即可
 
-// 三項優勢
-export const advantages = [
+// 匯入品牌故事段落型別
+import type { Story } from "../components/Story";
+
+// 三項優勢（/advantages 頁的圖文段落；圖片為 Unsplash 免費圖庫，放在 public/about/）
+export const advantages: Story[] = [
   // 優勢 1
-  { title: "免費空間規劃", desc: "告訴我們場地與需求，專人為您規劃排隊動線並提供報價。" },
+  {
+    en: "FREE PLANNING",
+    title: "免費空間規劃",
+    body: "告訴我們場地與需求，專人為您規劃排隊動線、估算欄柱與織帶數量，並提供報價建議。規劃服務完全免費。",
+    image: "/about/planning.jpg",
+    alt: "以鉛筆與尺繪製的空間草圖",
+    href: "/contact",
+    cta: "預約免費規劃",
+  },
   // 優勢 2
-  { title: "企業識別客製", desc: "拒馬看板、告示牌與海報架，皆可置入貴公司的品牌視覺。" },
+  {
+    en: "CUSTOM BRANDING",
+    title: "企業識別客製",
+    body: "拒馬看板、告示牌與海報架，皆可置入貴公司的品牌視覺，讓公共設備也成為品牌形象的一部分。",
+    image: "/about/branding.jpg",
+    alt: "色票扇形展開",
+    href: "/custom",
+    cta: "了解客製服務",
+  },
   // 優勢 3
-  { title: "全系列台灣製造", desc: "所有欄柱與設備皆於台灣在地生產，品質穩定，溝通即時。" },
+  {
+    en: "MADE IN TAIWAN",
+    title: "全系列台灣製造",
+    body: "所有欄柱與設備皆於台灣在地生產，品質穩定，溝通即時；產品設計取得多國專利，並通過 SGS 與金屬中心等第三方檢驗。",
+    image: "/about/factory.jpg",
+    alt: "工廠中的金屬加工機台",
+    href: "#patents",
+    cta: "查看專利與檢驗",
+  },
 ];
 
 // 證書圖片：width／height 為原圖像素；crop 為保留的上方比例（裁掉原圖底部的倒影裝飾，1 表示不裁）

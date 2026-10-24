@@ -1,7 +1,7 @@
 // 站內搜尋的比對邏輯（不讀檔案，瀏覽器端與伺服器端共用）
 
 // 搜尋結果的類型；依此順序排列
-export const SEARCH_KINDS = ["產品系列", "產品", "服務", "適用場域", "商品"] as const;
+export const SEARCH_KINDS = ["產品系列", "產品", "服務", "適用場域", "客戶案例", "商品"] as const;
 export type SearchKind = (typeof SEARCH_KINDS)[number];
 
 // 單一可搜尋項目

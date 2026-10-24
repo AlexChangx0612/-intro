@@ -4,6 +4,9 @@ import type { Metadata } from "next";
 import { Archivo, Caveat, Noto_Sans_TC } from "next/font/google";
 // 匯入全站共用樣式
 import "./globals.css";
+// 匯入中文斷行補強（長句改在詞與詞之間換行）與不可拆開的專有名詞
+import LineBreaks from "./components/LineBreaks";
+import { lineBreakTerms } from "./lib/line-break-terms";
 // 匯入網站網址與公司資料
 import { company, HOME_DESCRIPTION, HOME_TITLE, SITE_URL } from "./lib/site";
 
@@ -63,7 +66,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // data-scroll-behavior：換頁時直接跳到頂端，不用平滑捲動（同頁錨點仍平滑捲動）
     <html lang="zh-Hant" data-scroll-behavior="smooth" className={`${notoSans.variable} ${archivo.variable} ${caveat.variable} h-full antialiased`}>
       {/* body 為直向排列、至少滿版高度，並全站使用無襯線粗體字；children 為各頁內容 */}
-      <body className="flex min-h-full flex-col font-sans font-bold">{children}</body>
+      <body className="flex min-h-full flex-col font-sans font-bold">
+        {children}
+        <LineBreaks keep={lineBreakTerms()} />
+      </body>
     </html>
   );
 }

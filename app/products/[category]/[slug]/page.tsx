@@ -16,8 +16,10 @@ import PageShell from "../../../components/PageShell";
 import SectionTitle from "../../../components/SectionTitle";
 // 匯入分類頁文字內容（適用場所、規格選擇）
 import { categoryContent } from "../../../lib/category-content";
+// 匯入未登錄品項的產品頁資料產生器
+import { autoInfo, type ItemInfo } from "../../../lib/product-auto";
 // 匯入品項資料
-import { allItemParams, getItem, ONSALE, type CatalogItem } from "../../../lib/products";
+import { allItemParams, getCategory, getItem, type CatalogItem } from "../../../lib/products";
 // 匯入 SEO 工具與公司資料
 import { absoluteUrl, company, ORG_ID, pageMetadata } from "../../../lib/site";
 // 匯入共用樣式
@@ -36,17 +38,24 @@ function itemTitle(item: CatalogItem) {
   return item.detail ? `${item.detail.model} ${item.detail.name}` : `${item.model} ${item.name}${item.spec ? `（${item.spec}）` : ""}`;
 }
 
+// 產品頁顯示的名稱、說明、規格與特色：已登錄（product-details.ts）的用手寫資料，其餘依產品照標示自動產生
+function itemInfo(item: CatalogItem, list: { slug: string; name: string; desc: string }): ItemInfo {
+  if (item.detail) return { ...item.detail, features: item.detail.features ?? [] };
+  // 伸縮帶欄柱另外找出所屬小系列
+  const group = getCategory(list.slug)?.groups?.find((g) => g.items.some((i) => i.slug === item.slug));
+  return autoInfo(item, list, group);
+}
+
 // 每個品項頁各自的標題、描述、canonical 與分享圖
 export async function generateMetadata({ params }: PageProps<"/products/[category]/[slug]">): Promise<Metadata> {
   const { category, slug } = await params;
   const found = getItem(category, slug);
   if (!found) return {};
   const { item, list } = found;
+  const info = itemInfo(item, list);
   const meta = pageMetadata({
-    title: `${itemTitle(item)}｜世紘興業`,
-    description:
-      item.detail?.description ??
-      `世紘興業${list.name} ${item.model}${item.spec ? `，${item.spec}` : ""}。${list.desc}尺寸與報價請洽世紘專員。`,
+    title: `${item.model} ${info.name}｜世紘興業`,
+    description: info.description,
     path: item.href,
     image: item.image,
   });
@@ -66,7 +75,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
   const { item, index, list } = found;
   const detail = item.detail;
 
-  // 分類頁內容（特價商品沒有）
+  // 分類頁內容
   const content = categoryContent[list.slug];
   // 適用場所：沿用分類頁內容
   const places = content?.places ?? [];
@@ -79,8 +88,10 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
     ...others.filter((i) => i.detail),
     ...others.filter((i) => !i.detail).sort((a, b) => Math.abs(list.items.indexOf(a) - index) - Math.abs(list.items.indexOf(b) - index)),
   ].slice(0, 8);
+  // 名稱、說明、規格與特色
+  const info = itemInfo(item, list);
   // 標題與替代文字
-  const title = itemTitle(item);
+  const title = `${item.model} ${info.name}`;
   const images = detail?.images ?? [item.image];
   // 詢價信件主旨：帶入型號或品項編號，方便專員辨識
   const mailSubject = encodeURIComponent(`產品詢價：${item.model}`);
@@ -113,13 +124,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
           <Breadcrumbs
             items={[
               { name: "首頁", path: "/" },
-              // 特價商品沒有分類頁，第二層直接連到首頁特價區
-              ...(list.slug === ONSALE.slug
-                ? [{ name: list.name, path: list.listHref }]
-                : [
-                    { name: "產品系列", path: "/products" },
-                    { name: list.name, path: list.listHref },
-                  ]),
+              { name: "產品系列", path: "/products" },
+              { name: list.name, path: list.listHref },
               { name: item.model, path: item.href },
             ]}
           />
@@ -142,60 +148,31 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
 
             {/* 產品文字 */}
             <div>
-              <SectionTitle
-                as="h1"
-                align="left"
-                eyebrow={detail ? detail.model : `${list.en}・${item.model}`}
-                title={detail ? detail.name : `${item.model} ${list.name}`}
-              />
-              <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{detail?.description ?? list.desc}</p>
-              {/* 未登錄規格的品項：說明型號以產品照為準 */}
-              {!detail && (
-                <p className="mt-3 text-xs leading-6 text-muted">
-                  {item.spec && <>{item.spec}。</>}品項編號 {item.code}。尺寸、材質與報價，請洽世紘專員確認。
-                </p>
-              )}
+              {/* 型號（小標）＋產品名稱 */}
+              <SectionTitle as="h1" align="left" eyebrow={item.model} title={info.name} />
+              <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{info.description}</p>
 
-              {/* 規格表：已登錄產品才有 */}
-              {detail && (
-                <>
-                  <h2 className={`${cardTitle} mt-12`}>產品規格</h2>
-                  <dl className="mt-4 border-t border-line">
-                    {detail.specs.map((s) => (
-                      <div key={s.label} className="flex gap-6 border-b border-line py-3.5 text-sm">
-                        <dt className="w-24 shrink-0 text-muted">{s.label}</dt>
-                        <dd className="min-w-0">{s.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                  <p className="mt-3 text-xs leading-6 text-muted">尺寸、重量與其他規格，請洽世紘專員確認。</p>
-                </>
-              )}
+              {/* 規格表 */}
+              <h2 className={`${cardTitle} mt-12`}>產品規格</h2>
+              <dl className="mt-4 border-t border-line">
+                {info.specs.map((s) => (
+                  <div key={s.label} className="flex gap-6 border-b border-line py-3.5 text-sm">
+                    <dt className="w-24 shrink-0 text-muted">{s.label}</dt>
+                    <dd className="min-w-0">{s.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="mt-3 text-xs leading-6 text-muted">尺寸、重量與其他規格，請洽世紘專員確認。</p>
 
-              {/* 產品特色：已登錄產品才有 */}
-              {detail?.features && (
+              {/* 產品特色 */}
+              {info.features.length > 0 && (
                 <>
                   <h2 className={`${cardTitle} mt-12`}>產品特色</h2>
                   <ul className="mt-4 space-y-3">
-                    {detail.features.map((f) => (
+                    {info.features.map((f) => (
                       <li key={f} className={`${bodyText} flex gap-3`}>
                         <span aria-hidden="true" className="mt-3 h-px w-3 shrink-0 bg-brand" />
                         {f}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-
-              {/* 系列規格選擇：未登錄產品沿用分類頁已確認的內容 */}
-              {!detail && content && (
-                <>
-                  <h2 className={`${cardTitle} mt-12`}>系列規格與選擇</h2>
-                  <ul className="mt-4 space-y-3">
-                    {content.options.map((o) => (
-                      <li key={o} className={`${bodyText} flex gap-3`}>
-                        <span aria-hidden="true" className="mt-3 h-px w-3 shrink-0 bg-brand" />
-                        {o}
                       </li>
                     ))}
                   </ul>
@@ -217,10 +194,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
                   LINE 官方帳號
                 </a>
               </div>
+              {/* 返回列表（詢價方式已在上方，不再放「聯絡我們」按鈕） */}
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Link href="/contact" className={outlineBtn}>
-                  聯絡我們
-                </Link>
                 <Link href={list.listHref} className="inline-flex min-h-11 items-center px-2 text-sm tracking-[0.12em] transition hover:text-brand-deep">
                   ← 返回{list.name}列表
                 </Link>

@@ -16,6 +16,27 @@ import { card, cardHover } from "../lib/ui";
 const PAGE_SIZE = 12;
 // 記住目前分類與顯示數量（從商品頁按「上一頁」回來時恢復），只存在這個分頁
 const STORAGE_KEY = "catalog-state";
+// 商品格的欄數斷點（需與下方商品卡片格的 class 一致）：1900px 以上 5 欄、1536px 以上 4 欄、768px 以上 3 欄，其餘 2 欄
+const COLUMN_QUERIES: [string, number][] = [
+  ["(min-width: 118.75rem)", 5],
+  ["(min-width: 96rem)", 4],
+  ["(min-width: 48rem)", 3],
+];
+
+// 目前螢幕寬度下商品格的欄數；視窗縮放跨過斷點時自動更新
+function useColumns() {
+  // 伺服器端與第一次繪製先用 1（不調整數量），載入後再讀實際欄數
+  const [cols, setCols] = useState(1);
+  useEffect(() => {
+    // 依序找出第一個符合的斷點
+    const lists = COLUMN_QUERIES.map(([q, n]) => [matchMedia(q), n] as const);
+    const update = () => setCols(lists.find(([m]) => m.matches)?.[1] ?? 2);
+    update();
+    lists.forEach(([m]) => m.addEventListener("change", update));
+    return () => lists.forEach(([m]) => m.removeEventListener("change", update));
+  }, []);
+  return cols;
+}
 
 // 商品卡片下方文字：型號（產品照右下角黃色字）＋規格（例如「不鏽鋼色柱身・紅色織帶」）；沒有規格時顯示分類名稱
 function cardText(item: Category["items"][number], categoryName: string) {
@@ -109,8 +130,10 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
     // 分類資料改變時重新設定
   }, [categories]);
 
-  // 目前要顯示的圖片（取前 visible 張）
-  const shown = active.items.slice(0, visible);
+  // 商品格目前的欄數
+  const cols = useColumns();
+  // 目前要顯示的圖片：visible 張無條件進位到整排（例如 5 欄時 12 張補成 15 張），每一排數量相同
+  const shown = active.items.slice(0, Math.ceil(visible / cols) * cols);
   // 尚未顯示的圖片數量
   const remaining = active.items.length - shown.length;
 
@@ -189,12 +212,12 @@ export default function ProductCatalog({ categories }: { categories: Category[] 
             {/* 系列說明：灰字 */}
             <p className="mt-3 text-sm leading-7 text-muted">{active.desc}</p>
           </div>
-          {/* 連到系列頁（選購建議、常見問題） */}
+          {/* 連到系列頁（該系列所有產品、選購建議、常見問題）；按鈕文字帶入系列名稱 */}
           <Link
             href={`/products/${active.slug}`}
             className="group inline-flex shrink-0 items-center gap-3 self-start text-sm tracking-[0.15em] text-brand-deep sm:self-auto"
           >
-            系列介紹與選購建議
+            點擊查看{active.name}所有產品
             {/* 右箭頭：滑鼠移上往右移 */}
             <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
               →
