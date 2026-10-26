@@ -19,7 +19,7 @@ import { bodyText, card, cardHover, cardTitle, container, pageTop } from "../lib
 
 // 頁面描述
 const description =
-  "依場域查看排隊動線與公共空間設備規劃：銀行・郵局、醫院・診所、百貨・商場、機場・車站、展覽・活動、飯店・餐廳，世紘興業提供免費空間規劃與報價。";
+  "依場域查看排隊動線與公共空間設備規劃：銀行・郵局、醫院・診所、百貨・商場、機場・車站、展覽・活動、飯店・餐廳，世紘興業專員為您提供規劃。";
 
 // 中繼資料
 export const metadata: Metadata = pageMetadata({

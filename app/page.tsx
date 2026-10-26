@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 // 匯入客戶實際案例弧形輪播
 import CaseCarousel from "./components/CaseCarousel";
+// 匯入「產品系列」標題區（新品聚光燈）
+import CollectionsSpotlight from "./components/CollectionsSpotlight";
 // 匯入聯絡區塊
 import ContactSection from "./components/ContactSection";
 // 匯入常見問題清單
@@ -75,15 +77,8 @@ export default function Home() {
         <section id="collections" className="scroll-mt-20 sm:scroll-mt-24 border-t border-line py-20 sm:py-28">
           {/* 滿版：不限最大寬度，佔滿整個畫面 */}
           <div className={wide}>
-            {/* 區塊標題與說明 */}
-            <SectionTitle eyebrow="COLLECTIONS" title="產品系列" desc="選擇系列瀏覽商品，點擊圖片查看產品介紹。" />
-            {/* 電子目錄連結（與「點擊查看○○所有產品」相同的紅字箭頭樣式） */}
-            <p className="mt-5 text-center">
-              <Link href="/catalog" className="group inline-flex items-center gap-3 text-sm tracking-[0.15em] text-brand-deep">
-                瀏覽產品電子目錄
-                <span aria-hidden="true" className="transition group-hover:translate-x-1">→</span>
-              </Link>
-            </p>
+            {/* 標題區：左邊標題與系列入口，右邊新品／服務／LINE 諮詢分頁式輪播（內容在 app/lib/spotlight.ts） */}
+            <CollectionsSpotlight categories={links} />
             {/* 商品目錄（系列方塊＋商品圖片） */}
             <ProductCatalog categories={categories} />
           </div>

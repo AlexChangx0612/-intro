@@ -132,7 +132,7 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
               <SectionTitle as="h1" align="left" eyebrow={cat.en} title={content.h1} />
               <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{content.intro}</p>
               <a href="#contact" className={`${outlineBtn} mt-10`}>
-                免費規劃與報價
+                專員為您提供服務
               </a>
             </div>
             <div className="relative hidden h-80 md:block lg:h-[420px]">

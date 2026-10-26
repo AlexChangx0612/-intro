@@ -49,13 +49,13 @@ export default function ContactSection() {
         <h2 className="mt-5 text-2xl tracking-[0.12em] sm:text-4xl">
           <span className="whitespace-nowrap">線上專員立即</span>
           <wbr />
-          <span className="whitespace-nowrap">為您提供報價服務</span>
+          <span className="whitespace-nowrap">為您提供服務</span>
         </h2>
         {/* 說明文字：90% 白；空間不夠時在「，」後換行 */}
         <p className="mx-auto mt-6 text-sm leading-7 text-white/90">
           <span className="whitespace-nowrap">告訴我們您的場地與需求，</span>
           <wbr />
-          <span className="whitespace-nowrap">專員將為您提供免費規劃 &amp; 報價</span>
+          <span className="whitespace-nowrap">專員為您提供規劃與服務</span>
         </p>
         {/* 三顆按鈕：1280px 以下上下排列；以上左右並排，寬度相同 */}
         <div className="mx-auto mt-12 grid max-w-sm grid-cols-[minmax(0,1fr)] gap-4 xl:max-w-none xl:grid-cols-[repeat(3,21rem)] xl:justify-center xl:gap-6">
@@ -84,7 +84,7 @@ export default function ContactSection() {
             <LineIcon />
             <span className="text-left">
               <span className="block text-xs tracking-[0.2em] opacity-80">LINE 官方帳號</span>
-              <span className="block text-base tracking-[0.12em]">專員立即報價</span>
+              <span className="block text-base tracking-[0.12em]">專員為您服務</span>
             </span>
           </a>
         </div>

@@ -524,4 +524,5 @@ export const productModels: Record<string, [model: string, spec: string]> = {
   "new-006-001": ["RW-S5BK", "掛壁式圍欄・黑色織帶 500cm"],
   "new-046-001": ["P4-45LBK", "超薄型・LED 背光板"],
   "new-047-001": ["P4-45LGD", "超薄型・LED 背光板"],
+  "new-048-001": ["RS-258WE", "全白烤漆柱身・馬卡龍色系織帶"],
 };

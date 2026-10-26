@@ -180,7 +180,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
               )}
 
               {/* 詢價：電話、Email（主旨帶入型號）、LINE、聯絡頁 */}
-              <h2 className={`${cardTitle} mt-12`}>詢價與免費規劃</h2>
+              <h2 className={`${cardTitle} mt-12`}>詢價與專員規劃</h2>
               <p className={`${bodyText} mt-3`}>詢價時提供型號「{item.model}」，專員可更快為您確認。</p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <a href={company.phoneHref} className={inquiryBtn}>

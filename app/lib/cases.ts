@@ -67,7 +67,7 @@ export const cases: CaseStudy[] = [
     title: "經國七海文化園區",
     scene: "文化園區",
     client: "經國七海文化園區",
-    location: "台北市內湖區",
+    location: "台北市中山區",
     products: "客製拒馬、RS-A4BK 黑色伸縮帶欄柱、RF-R26G 繩龍柱搭配 BA-27 橫桿",
     custom: "拒馬看板印製園區標誌、加重拒馬每座約 20kg",
     summary: "入口加重拒馬、廊道伸縮帶欄柱與展區繩龍柱，一次規劃整個園區的動線。",
@@ -76,7 +76,7 @@ export const cases: CaseStudy[] = [
       {
         ...NEEDS,
         body: "經國七海文化園區開放民眾參觀，入口車道、室內廊道與展區各有不同的動線需求：入口要擋住車輛、放在戶外也不能被風吹動，廊道要引導參觀人流，展區則要保護展品，又不能搶走展示的焦點。",
-        photo: photo("chihai-cultural-park", "01", "經國七海文化園區入口石碑與後方的拒馬"),
+        photo: photo("chihai-cultural-park", "01-sign", "經國七海文化園區入口的園區名稱石碑"),
       },
       {
         ...SOLUTION,
@@ -251,7 +251,7 @@ export const cases: CaseStudy[] = [
     scene: "3C 門市",
     client: "小米台灣",
     location: "小米門市",
-    products: "黑色伸縮帶欄柱、P7-75BK 黑色烤漆告示牌、FR-025BK 黑色烤漆雨傘架（25 孔）",
+    products: "黑色伸縮帶欄柱、P7-45BK 黑色烤漆告示牌、FR-025BK 黑色烤漆雨傘架（25 孔）",
     custom: "紅色織帶印製小米標誌",
     summary: "門口排隊動線、服務告示與雨天傘架，一次搭配門市的黑色調。",
     cover: photo("xiaomi-store", "05", "小米門市外觀與門口的欄柱"),
@@ -263,7 +263,7 @@ export const cases: CaseStudy[] = [
       },
       {
         ...SOLUTION,
-        body: "門口使用黑色伸縮帶欄柱，紅色織帶印上小米標誌；搭配 P7-75BK 黑色烤漆告示牌張貼維修服務資訊，以及 FR-025BK 黑色烤漆 25 孔雨傘架，整體與門市的黑色調一致。",
+        body: "門口使用黑色伸縮帶欄柱，紅色織帶印上小米標誌；搭配 P7-45BK 黑色烤漆告示牌張貼維修服務資訊，以及 FR-025BK 黑色烤漆 25 孔雨傘架，整體與門市的黑色調一致。",
         photo: photo("xiaomi-store", "04", "張貼維修服務資訊的黑色烤漆告示牌"),
       },
       {

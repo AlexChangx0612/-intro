@@ -87,7 +87,7 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
               <SectionTitle as="h1" align="left" eyebrow={s.en} title={s.h1} />
               <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{s.intro}</p>
               <a href="#contact" className={`${outlineBtn} mt-10`}>
-                免費規劃我的場地
+                請專員規劃我的場地
               </a>
             </div>
           </div>

@@ -25,7 +25,7 @@ const icons: Record<string, ReactNode> = {
       <path d="M12 17c4 8 20 8 24 0" />
     </>
   ),
-  // 室內外欄柱：平頭欄柱＋太陽
+  // 展覽佈展欄柱：平頭欄柱＋太陽
   outdoor: (
     <>
       <path d="M17 12h8v3h-8z" />

@@ -119,6 +119,24 @@ export const products: ProductDetail[] = [
     ],
     ...universal,
   },
+  // 新品：全白烤漆柱身，可選購馬卡龍色系織帶（第二張圖為色票與彩印說明）
+  {
+    slug: "rs-258we",
+    category: "retractable-belt-stanchions",
+    model: "RS-258WE",
+    name: "萬向系列伸縮帶欄柱（全白烤漆柱身・馬卡龍色系織帶）",
+    images: ["/images/new/new-048-001.jpg", "/products/rs-258we-colors.png"],
+    description: "世紘萬向系列伸縮帶欄柱 RS-258WE，全白烤漆柱身，可選購櫻花紫、檸檬黃、米白、湖水藍、莓果粉 5 色馬卡龍色系織帶，織帶長 200cm，適合重視色彩搭配的門市、展場與活動空間。",
+    specs: [
+      { label: "型號", value: "RS-258WE" },
+      { label: "系列", value: "萬向系列" },
+      { label: "織帶長度", value: "200cm" },
+      { label: "柱身顏色", value: "白色（烤漆）" },
+      { label: "織帶顏色", value: "櫻花紫、檸檬黃、米白、湖水藍、莓果粉（可選購）" },
+      { label: "產地標示", value: "Made in Taiwan" },
+    ],
+    features: [...universal.features, "可升級彩色印刷織帶，印上品牌圖案與文字。"],
+  },
 ];
 
 // 取得單一產品

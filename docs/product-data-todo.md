@@ -139,7 +139,7 @@
 - [ ] `011-001-013-001` — /products/cleaning-hygiene/011-001-013-001
 - [ ] `011-003-001-001` — /products/cleaning-hygiene/011-003-001-001
 
-## 數位看板・燈箱・LED 展示架（10 項待補）
+## 數位看板・燈箱・LED 展示架（8 項待補）
 
 - [ ] `009-001-001` — /products/digital-signage-lightbox/009-001-001
 - [ ] `009-002-001` — /products/digital-signage-lightbox/009-002-001
@@ -149,20 +149,20 @@
 - [ ] `20240729-004-001` — /products/digital-signage-lightbox/20240729-004-001
 - [ ] `20240729-005-001` — /products/digital-signage-lightbox/20240729-005-001
 - [ ] `20240729-006-001` — /products/digital-signage-lightbox/20240729-006-001
-- [ ] `20240729-007-001` — /products/digital-signage-lightbox/20240729-007-001
-- [ ] `20240729-008-001` — /products/digital-signage-lightbox/20240729-008-001
 
-## 室內外欄柱・戶外欄柱（9 項待補）
+## 展覽佈展欄柱・戶外欄柱（11 項待補）
 
-- [ ] `005-001-001` — /products/indoor-outdoor-stanchions/005-001-001
-- [ ] `005-002-001` — /products/indoor-outdoor-stanchions/005-002-001
-- [ ] `005-003-001` — /products/indoor-outdoor-stanchions/005-003-001
-- [ ] `005-004-001` — /products/indoor-outdoor-stanchions/005-004-001
-- [ ] `006-001-001` — /products/indoor-outdoor-stanchions/006-001-001
-- [ ] `006-002-001` — /products/indoor-outdoor-stanchions/006-002-001
-- [ ] `006-003-001` — /products/indoor-outdoor-stanchions/006-003-001
-- [ ] `006-004-001` — /products/indoor-outdoor-stanchions/006-004-001
-- [ ] `006-005-001` — /products/indoor-outdoor-stanchions/006-005-001
+- [ ] `005-001-001` — /products/exhibition-stanchions/005-001-001
+- [ ] `005-002-001` — /products/exhibition-stanchions/005-002-001
+- [ ] `005-003-001` — /products/exhibition-stanchions/005-003-001
+- [ ] `005-004-001` — /products/exhibition-stanchions/005-004-001
+- [ ] `006-001-001` — /products/exhibition-stanchions/006-001-001
+- [ ] `006-002-001` — /products/exhibition-stanchions/006-002-001
+- [ ] `006-003-001` — /products/exhibition-stanchions/006-003-001
+- [ ] `006-004-001` — /products/exhibition-stanchions/006-004-001
+- [ ] `006-005-001` — /products/exhibition-stanchions/006-005-001
+- [ ] `20240729-007-001` — /products/exhibition-stanchions/20240729-007-001
+- [ ] `20240729-008-001` — /products/exhibition-stanchions/20240729-008-001
 
 ## 鑰匙箱・鑰匙管理箱（8 項待補）
 
@@ -184,7 +184,7 @@
 - [ ] `002-005-001` — /products/plastic-stanchions/002-005-001
 - [ ] `002-006-001` — /products/plastic-stanchions/002-006-001
 
-## 海報架・告示牌・立牌（82 項待補）
+## 海報架・告示牌・立牌（84 項待補）
 
 - [ ] `007-001-001` — /products/poster-sign-stands/007-001-001
 - [ ] `007-002-001` — /products/poster-sign-stands/007-002-001
@@ -268,8 +268,10 @@
 - [ ] `018-004-001` — /products/poster-sign-stands/018-004-001
 - [ ] `018-005-001` — /products/poster-sign-stands/018-005-001
 - [ ] `018-006-001` — /products/poster-sign-stands/018-006-001
+- [ ] `NEW-046-001` — /products/poster-sign-stands/new-046-001
+- [ ] `NEW-047-001` — /products/poster-sign-stands/new-047-001
 
-## 伸縮帶欄柱・紅龍柱（119 項待補）
+## 伸縮帶欄柱・紅龍柱（117 項待補）
 
 - [ ] `001-006-001` — /products/retractable-belt-stanchions/001-006-001
 - [ ] `001-007-001` — /products/retractable-belt-stanchions/001-007-001
@@ -388,8 +390,6 @@
 - [ ] `NEW-004-001` — /products/retractable-belt-stanchions/new-004-001
 - [ ] `NEW-005-001` — /products/retractable-belt-stanchions/new-005-001
 - [ ] `NEW-006-001` — /products/retractable-belt-stanchions/new-006-001
-- [ ] `NEW-046-001` — /products/retractable-belt-stanchions/new-046-001
-- [ ] `NEW-047-001` — /products/retractable-belt-stanchions/new-047-001
 
 ## 掛繩欄柱・絨布繩紅龍柱（29 項待補）
 

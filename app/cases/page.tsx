@@ -69,7 +69,7 @@ export default function CasesPage() {
           {/* 行動按鈕：連到聯絡我們頁 */}
           <div className="mt-16 text-center">
             <Link href="/contact" className={outlineBtn}>
-              免費規劃我的場地
+              請專員規劃我的場地
             </Link>
           </div>
         </div>

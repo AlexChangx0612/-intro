@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
       ...legacyRedirects.map((r) => ({ ...r, permanent: true })),
       // 特價商品已下架：舊的特價商品網址一律導到產品系列總覽
       { source: "/products/special-offers/:path*", destination: "/products", permanent: true },
+      // P4-45LBK、P4-45LGD 從伸縮帶欄柱移到海報架・告示牌
+      { source: "/products/retractable-belt-stanchions/:code(new-046-001|new-047-001)", destination: "/products/poster-sign-stands/:code", permanent: true },
+      // RF-19BU、RF-19BU-FD 從數位看板・燈箱移到展覽佈展欄柱
+      { source: "/products/digital-signage-lightbox/:code(20240729-007-001|20240729-008-001)", destination: "/products/exhibition-stanchions/:code", permanent: true },
+      // 「室內外欄柱」更名為「展覽佈展欄柱」：舊分類與產品網址導到新網址
+      { source: "/products/indoor-outdoor-stanchions/:path*", destination: "/products/exhibition-stanchions/:path*", permanent: true },
     ];
   },
 };

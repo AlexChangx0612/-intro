@@ -23,7 +23,7 @@ import { bodyText, card, cardHover, cardTitle, container, pageTop, section } fro
 
 // 頁面描述
 const description =
-  "世紘興業客製化服務：伸縮帶欄柱柱頭告示框、拒馬看板、告示牌與海報架皆可置入企業識別，並提供企業禮贈品與免費空間規劃報價。";
+  "世紘興業客製化服務：伸縮帶欄柱柱頭告示框、拒馬看板、告示牌與海報架皆可置入企業識別，並提供企業禮贈品，專員為您提供規劃。";
 
 // 中繼資料
 export const metadata: Metadata = pageMetadata({
@@ -63,7 +63,7 @@ const items: { title: string; en: string; desc: string; category?: string }[] = 
 const steps = [
   { title: "提供需求", desc: "告訴我們場地、用途、數量，以及要置入的企業識別或內容。" },
   { title: "專人規劃", desc: "專員依場地與需求規劃動線與客製內容，並確認可行性與交期。" },
-  { title: "免費報價", desc: "規劃服務免費，確認內容後提供完整報價。" },
+  { title: "專員服務", desc: "確認內容後，由專員為您提供後續服務。" },
 ];
 
 // 客製化常見問題
@@ -80,7 +80,7 @@ const faqs: Faq[] = [
   },
   {
     q: "詢問客製化需要準備什麼？",
-    a: "請提供場地與用途、需要的品項與數量，以及要置入的標誌或文字內容。詢問特定產品時，提供產品頁或電子目錄上的型號，專員可更快為您報價。",
+    a: "請提供場地與用途、需要的品項與數量，以及要置入的標誌或文字內容。詢問特定產品時，提供產品頁或電子目錄上的型號，專員可更快為您提供服務。",
     link: { href: "/catalog", label: "查看產品電子目錄" },
   },
 ];
@@ -102,7 +102,7 @@ export default function CustomPage() {
           <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-end lg:gap-20">
             <SectionTitle as="h1" align="left" eyebrow="CUSTOM SERVICE" title="客製化服務，讓設備帶著您的品牌" />
             <p className="text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">
-              欄柱、拒馬、告示牌與海報架，都可以置入貴公司的企業識別。從空間規劃到客製內容，專員一對一協助，規劃與報價免費。
+              欄柱、拒馬、告示牌與海報架，都可以置入貴公司的企業識別。從動線規劃到客製內容，專員一對一協助。
             </p>
           </div>
 
@@ -152,7 +152,7 @@ export default function CustomPage() {
       {/* 洽詢流程：三步驟（與首頁「世紘優勢」相同樣式） */}
       <section className={section}>
         <div className={container}>
-          <SectionTitle eyebrow="PROCESS" title="客製流程" desc="三個步驟，從需求到報價。" />
+          <SectionTitle eyebrow="PROCESS" title="客製流程" desc="三個步驟，從需求到專員服務。" />
           <ol className="mt-14 grid gap-12 md:grid-cols-3 md:gap-10">
             {steps.map((s) => (
               <li key={s.title} className="border-t border-line pt-8 text-center md:text-left">

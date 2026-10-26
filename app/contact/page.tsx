@@ -14,11 +14,11 @@ import { absoluteUrl, company, organizationJsonLd, pageMetadata } from "../lib/s
 import { container, pageTop } from "../lib/ui";
 
 // 頁面描述
-const description = `聯絡世紘興業：電話 ${company.phone}、Email ${company.email}、LINE 官方帳號，提供紅龍柱、欄柱與公共空間設備的免費空間規劃與報價。`;
+const description = `聯絡世紘興業：電話 ${company.phone}、Email ${company.email}、LINE 官方帳號，提供紅龍柱、欄柱與公共空間設備，專員為您提供規劃。`;
 
 // 中繼資料
 export const metadata: Metadata = pageMetadata({
-  title: "聯絡我們｜免費空間規劃與報價｜世紘興業",
+  title: "聯絡我們｜專員為您提供規劃｜世紘興業",
   description,
   path: "/contact",
 });
@@ -53,7 +53,7 @@ export default function ContactPage() {
                 align="left"
                 eyebrow="CONTACT"
                 title="聯絡我們"
-                desc="告訴我們您的場地與需求，專員將為您提供免費空間規劃與報價。詢問特定產品時，請提供產品頁上的型號或品項編號。"
+                desc="告訴我們您的場地與需求，專員為您提供規劃。詢問特定產品時，請提供產品頁上的型號或品項編號。"
               />
             </div>
           </div>

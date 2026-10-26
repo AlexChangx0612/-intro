@@ -16,7 +16,7 @@ const pages: { title: string; href: string; desc: string; keywords: string }[] =
   { title: "客製化服務", href: "/custom", desc: "欄柱、拒馬、告示牌與海報架置入企業識別，企業禮贈品。", keywords: "客製 訂製 logo 企業識別 印製 禮贈品 贈品 柱頭告示框 拒馬看板" },
   { title: "產品電子目錄", href: "/catalog", desc: "線上瀏覽與 PDF 下載。", keywords: "目錄 型錄 catalog pdf 下載 dm" },
   { title: "世紘優勢", href: "/advantages", desc: "多國專利、SGS 檢驗與台灣製造。", keywords: "優勢 專利 證書 認證 sgs reach 檢驗 報告 鹽霧 台灣製造 mit 品質" },
-  { title: "免費空間規劃與報價", href: "/contact", desc: "提供場地尺寸，專員協助規劃動線與報價。", keywords: "聯絡 報價 詢價 估價 規劃 動線 電話 email line 地址 營業時間 免費" },
+  { title: "專員為您提供規劃", href: "/contact", desc: "提供場地尺寸，專員協助規劃動線並為您提供服務。", keywords: "聯絡 報價 詢價 估價 規劃 動線 電話 email line 地址 營業時間 免費" },
   { title: "客戶實際案例", href: "/cases", desc: "文化園區、寺廟、政府機關、門市與職業球團的實拍案例。", keywords: "案例 實績 實例 作品 應用 實拍" },
   { title: "關於世紘", href: "/about", desc: "專注公共與商業空間設備的台灣專業廠商。", keywords: "關於 公司 簡介 世紘興業 理念 物業管理" },
   { title: "常見問題", href: "/#faq", desc: "欄柱選擇、數量估算與採購的常見問題。", keywords: "faq 問題 問答 估算 幾支" },

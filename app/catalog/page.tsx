@@ -62,7 +62,7 @@ export default function CatalogPage() {
                   align="left"
                   eyebrow="E-CATALOG"
                   title="產品電子目錄"
-                  desc="線上瀏覽世紘全系列產品，或下載 PDF 版本隨時查閱。詢價時提供目錄上的型號，專員可更快為您報價。"
+                  desc="線上瀏覽世紘全系列產品，或下載 PDF 版本隨時查閱。詢價時提供目錄上的型號，專員可更快為您提供服務。"
                 />
               </div>
             </div>

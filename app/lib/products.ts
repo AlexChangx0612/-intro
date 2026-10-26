@@ -67,8 +67,9 @@ export type CategoryGroup = {
 // 小系列定義：match 判斷品項是否屬於此小系列（各小系列的條件互不重疊）；cover 為代表圖的品項編號，省略時用第一個品項
 type GroupDef = Omit<CategoryGroup, "items" | "cover"> & { match: (item: CatalogItem) => boolean; cover?: string };
 
-// 依照片實際內容分類；prefixes 比對 public/images 底下的檔名開頭
-const categoryDefs: { id: string; slug: string; en: string; name: string; desc: string; prefixes: string[]; groups?: GroupDef[] }[] = [
+// 依照片實際內容分類；prefixes 比對 public/images 底下的檔名開頭，exclude 為符合 prefixes 但要排除的檔名開頭
+// placeAfter 調整個別品項的位置：品項編號 → 要排在哪個品項編號後面（依序套用；未列出的品項維持檔名順序）
+const categoryDefs: { id: string; slug: string; en: string; name: string; desc: string; prefixes: string[]; exclude?: string[]; placeAfter?: Record<string, string>; groups?: GroupDef[] }[] = [
   // 分類 1：伸縮帶欄柱
   {
     id: "retractable",
@@ -78,6 +79,8 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     desc: "四向、八向、萬向伸縮帶欄柱與壁掛式圍欄，以及柱頭告示框、防塵蓋等配件。",
     // 檔名以這些文字開頭的圖片歸入此分類
     prefixes: ["001-", "20230821-", "new-"],
+    // P4-45LBK、P4-45LGD LED 背光板立牌歸入海報架・告示牌
+    exclude: ["new-046-", "new-047-"],
     // 依產品照左上角標籤分成五個小系列（標籤已寫在 product-models.ts 的規格說明與型號）
     groups: [
       {
@@ -102,7 +105,7 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
         name: "萬向伸縮欄柱",
         desc: "柱頭可往任意方向扣接織帶，動線排法最自由；織帶長 200／400／500cm，柱身有多種顏色、警示條紋、透明與木紋款。",
         // 其餘欄柱的產品照標籤皆為「萬向系列」（規格說明沒有寫系列名稱）
-        match: (i) => !/^(四向系列|八向系列|掛壁式圍欄)/.test(i.spec ?? "") && !/^(RP|RV|P4)-/.test(i.model),
+        match: (i) => !/^(四向系列|八向系列|掛壁式圍欄)/.test(i.spec ?? "") && !/^(RP|RV)-/.test(i.model),
       },
       {
         id: "wall-mounted",
@@ -115,9 +118,9 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
         id: "accessories",
         en: "ACCESSORIES",
         name: "欄柱配件",
-        desc: "A3／A4 柱頭告示框、拍拍框、防塵蓋與 LED 背光板，讓欄柱同時傳遞指示與宣傳資訊。",
-        // 型號開頭：RP 告示框、RV 防塵蓋、P4 LED 背光板
-        match: (i) => /^(RP|RV|P4)-/.test(i.model),
+        desc: "A3／A4 柱頭告示框、拍拍框與防塵蓋，讓欄柱同時傳遞指示與宣傳資訊。",
+        // 型號開頭：RP 告示框、RV 防塵蓋
+        match: (i) => /^(RP|RV)-/.test(i.model),
         // 欄柱裝上告示框的產品照
         cover: "001-102-001",
       },
@@ -132,14 +135,14 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     desc: "不鏽鋼迎賓欄柱，有圓球頭、皇冠頭、平蓋頭等柱頭造型，搭配絨布繩，典雅大方。",
     prefixes: ["003-", "004-"],
   },
-  // 分類 3：室內外欄柱
+  // 分類 3：展覽佈展欄柱
   {
     id: "outdoor",
-    slug: "indoor-outdoor-stanchions",
-    en: "INDOOR & OUTDOOR STANCHIONS",
-    name: "室內外欄柱",
+    slug: "exhibition-stanchions",
+    en: "EXHIBITION STANCHIONS",
+    name: "展覽佈展欄柱",
     desc: "消光烤漆柱身，可搭配彈力繩或鋁合金橫桿，室內外皆適用。",
-    prefixes: ["005-", "006-"],
+    prefixes: ["005-", "006-", "20240729-007-", "20240729-008-"],
   },
   // 分類 4：塑膠欄柱
   {
@@ -166,7 +169,9 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     en: "POSTER & SIGN STANDS",
     name: "海報架・告示牌",
     desc: "壁掛海報框、立式告示牌、壓克力公佈欄與警示立牌。",
-    prefixes: ["007-", "014-", "018-", "012-20221125-"],
+    prefixes: ["007-", "014-", "018-", "012-20221125-", "new-046-", "new-047-"],
+    // P4-45LBK、P4-45LGD 排在同系列的 P4-45 後面
+    placeAfter: { "new-046-001": "007-033-001", "new-047-001": "new-046-001" },
   },
   // 分類 7：佈告欄
   {
@@ -185,6 +190,8 @@ const categoryDefs: { id: string; slug: string; en: string; name: string; desc: 
     name: "數位看板・燈箱",
     desc: "IPS 數位看板與 LED 發光展示架，吸睛宣傳。",
     prefixes: ["009-", "20240729-"],
+    // RF-19BU、RF-19BU-FD 欄柱歸入展覽佈展欄柱
+    exclude: ["20240729-007-", "20240729-008-"],
   },
   // 分類 9：垃圾桶・資源回收
   {
@@ -277,9 +284,17 @@ export function getCatalog() {
     .sort();
 
   // 依分類定義，把檔名符合開頭規則的圖片放進各分類
-  const categories: Category[] = categoryDefs.map(({ prefixes, groups, ...rest }) => {
-    // 篩選出檔名開頭符合任一規則的圖片
-    const images = all.filter((url) => prefixes.some((p) => fileName(url).startsWith(p)));
+  const categories: Category[] = categoryDefs.map(({ prefixes, exclude = [], placeAfter = {}, groups, ...rest }) => {
+    // 篩選出檔名開頭符合任一規則、且不在排除清單的圖片
+    const images = all.filter((url) => prefixes.some((p) => fileName(url).startsWith(p)) && !exclude.some((p) => fileName(url).startsWith(p)));
+    // 依 placeAfter 把個別品項移到指定品項後面
+    const codeOf = (url: string) => fileName(url).replace(IMAGE_EXT, "");
+    for (const [code, after] of Object.entries(placeAfter)) {
+      const from = images.findIndex((url) => codeOf(url) === code);
+      if (from === -1) continue;
+      const [moved] = images.splice(from, 1);
+      images.splice(images.findIndex((url) => codeOf(url) === after) + 1, 0, moved);
+    }
     // 保留分類的 id、名稱、說明，並把每張圖片轉成品項
     const items = images.map((url) => toItem(url, rest.slug, rest.name));
     // 有小系列定義時，把品項分進各小系列，並找出代表圖
