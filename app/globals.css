@@ -121,3 +121,42 @@ body {
     opacity: 0;
   }
 }
+
+/* 客製織帶牆（BeltWall）：每列是兩倍圖寬的橫條，背景圖橫向重複，移動一個圖寬後無縫接回 */
+.belt-track {
+  /* 一列高 40px，寬為圖寬 13698px 的兩倍 */
+  height: 40px;
+  width: 27396px;
+  /* 8 列拼成的織帶圖 */
+  background-image: url("/belts/belt-wall.webp");
+  background-repeat: repeat-x;
+  /* 預設 260 秒捲完一輪（各列在元件內另設速度與方向） */
+  animation: belt-run 260s linear infinite;
+}
+
+/* 滑鼠移上織帶牆時暫停，方便看清楚 */
+.belt-wall:hover .belt-track {
+  animation-play-state: paused;
+}
+
+/* 系統設定「減少動態效果」時不捲動 */
+@media (prefers-reduced-motion: reduce) {
+  .belt-track {
+    animation: none;
+  }
+}
+
+/* 動畫：織帶牆向左移動一個圖寬 */
+@keyframes belt-run {
+  to {
+    transform: translateX(-13698px);
+  }
+}
+
+/* 動畫：首頁新品聚光燈分頁的紅色進度線，由左往右填滿（跑完即換下一頁） */
+@keyframes spotlight-progress {
+  /* 起點：寬度為 0 */
+  from {
+    transform: scaleX(0);
+  }
+}

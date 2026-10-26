@@ -2,40 +2,44 @@
 // 專利與檢驗報告圖檔放在 public/certificates；取自關係企業中衛聯合開發官網最大解析度的版本
 // 拿到原始高解析檔案（PDF 或掃描檔）後，用同檔名覆蓋並更新下方的 width／height 即可
 
-// 匯入品牌故事段落型別
-import type { Story } from "../components/Story";
+// 三項優勢（/advantages 頁「選擇世紘，您多得到的三件事」）：圖文左右交錯
+// 專員與客製的圖片為生成圖（public/about/specialist.jpg、branding-*.jpg），不是實際案例；台灣製造為產品去背圖
+export type Advantage = {
+  title: string;
+  body: string;
+  // 圖片：多張時並排；ratio 為顯示寬高比；contain 為去背圖（完整顯示、不裁切）
+  images: { src: string; alt: string; ratio: string; contain?: boolean }[];
+  href: string;
+  cta: string;
+};
 
-// 三項優勢（/advantages 頁的圖文段落；圖片為 Unsplash 免費圖庫，放在 public/about/）
-export const advantages: Story[] = [
+export const advantages: Advantage[] = [
   // 優勢 1
   {
-    en: "FREE PLANNING",
-    title: "免費空間規劃",
-    body: "告訴我們場地與需求，專人為您規劃排隊動線、估算欄柱與織帶數量，並提供報價建議。規劃服務完全免費。",
-    image: "/about/planning.jpg",
-    alt: "以鉛筆與尺繪製的空間草圖",
-    href: "/contact",
-    cta: "預約免費規劃",
+    title: "一位資深專員，從頭陪您到底",
+    body: "熟悉全系列產品的資深專員，會先了解您的場地與人流，講解各款欄柱的材質、用途與差異，再為您規劃動線、估算欄柱與織帶數量，最後提出清楚的報價。從第一次諮詢到交貨，都由同一位專員負責。",
+    images: [{ src: "/about/specialist.jpg", alt: "專員在場地平面圖上以鉛筆為客戶講解欄柱排隊動線", ratio: "16 / 9" }],
+    href: "#contact",
+    cta: "預約專員諮詢",
   },
   // 優勢 2
   {
-    en: "CUSTOM BRANDING",
     title: "企業識別客製",
-    body: "拒馬看板、告示牌與海報架，皆可置入貴公司的品牌視覺，讓公共設備也成為品牌形象的一部分。",
-    image: "/about/branding.jpg",
-    alt: "色票扇形展開",
+    body: "織帶、拒馬看板、告示牌與海報架，都能印上貴公司的標誌與顏色，讓公共設備也成為品牌形象的一部分。",
+    images: [
+      { src: "/about/branding-proof.jpg", alt: "印有世紘標誌的紅色織帶捲、品牌色打樣稿與色票", ratio: "3 / 4" },
+      { src: "/about/branding-stanchions.jpg", alt: "兩支黑色伸縮帶欄柱，拉開印有世紘標誌的紅色織帶", ratio: "3 / 4" },
+    ],
     href: "/custom",
     cta: "了解客製服務",
   },
-  // 優勢 3
+  // 優勢 3（{series} 由頁面換成實際的產品系列數）
   {
-    en: "MADE IN TAIWAN",
     title: "全系列台灣製造",
-    body: "所有欄柱與設備皆於台灣在地生產，品質穩定，溝通即時；產品設計取得多國專利，並通過 SGS 與金屬中心等第三方檢驗。",
-    image: "/about/factory.jpg",
-    alt: "工廠中的金屬加工機台",
-    href: "#patents",
-    cta: "查看專利與檢驗",
+    body: "{series} 個產品系列都在台灣生產。品質穩定、溝通即時，遇到客製或急件也能快速調整，不必跨海等待。",
+    images: [{ src: "/cutouts/retractable-belt-stanchions.png", alt: "世紘伸縮帶欄柱產品去背圖", ratio: "4 / 3", contain: true }],
+    href: "/products",
+    cta: "瀏覽產品系列",
   },
 ];
 

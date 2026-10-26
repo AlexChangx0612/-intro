@@ -29,3 +29,10 @@ export type CategoryLink = { id: string; slug: string; name: string };
 
 // 滿版版心：不限最大寬度，佔滿整個畫面（左右留白同 container，1536px 以上 64px）
 export const wide = "w-full px-5 sm:px-8 lg:px-12 2xl:px-16";
+
+// 實心紅底白字主按鈕（直角，高 56px；「關於世紘」「世紘優勢」頁首與區塊行動按鈕）
+export const solidBtn =
+  "inline-flex min-h-14 items-center bg-brand-deep px-8 text-base font-bold text-white transition hover:bg-ink active:translate-y-px";
+
+// 文字連結：底線、黑字，滑鼠移上變紅（後面接「→」）
+export const textLink = "inline-flex min-h-11 items-center text-base font-medium underline underline-offset-4 transition hover:text-brand-deep";
