@@ -8,18 +8,18 @@ import { container } from "../lib/ui";
 // 完整地址（顯示與地圖搜尋共用）
 const address = `${company.address.region}${company.address.locality}${company.address.street}`;
 
-// 聯絡資訊清單：label 為英文小標，href 有值時可點擊
+// 聯絡資訊清單：label 為項目名稱，href 有值時可點擊
 const contacts: { label: string; value: string; href?: string; external?: boolean }[] = [
   // 電話：手機上點擊直接撥號
-  { label: "TEL", value: company.phone, href: company.phoneHref },
+  { label: "電話", value: company.phone, href: company.phoneHref },
   // 傳真：只顯示號碼
-  { label: "FAX", value: company.fax },
+  { label: "傳真", value: company.fax },
   // Email：點擊開啟寄信程式
-  { label: "E-MAIL", value: company.email, href: `mailto:${company.email}` },
+  { label: "信箱", value: company.email, href: `mailto:${company.email}` },
   // 地址：點擊另開 Google 地圖
-  { label: "ADDRESS", value: address, href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, external: true },
+  { label: "地址", value: address, href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, external: true },
   // 營業時間
-  { label: "HOURS", value: company.hours },
+  { label: "營業時間", value: company.hours },
 ];
 
 // 頁尾元件；barOnly 為 true 時只顯示底部紅色色帶（不顯示公司簡介與聯絡資訊）
@@ -43,7 +43,7 @@ export default function SiteFooter({ barOnly = false }: { barOnly?: boolean }) {
             {/* 公司名稱與成立年份 */}
             <div>
               <p className="text-lg tracking-[0.3em] text-ink">{company.shortName}</p>
-              <p className="mt-1 font-display text-xs tracking-[0.35em] text-brand-deep">SINCE {company.foundingYear}</p>
+              <p className="mt-1 text-sm tracking-[0.1em] text-brand-deep">{company.foundingYear} 年創立</p>
             </div>
           </div>
           {/* 公司簡介：灰字、最寬約 384px */}
@@ -55,14 +55,14 @@ export default function SiteFooter({ barOnly = false }: { barOnly?: boolean }) {
         {/* 右欄：聯絡資訊 */}
         <div>
           {/* 欄位標題 */}
-          <h2 className="text-xs tracking-[0.35em] text-brand-deep">CONTACT</h2>
-          {/* 每項一列：左英文小標、右內容；上下淡紅分隔線（與首頁「適用場域」清單相同） */}
+          <h2 className="text-lg tracking-[0.12em] text-brand-deep">聯絡資訊</h2>
+          {/* 每項一列：左項目名稱、右內容；上下淡紅分隔線（與首頁「適用場域」清單相同） */}
           <dl className="mt-6 border-t border-line">
             {contacts.map((c) => (
               // 一列：手機小標在上；平板以上左右並排
               <div key={c.label} className="grid gap-1 border-b border-line py-4 sm:grid-cols-[7rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
-                {/* 英文小標：品牌紅、字距加寬 */}
-                <dt className="font-display text-xs tracking-[0.3em] text-brand">{c.label}</dt>
+                {/* 項目名稱：深品牌紅（白底對比 4.9:1） */}
+                <dt className="text-sm tracking-[0.1em] text-brand-deep">{c.label}</dt>
                 {/* 內容：可點擊的項目滑鼠移上變紅字 */}
                 <dd className="text-sm tracking-[0.06em] text-ink sm:text-base">
                   {c.href ? (

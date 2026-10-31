@@ -1,5 +1,7 @@
 // 匯入 Next.js 網頁中繼資料型別
 import type { Metadata } from "next";
+// 匯入 Next.js 圖片元件
+import Image from "next/image";
 // 匯入麵包屑
 import Breadcrumbs from "../components/Breadcrumbs";
 // 匯入結構化資料元件
@@ -51,7 +53,6 @@ export default function ContactPage() {
               <SectionTitle
                 as="h1"
                 align="left"
-                eyebrow="CONTACT"
                 title="聯絡我們"
                 desc="告訴我們您的場地與需求，專員為您提供規劃。詢問特定產品時，請提供產品頁上的型號或品項編號。"
               />
@@ -77,6 +78,10 @@ export default function ContactPage() {
                     </a>
                   ) : (
                     r.value
+                  )}
+                  {/* LINE 列：附 QR Code 給手機掃描加好友 */}
+                  {r.label === "LINE" && (
+                    <Image src={company.lineQr} alt="世紘興業 LINE 官方帳號 QR Code" width={540} height={540} className="mt-3 size-32" />
                   )}
                 </dd>
               </div>

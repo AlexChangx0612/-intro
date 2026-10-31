@@ -43,10 +43,8 @@ export default function ContactSection() {
     <section id="contact" className="scroll-mt-20 sm:scroll-mt-24 bg-brand-deep py-24 text-center text-white sm:py-32">
       {/* 版心 */}
       <div className={container}>
-        {/* 英文小標：85% 白 */}
-        <p className="text-xs tracking-[0.35em] text-white/85">CONTACT US</p>
         {/* 主標題：手機 28px → 平板以上 42px；手機在「立即」後換行 */}
-        <h2 className="mt-5 text-2xl tracking-[0.12em] sm:text-4xl">
+        <h2 className="text-2xl tracking-[0.12em] sm:text-4xl">
           <span className="whitespace-nowrap">線上專員立即</span>
           <wbr />
           <span className="whitespace-nowrap">為您提供服務</span>
@@ -87,6 +85,14 @@ export default function ContactSection() {
               <span className="block text-base tracking-[0.12em]">專員為您服務</span>
             </span>
           </a>
+        </div>
+        {/* LINE QR Code：電腦版給手機掃描加好友（手機直接點上方按鈕即可，不顯示） */}
+        <div className="mx-auto mt-10 hidden w-fit items-center gap-5 rounded-[20px] bg-white p-4 pr-7 text-left text-ink sm:flex">
+          <Image src={company.lineQr} alt="世紘興業 LINE 官方帳號 QR Code" width={540} height={540} className="size-32 shrink-0" />
+          <span>
+            <span className="block text-xs tracking-[0.2em] text-muted">LINE 官方帳號</span>
+            <span className="mt-1 block text-base tracking-[0.12em]">手機掃描加入好友</span>
+          </span>
         </div>
       </div>
     </section>

@@ -38,7 +38,6 @@ export default function CasesPage() {
           <div className="mt-10">
             <SectionTitle
               as="h1"
-              eyebrow="CASE STUDIES"
               title="走進各種場域，看見秩序的樣子"
               desc="從文化園區、寺廟、政府機關到門市與職業球團，看看世紘的欄柱與拒馬，如何在真實場域中安排從容的動線。"
             />

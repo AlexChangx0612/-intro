@@ -55,7 +55,7 @@ export default function SolutionsPage() {
         <div className={container}>
           <Breadcrumbs items={[{ name: "首頁", path: "/" }, { name: "適用場域", path: "/solutions" }]} />
           <div className="mt-10">
-            <SectionTitle as="h1" eyebrow="APPLICATIONS" title="為每一個公共空間，安排秩序" desc="從銀行大廳到大型展覽，依場域的人流與氛圍，挑選合適的欄柱與設備。選擇場域查看規劃重點。" />
+            <SectionTitle as="h1" title="為每一個公共空間，安排秩序" desc="從銀行大廳到大型展覽，依場域的人流與氛圍，挑選合適的欄柱與設備。選擇場域查看規劃重點。" />
           </div>
           {/* 場域卡片：手機 1 欄、平板 2 欄、電腦 3 欄 */}
           <ul className="mt-14 grid gap-4 sm:grid-cols-2 md:gap-5 lg:grid-cols-3">

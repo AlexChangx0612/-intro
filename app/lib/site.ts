@@ -28,6 +28,8 @@ export const company = {
   email: "shung3758@gmail.com",
   // LINE 官方帳號加好友連結
   line: "https://lin.ee/vcMIuCv",
+  // LINE 官方帳號 QR Code 圖檔（public 底下，540×540）
+  lineQr: "/brand/line-qrcode.png",
   // 地址
   address: { region: "新北市", locality: "林口區", street: "文化二路一段68巷39號6F" },
   // 營業時間

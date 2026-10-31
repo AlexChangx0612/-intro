@@ -57,7 +57,7 @@ export default function ProductsPage() {
         <div className={container}>
           <Breadcrumbs items={[{ name: "首頁", path: "/" }, { name: "產品系列", path: "/products" }]} />
           <div className="mt-10">
-            <SectionTitle as="h1" eyebrow="COLLECTIONS" title="產品系列" desc="從排隊動線、告示展示到清潔與物業管理，世紘提供公共與商業空間所需的各類周邊設備。選擇系列查看產品與選購建議。" />
+            <SectionTitle as="h1" title="產品系列" desc="從排隊動線、告示展示到清潔與物業管理，世紘提供公共與商業空間所需的各類周邊設備。選擇系列查看產品與選購建議。" />
           </div>
           <CollectionGrid categories={categories} />
           {/* 每個分類的簡短說明（純文字清單，方便快速瀏覽） */}

@@ -14,6 +14,8 @@ import CountUp from "../components/CountUp";
 import JsonLd from "../components/JsonLd";
 // 匯入內頁外框
 import PageShell from "../components/PageShell";
+// 匯入做事的三個原則
+import Principles from "../components/Principles";
 // 匯入產品目錄
 import { getCatalog } from "../lib/products";
 // 匯入 SEO 工具
@@ -41,13 +43,6 @@ const cases = [
   { href: "/cases/tsg-hawks", image: "/cases/tsg-hawks/01.jpg", alt: "印有 TSG HAWKS 字樣的綠色織帶", label: "台鋼雄鷹・球隊印字織帶" },
 ];
 
-// 做事的三個原則
-const values = [
-  { title: "創新", body: "公共空間的動線、展示與管理需求不斷改變。我們持續開發新產品，從結構設計到使用細節反覆改良，讓設備更好用、更耐用。", href: "/custom", cta: "了解客製服務" },
-  { title: "品質", body: "從選材、加工到表面處理，每個環節都以長期使用為標準。織帶拉伸一萬次無損壞，鋁材鹽霧 24 小時無腐蝕，都有報告。", href: "/advantages#reports", cta: "看專利與檢驗" },
-  { title: "誠信", body: "依場地與需求給規劃建議，說明清楚、承諾實在。不誇大、不隱藏，做得到的才答應，答應的就做到。", href: "#contact", cta: "聯絡專員" },
-];
-
 // 關於世紘頁
 export default function AboutPage() {
   // 產品分類（系列數）與品項數（型號數）
@@ -73,9 +68,10 @@ export default function AboutPage() {
       >
         <figure>
           <div className="relative aspect-[16/10]">
-            <Image src="/cases/zhulinshan-guanyin-temple/01.jpg" alt="竹林山觀音寺殿前以金色伸縮帶欄柱圍出參拜動線" fill preload sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
+            {/* 直式圖裁成 16:10，往上對齊，保留公司招牌與織帶 */}
+            <Image src="/about/branding-stanchions.jpg" alt="世紘興業公司招牌前，兩支黑色伸縮帶欄柱拉開印有世紘標誌的紅色織帶" fill preload sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover object-[center_10%]" />
           </div>
-          <figcaption className="mt-3 text-[15px] text-muted">新北林口 竹林山觀音寺：殿前的金色伸縮帶欄柱</figcaption>
+          <figcaption className="mt-3 text-[15px] text-muted">世紘興業：印上 Shung 標誌的伸縮帶欄柱</figcaption>
         </figure>
       </SplitHero>
 
@@ -148,23 +144,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 做事的三個原則：白底 */}
-      <section className="mt-40 bg-white">
-        <div className={`${container} py-28`}>
-          <h2 className="text-[clamp(30px,3vw,44px)] leading-[1.3] font-bold">我們做事的三個原則</h2>
-          <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-14">
-            {values.map((v) => (
-              <div key={v.title}>
-                <h3 className="text-[clamp(40px,4vw,56px)] leading-none font-bold">{v.title}</h3>
-                <p className="mt-6 text-base leading-[1.8]">{v.body}</p>
-                <Link href={v.href} className={`${textLink} mt-5`}>
-                  {v.cta} →
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 做事的三個原則：白底，開場織帶隨捲動拉開，每個原則附上證據 */}
+      <Principles />
     </PageShell>
   );
 }

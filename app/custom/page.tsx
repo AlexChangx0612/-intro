@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 // 匯入麵包屑
 import Breadcrumbs from "../components/Breadcrumbs";
+// 匯入客製流程（捲動切換步驟與示意圖）
+import CustomProcess from "../components/CustomProcess";
 // 匯入常見問題清單
 import FaqList, { type Faq } from "../components/FaqList";
 // 匯入結構化資料元件
@@ -100,7 +102,7 @@ export default function CustomPage() {
         <div className={container}>
           <Breadcrumbs items={[{ name: "首頁", path: "/" }, { name: "客製化服務", path: "/custom" }]} />
           <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-end lg:gap-20">
-            <SectionTitle as="h1" align="left" eyebrow="CUSTOM SERVICE" title="客製化服務，讓設備帶著您的品牌" />
+            <SectionTitle as="h1" align="left" title="客製化服務，讓設備帶著您的品牌" />
             <p className="text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">
               欄柱、拒馬、告示牌與海報架，都可以置入貴公司的企業識別。從動線規劃到客製內容，專員一對一協助。
             </p>
@@ -149,25 +151,18 @@ export default function CustomPage() {
         </div>
       </section>
 
-      {/* 洽詢流程：三步驟（與首頁「世紘優勢」相同樣式） */}
+      {/* 洽詢流程：三步驟，捲動時逐步顯示對應的介面示意圖 */}
       <section className={section}>
         <div className={container}>
-          <SectionTitle eyebrow="PROCESS" title="客製流程" desc="三個步驟，從需求到專員服務。" />
-          <ol className="mt-14 grid gap-12 md:grid-cols-3 md:gap-10">
-            {steps.map((s) => (
-              <li key={s.title} className="border-t border-line pt-8 text-center md:text-left">
-                <h3 className="text-xl tracking-[0.1em] text-brand-deep">{s.title}</h3>
-                <p className="mx-auto mt-4 max-w-xs text-sm leading-7 text-pretty text-muted md:mx-0">{s.desc}</p>
-              </li>
-            ))}
-          </ol>
+          <SectionTitle title="客製流程" desc="三個步驟，從需求到專員服務。" />
+          <CustomProcess steps={steps} />
         </div>
       </section>
 
       {/* 常見問題：手機上下排列，電腦左標題右問答 */}
       <section className={section}>
         <div className={`${container} grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20`}>
-          <SectionTitle align="left" eyebrow="FAQ" title="客製化常見問題" />
+          <SectionTitle align="left" title="客製化常見問題" />
           <FaqList faqs={faqs} />
         </div>
       </section>

@@ -92,7 +92,7 @@ export default function Home() {
         {/* 常見問題（上方有分隔線）：手機上下排列，電腦左標題右問答 */}
         <section id="faq" className="scroll-mt-20 sm:scroll-mt-24 border-t border-line py-20 sm:py-28">
           <div className={`${container} grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20`}>
-            <SectionTitle align="left" eyebrow="FAQ" title="常見問題" desc="關於欄柱選擇、數量估算與採購的常見問題。" />
+            <SectionTitle align="left" title="常見問題" desc="關於欄柱選擇、數量估算與採購的常見問題。" />
             <FaqList faqs={homeFaqs} />
           </div>
         </section>
@@ -104,7 +104,7 @@ export default function Home() {
         <section id="about" className="scroll-mt-20 sm:scroll-mt-24 border-t border-line py-20 sm:py-28">
           <div className={`${container} grid gap-10 lg:grid-cols-2 lg:gap-20`}>
             {/* 靠左的區塊標題 */}
-            <SectionTitle align="left" eyebrow="ABOUT SHIHHUNG" title="專注公共與商業空間設備的台灣專業廠商" />
+            <SectionTitle align="left" title="專注公共與商業空間設備的台灣專業廠商" />
             {/* 簡介與連結 */}
             <div>
               <p className="text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">

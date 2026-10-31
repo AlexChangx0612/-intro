@@ -15,8 +15,6 @@ const INTERVAL = 6000;
 
 // 產品輪播頁的資料型別
 type ProductSlide = {
-  // 英文小標
-  eyebrow: string;
   // 主標題
   title: string;
   // 說明文字
@@ -33,7 +31,6 @@ type ProductSlide = {
 const productSlides: ProductSlide[] = [
   // 第 2 張：伸縮帶欄柱
   {
-    eyebrow: "RETRACTABLE BARRIERS",
     title: "伸縮帶欄柱",
     desc: "萬向系列伸縮織帶紅龍柱，以及柱頭告示框、防塵蓋等配件。",
     image: "/images/001/001-001-001.png",
@@ -43,7 +40,6 @@ const productSlides: ProductSlide[] = [
   },
   // 第 3 張：企業識別客製
   {
-    eyebrow: "CUSTOM BRANDING",
     title: "企業識別客製",
     desc: "拒馬看板、告示牌與海報架，皆可置入貴公司的品牌視覺。",
     image: "/images/012/012-001-001.png",
@@ -53,7 +49,6 @@ const productSlides: ProductSlide[] = [
   },
   // 第 4 張：台灣製造
   {
-    eyebrow: "MADE IN TAIWAN",
     title: "台灣製造",
     desc: "所有欄柱與設備皆於台灣在地生產，品質穩定，溝通即時。",
     image: "/images/003/003-001-001.png",
@@ -245,10 +240,8 @@ export default function HeroCarousel() {
                   </div>
                   {/* 文字區：手機置中；電腦靠左 */}
                   <div className="text-center lg:text-left">
-                    {/* 英文小標 */}
-                    <p className="text-xs tracking-[0.35em] text-brand-deep">{s.eyebrow}</p>
                     {/* 產品標題：品牌紅 */}
-                    <h2 className="mt-5 text-[30px] tracking-[0.12em] text-brand sm:text-5xl">{s.title}</h2>
+                    <h2 className="text-[30px] tracking-[0.12em] text-brand sm:text-5xl">{s.title}</h2>
                     {/* 說明文字：灰字 */}
                     <p className="mx-auto mt-6 max-w-md text-sm leading-7 text-balance text-muted lg:mx-0">{s.desc}</p>
                     {/* 行動按鈕 */}

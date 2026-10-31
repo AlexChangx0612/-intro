@@ -13,6 +13,8 @@ import SectionTitle from "./SectionTitle";
 import { featuredCategoryIds, spotlight, type SpotlightSlide } from "../lib/spotlight";
 // 匯入分類連結型別
 import type { CategoryLink } from "../lib/ui";
+// 匯入公司資料（LINE QR Code 圖檔路徑）
+import { company } from "../lib/site";
 
 // 每頁停留時間（毫秒），與紅色進度線動畫同長
 const DURATION = 6000;
@@ -65,7 +67,6 @@ export default function CollectionsSpotlight({ categories }: { categories: Categ
       <div className="min-w-0">
         <SectionTitle
           align="left"
-          eyebrow="COLLECTIONS"
           title="產品系列"
           desc={`${categories.length} 大系列，全系列台灣製造。選擇系列瀏覽，或往下看完整目錄。`}
         />
@@ -179,21 +180,27 @@ export default function CollectionsSpotlight({ categories }: { categories: Categ
 function Slide({ slide }: { slide: SpotlightSlide }) {
   if (slide.kind === "product") return <ProductSlide slide={slide} />;
 
-  // LINE 諮詢：LINE 綠底黑字（白字在綠底上對比不足），白底按鈕另開新分頁
+  // LINE 諮詢：LINE 綠底黑字（白字在綠底上對比不足），白底按鈕另開新分頁；平板以上右側加 QR Code 給手機掃描
   if (slide.kind === "line")
     return (
-      <div className="flex h-full flex-col justify-center bg-[#06c755] px-7 py-9 text-ink sm:px-9">
-        <p className="text-xs tracking-[0.2em]">{slide.eyebrow}</p>
-        <p className="mt-3 text-xl font-bold leading-snug sm:text-2xl">{slide.title}</p>
-        <p className="mt-3 text-sm leading-7">{slide.desc}</p>
-        <a
-          href={slide.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-5 self-start rounded-full bg-white px-6 py-2.5 text-sm font-bold transition hover:bg-ink hover:text-white"
-        >
-          {slide.cta}
-        </a>
+      <div className="flex h-full items-center gap-6 bg-[#06c755] px-7 py-9 text-ink sm:px-9">
+        <div className="flex min-w-0 flex-1 flex-col">
+          <p className="text-xs tracking-[0.2em]">{slide.eyebrow}</p>
+          <p className="mt-3 text-xl font-bold leading-snug sm:text-2xl">{slide.title}</p>
+          <p className="mt-3 text-sm leading-7">{slide.desc}</p>
+          <a
+            href={slide.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 self-start rounded-full bg-white px-6 py-2.5 text-sm font-bold transition hover:bg-ink hover:text-white"
+          >
+            {slide.cta}
+          </a>
+        </div>
+        <div className="hidden shrink-0 rounded-2xl bg-white p-2.5 text-center sm:block">
+          <Image src={company.lineQr} alt="世紘興業 LINE 官方帳號 QR Code" width={540} height={540} className="size-32" />
+          <p className="mt-1 text-xs">手機掃描加好友</p>
+        </div>
       </div>
     );
 

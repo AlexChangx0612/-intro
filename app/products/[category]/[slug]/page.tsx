@@ -148,8 +148,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
 
             {/* 產品文字 */}
             <div>
-              {/* 型號（小標）＋產品名稱 */}
-              <SectionTitle as="h1" align="left" eyebrow={item.model} title={info.name} />
+              {/* 產品名稱＋型號 */}
+              <SectionTitle as="h1" align="left" title={info.name} desc={`型號 ${item.model}`} />
               <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{info.description}</p>
 
               {/* 規格表 */}
@@ -194,6 +194,11 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
                   LINE 官方帳號
                 </a>
               </div>
+              {/* LINE QR Code：電腦版給手機掃描加好友 */}
+              <div className="mt-5 hidden items-center gap-4 sm:flex">
+                <Image src={company.lineQr} alt="世紘興業 LINE 官方帳號 QR Code" width={540} height={540} className="size-28 shrink-0 rounded-lg border border-line bg-white p-1.5" />
+                <p className={bodyText}>手機掃描 QR Code，加入 LINE 官方帳號詢價</p>
+              </div>
               {/* 返回列表（詢價方式已在上方，不再放「聯絡我們」按鈕） */}
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link href={list.listHref} className="inline-flex min-h-11 items-center px-2 text-sm tracking-[0.12em] transition hover:text-brand-deep">
@@ -225,7 +230,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
       {places.length > 0 && (
         <section className={section}>
           <div className={`${container} grid gap-12 lg:grid-cols-2 lg:gap-20`}>
-            <SectionTitle align="left" eyebrow="APPLICATIONS" title="適用場所" />
+            <SectionTitle align="left" title="適用場所" />
             <ol className="border-t border-line">
               {places.map((p) => (
                 <li key={p} className="flex items-baseline gap-6 border-b border-line py-4">
@@ -241,7 +246,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[cate
       {related.length > 0 && (
         <section className={section}>
           <div className={container}>
-            <SectionTitle eyebrow="RELATED" title={`更多${list.name}`} />
+            <SectionTitle title={`更多${list.name}`} />
             <ul className="mt-14 grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
               {related.map((p) => (
                 <li key={p.slug}>

@@ -84,7 +84,7 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
               ]}
             />
             <div className="mt-10">
-              <SectionTitle as="h1" align="left" eyebrow={s.en} title={s.h1} />
+              <SectionTitle as="h1" align="left" title={s.h1} />
               <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{s.intro}</p>
               <a href="#contact" className={`${outlineBtn} mt-10`}>
                 請專員規劃我的場地
@@ -108,7 +108,7 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
       {/* 建議設備配置：白色卡片 */}
       <section className={section}>
         <div className={container}>
-          <SectionTitle eyebrow="SOLUTIONS" title="世紘建議的設備配置" />
+          <SectionTitle title="世紘建議的設備配置" />
           <div className="mt-14 grid gap-4 md:grid-cols-2 md:gap-5">
             {s.needs.map((n) => (
               <article key={n.title} className={`p-6 lg:p-8 ${card}`}>
@@ -136,7 +136,7 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
       {/* 推薦相關產品系列 */}
       <section className={section}>
         <div className={container}>
-          <SectionTitle eyebrow="RECOMMENDED" title="推薦產品系列" />
+          <SectionTitle title="推薦產品系列" />
           <CollectionGrid categories={used} />
         </div>
       </section>
@@ -144,7 +144,7 @@ export default async function SolutionPage({ params }: PageProps<"/solutions/[sl
       {/* 常見問題 */}
       <section id="faq" className={section}>
         <div className={`${container} grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20`}>
-          <SectionTitle align="left" eyebrow="FAQ" title="常見問題" />
+          <SectionTitle align="left" title="常見問題" />
           <FaqList faqs={s.faqs} />
         </div>
       </section>

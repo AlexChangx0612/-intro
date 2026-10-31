@@ -45,7 +45,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         <div className={container}>
           <Breadcrumbs items={[{ name: "首頁", path: "/" }, { name: "站內搜尋", path: "/search" }]} />
           <div className="mt-10">
-            <SectionTitle as="h1" align="left" eyebrow="SEARCH" title={q ? `「${q}」的搜尋結果` : "站內搜尋"} desc={q ? `共 ${results.length} 項結果` : "輸入產品名稱、型號或服務。"} />
+            <SectionTitle as="h1" align="left" title={q ? `「${q}」的搜尋結果` : "站內搜尋"} desc={q ? `共 ${results.length} 項結果` : "輸入產品名稱、型號或服務。"} />
           </div>
 
           {/* 搜尋框：一般表單送出，不需 JavaScript 也能使用 */}

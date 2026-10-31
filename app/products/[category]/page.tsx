@@ -129,7 +129,7 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
           {/* 左：標題與介紹；右：該系列代表產品去背圖（平板以上才顯示） */}
           <div className="mt-10 grid items-center gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-16">
             <div className="max-w-3xl">
-              <SectionTitle as="h1" align="left" eyebrow={cat.en} title={content.h1} />
+              <SectionTitle as="h1" align="left" title={content.h1} />
               <p className="mt-6 text-sm leading-8 text-pretty text-muted sm:text-base sm:leading-8">{content.intro}</p>
               <a href="#contact" className={`${outlineBtn} mt-10`}>
                 專員為您提供服務
@@ -156,7 +156,7 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
           {/* 有小系列：先列小系列導覽卡片，再依小系列分區顯示產品 */}
           <section id="products" className={section}>
             <div className={container}>
-              <SectionTitle eyebrow="PRODUCTS" title={`${cat.groups.length} 大系列，${cat.items.length} 款產品`} desc={`${cat.desc}選擇系列快速查看。`} />
+              <SectionTitle title={`${cat.groups.length} 大系列，${cat.items.length} 款產品`} desc={`${cat.desc}選擇系列快速查看。`} />
               {/* 小系列導覽卡片：手機與平板為可橫向滑動的一排，電腦 5 欄一排；點擊跳到該系列 */}
               <ul className="-mx-5 mt-14 flex snap-x scroll-px-5 gap-3 overflow-x-auto px-5 pt-1 pb-3 [scrollbar-width:none] sm:-mx-8 sm:scroll-px-8 sm:gap-5 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:p-0 [&::-webkit-scrollbar]:hidden">
                 {cat.groups.map((g) => (
@@ -217,7 +217,7 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
         // 沒有小系列：直接列出全部產品
         <section id="products" className={section}>
           <div className={container}>
-            <SectionTitle eyebrow="PRODUCTS" title={cat.name} desc={`${cat.desc}點擊圖片查看產品介紹。`} />
+            <SectionTitle title={cat.name} desc={`${cat.desc}點擊圖片查看產品介紹。`} />
             <div className="mt-14">
               <ProductGrid items={cat.items} categoryName={cat.name} />
             </div>
@@ -238,7 +238,7 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
       {related.length > 0 && (
         <section className={section}>
           <div className={`${container} grid gap-12 lg:grid-cols-2 lg:gap-20`}>
-            <SectionTitle align="left" eyebrow="APPLICATIONS" title="常見的應用場域" desc="依場域查看動線規劃重點與建議設備配置。" />
+            <SectionTitle align="left" title="常見的應用場域" desc="依場域查看動線規劃重點與建議設備配置。" />
             <ol className="border-t border-line">
               {related.map((s) => (
                 <li key={s.slug} className="border-b border-line">
@@ -255,7 +255,7 @@ export default async function CategoryPage({ params }: PageProps<"/products/[cat
       {/* 常見問題 */}
       <section id="faq" className={section}>
         <div className={`${container} grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-20`}>
-          <SectionTitle align="left" eyebrow="FAQ" title="常見問題" />
+          <SectionTitle align="left" title="常見問題" />
           <FaqList faqs={content.faqs} />
         </div>
       </section>
